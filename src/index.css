@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-color: #FAF8F5;
+    --text-main: #2D2A26;
+    --text-muted: #595550;
+    --accent-color: #D96C4A;
+    --link-hover: #B85536;
+    --container-width: 900px;
+
+    --font-serif: 'Georgia', 'Newsreader', serif;
+    --font-sans: 'Helvetica Neue', 'Plus Jakarta Sans', Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-serif);
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: var(--font-sans);
+    font-weight: 600;
+  }
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Organic notebook subtle tilt */
+.organic-tilt {
+  transform: rotate(-0.5deg);
+}
+
+@media (max-width: 768px) {
+  .organic-tilt {
+    transform: none;
+  }
+}
+
+/* Custom scrollbar for editorial warmth */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #E5E0D8;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D96C4A;
+}

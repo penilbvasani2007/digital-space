@@ -1,0 +1,6 @@
+{
+  "name": "DesignBot",
+  "description": "A sleek, community-driven publication exploring the intersection of generative artificial intelligence and website design.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
