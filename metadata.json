@@ -1,6 +1,8 @@
 {
-  "name": "DesignBot",
-  "description": "A sleek, community-driven publication exploring the intersection of generative artificial intelligence and website design.",
+  "name": "Digital Business & Design Notes",
+  "description": "Explore digital business and design notes on modern website architecture, executive data analytics frameworks, and vertical micro-SaaS strategy by Penil Vasani.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

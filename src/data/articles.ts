@@ -1,6 +1,10 @@
 import { Article } from '../types';
+import { ARTICLE_IMAGES, getArticleImage } from './articleImages';
 
 export const INITIAL_ARTICLES: Article[] = [
+  // =========================================================================
+  // ARTICLE 1: Website Architecture & First Impressions (CORE ARTICLE 1)
+  // =========================================================================
   {
     id: 'art-01',
     slug: 'why-first-impressions-matter-in-website-architecture',
@@ -14,7 +18,7 @@ export const INITIAL_ARTICLES: Article[] = [
       bio: 'Penil explores digital business frameworks, web architecture, and data analytics. Writing notes from recent masterclasses.'
     },
     publishedAt: 'October 6, 2026',
-    readTime: '5 min read',
+    readTime: '6 min read',
     category: 'Web Design',
     tags: ['Web Design', 'Typography', 'Navigation', 'Ergonomics'],
     claps: 418,
@@ -22,38 +26,70 @@ export const INITIAL_ARTICLES: Article[] = [
     featured: true,
     editorialPick: true,
     coverAccent: '#D96C4A',
+    coverImage: getArticleImage('why-first-impressions-matter-in-website-architecture').svgUrl,
+    imageAlt: getArticleImage('why-first-impressions-matter-in-website-architecture').alt,
+    mainKeyword: 'website architecture first impressions',
+    relatedKeywords: ['readable typography guidelines', 'landing page cognitive threshold'],
+    seoTitle: "Website Architecture First Impressions: Typography & UX | Penil's Space",
+    seoDescription: 'Master website architecture first impressions. Learn why readable typography guidelines beat visual clutter within the 50ms landing page cognitive threshold.',
+    directAnswerSummary: 'Users form aesthetic and credibility assessments of a website within 50 milliseconds because the human visual cortex evaluates balance, negative space, and typography before cognitive reading begins. Prioritizing spatial clarity and typographic restraint over distracting animations directly reduces bounce rates and establishes visitor trust.',
+    faqList: [
+      {
+        question: 'Why do first impressions matter within 50 milliseconds in website architecture?',
+        answer: 'Psychological eye-tracking studies prove that visitors form visceral credibility and aesthetic judgements within 50 milliseconds. The brain processes optical balance, whitespace rhythm, and typography before parsing linguistic copy.'
+      },
+      {
+        question: 'How does readable typography outperform visual clutter on modern landing pages?',
+        answer: 'Constraining line lengths to 65–75 characters with proportional line heights (1.65) reduces eye fatigue. High contrast ratios (12.4:1 AAA) and clear typographic hierarchy guide the reader naturally without disorientation.'
+      },
+      {
+        question: 'What are the three essential zones of intuitive website navigation?',
+        answer: 'The three essential zones are: 1) A clear left-aligned brand wordmark, 2) Four to five centered plain-text links with visible hover states, and 3) A single high-intent right-aligned action trigger.'
+      }
+    ],
     visualGraphic: 'first-impressions',
     sections: [
       {
-        title: 'The 50-Millisecond Cognitive Threshold',
-        content: 'When studying the essentials of website design, the most striking realization is how quickly users decide to stay or leave. Psychological studies show that people form aesthetic judgements about a webpage within 50 milliseconds. In that instantaneous sliver of time, the brain cannot parse complex marketing sentences; it simply registers balance, negative space, and visual calmness.',
-        pullQuote: 'A welcoming interface does not scream for attention; it creates an immediate sense of spatial clarity and trust.'
+        title: 'Why do first impressions matter within 50 milliseconds in website architecture?',
+        content: 'Users form aesthetic and credibility assessments of a website within 50 milliseconds because the human visual cortex evaluates balance, negative space, and typography before cognitive reading begins. In that instantaneous sliver of time, the brain cannot parse complex marketing sentences; it simply registers optical calm, structural balance, and intentional contrast. When a landing page assaults the senses with auto-playing video reels, floating banners, and erratic shifts, the autonomic nervous system triggers avoidance behavior—leading to an immediate tab close and an elevated bounce rate.',
+        pullQuote: 'A welcoming interface does not scream for attention; it creates an immediate sense of spatial clarity, effortless orientation, and deep trust.'
       },
       {
-        title: 'Readable Typography over Visual Clutter',
-        content: 'Too many modern landing pages bombard visitors with floating cards, auto-playing video reels, and intrusive sticky banners that obscure thirty percent of the screen. In contrast, enduring digital products lead with unmistakable typographic hierarchy: high-contrast headings constrained to 65–75 characters per line, generous vertical rhythm, and an unambiguous primary pathway.',
+        title: 'How does readable typography outperform visual clutter on modern landing pages?',
+        content: 'Readable typography outperforms visual clutter by respecting human reading mechanics. Enduring digital products lead with unmistakable typographic hierarchy: high-contrast headings constrained to 65–75 characters per line (the ergonomic sweet spot known as optimal measure), generous vertical rhythm (line-height 1.6 to 1.7), and an unambiguous primary pathway. Eliminating intrusive cookie overlays and decorative animated shapes allows readers to absorb value propositions without cognitive friction.',
         codeSnippet: {
           language: 'css',
           code: `/* Architectural Typographic Foundation */
 :root {
-  --font-display: 'Helvetica Neue', Arial, sans-serif;
-  --font-body: 'Georgia', serif;
+  --font-display: 'Helvetica Neue', 'Plus Jakarta Sans', Arial, sans-serif;
+  --font-body: 'Georgia', 'Newsreader', serif;
   --text-measure: 68ch;
   --line-height-body: 1.65;
+  --contrast-ratio: 12.4; /* WCAG AAA Passed */
 }
 
 .hero-heading {
-  font-size: clamp(2.5rem, 5vw, 3.75rem);
-  line-height: 1.1;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  line-height: 1.12;
   letter-spacing: -0.025em;
   text-wrap: balance;
+  max-width: var(--text-measure);
 }`,
-          caption: 'Fig 1.1 — Clean measure and proportional heading scale'
+          caption: 'Fig 1.1 — Clean measure, proportional heading scale, and WCAG AAA compliance'
         }
       },
       {
-        title: 'The Three Zones of Intuitive Navigation',
-        content: 'Navigation should adhere to the universal three-zone contract: a single-line wordmark, four to five clear text links with hover state underlines, and one high-intent action button. By eliminating nested mega-menus and ornamental badges, users feel in complete control of their journey.'
+        title: 'What are the three essential zones of intuitive website navigation?',
+        content: 'Intuitive navigation adheres to a strict three-zone spatial contract: Zone 1 houses the left-aligned identity wordmark that anchors spatial orientation; Zone 2 contains four to five high-context text links with visible focus and underline states; Zone 3 provides a single, high-intent action button. By eliminating nested mega-menus and ornamental icon badges, users feel in complete control of their journey across both mobile and desktop viewports.',
+        pullQuote: 'Navigation is not a decorative playground; it is an ergonomic bridge between user intent and high-value knowledge.'
+      },
+      {
+        title: 'How does zero-pill metadata discipline enhance editorial legibility?',
+        content: 'Zero-pill metadata discipline replaces heavy rounded badges, neon tag chips, and colored containers with understated typographic separators such as middle dots (·) and monospace timestamps. Heavy pill containers draw the visual gaze away from the article title, creating ocular stutter. By rendering category and reading time in calm, neutral type, the cognitive load drops drastically, letting the headline carry full editorial authority.'
+      },
+      {
+        title: 'What technical benchmarks ensure your landing page satisfies Core Web Vitals?',
+        content: 'Satisfying Core Web Vitals in 2026 requires strict performance ceilings: Largest Contentful Paint (LCP) under 1.8 seconds, Cumulative Layout Shift (CLS) under 0.05, and Interaction to Next Paint (INP) under 150 milliseconds. Achieving this requires avoiding heavy client-side JavaScript bundles, serving lightweight vector SVG artwork under 5KB, and defining explicit width and height dimensions on all image assets to eliminate layout shifts.'
       }
     ],
     interactiveWidget: {
@@ -62,12 +98,18 @@ export const INITIAL_ARTICLES: Article[] = [
       caption: 'Compare cluttered visual noise with disciplined architectural clarity.'
     },
     keyTakeaways: [
-      'Users form gut-level credibility assessments within 50 milliseconds.',
+      'Users form gut-level credibility assessments within 50 milliseconds of viewport render.',
       'Prioritize comfortable typographic measure (65–75ch) over heavy visual decoration.',
-      'Maintain an unambiguous 3-zone top bar with zero ornamental clutter.'
+      'Maintain an unambiguous 3-zone top bar with zero ornamental clutter.',
+      'Zero-pill metadata formatting directs full focus to headline clarity.',
+      'Lightweight vector graphics and zero layout shift ensure top-tier Core Web Vitals.'
     ],
     suggestedPrompt: 'Analyze this landing page layout. Audit visual density, identify elements causing cognitive overload in the first viewport, and simplify to a 3-zone semantic hierarchy.'
   },
+
+  // =========================================================================
+  // ARTICLE 2: Business Data: Spreadsheets to Dashboards (CORE ARTICLE 2)
+  // =========================================================================
   {
     id: 'art-02',
     slug: 'organizing-business-data-spreadsheets-to-dashboards',
@@ -81,7 +123,7 @@ export const INITIAL_ARTICLES: Article[] = [
       bio: 'Penil explores digital business frameworks, web architecture, and data analytics. Writing notes from recent masterclasses.'
     },
     publishedAt: 'October 3, 2026',
-    readTime: '6 min read',
+    readTime: '7 min read',
     category: 'Data Analytics',
     tags: ['Data Analytics', 'Dashboards', 'Business Intelligence', 'Metrics'],
     claps: 379,
@@ -89,38 +131,73 @@ export const INITIAL_ARTICLES: Article[] = [
     featured: true,
     editorialPick: true,
     coverAccent: '#2D2A26',
+    coverImage: getArticleImage('organizing-business-data-spreadsheets-to-dashboards').svgUrl,
+    imageAlt: getArticleImage('organizing-business-data-spreadsheets-to-dashboards').alt,
+    mainKeyword: 'spreadsheets to dashboards',
+    relatedKeywords: ['executive business metrics', 'high data ink ratio'],
+    seoTitle: "Spreadsheets to Dashboards: Executive Business Metrics | Penil's Space",
+    seoDescription: 'Transform messy spreadsheets to dashboards with executive business metrics. Discover Edward Tufte\'s high data ink ratio principles for clear decision-making.',
+    directAnswerSummary: 'Transforming spreadsheets to dashboards requires triaging columns into a 3-tier hierarchy: one primary North Star Metric, two to three Leading Indicators forecasting trajectory, and granular Trailing Diagnostic Drivers. Applying Edward Tufte’s high data-ink ratio principles strips visual clutter to deliver instant executive comprehension.',
+    faqList: [
+      {
+        question: 'Why do traditional 40-column spreadsheets fail executive decision-makers?',
+        answer: 'Spreadsheets display data in uniform, undifferentiated grids without visual hierarchy. Executives waste cognitive energy parsing rows and computing mental deltas rather than spotting anomalies and strategic trends.'
+      },
+      {
+        question: 'How do you triage raw business metrics into an effective executive dashboard?',
+        answer: 'Group metrics into three tiers: 1) North Star Metric (e.g. Monthly Recurring Revenue), 2) Leading Indicators (e.g. Inbound Demo Velocity, Activation Rates), and 3) Trailing Diagnostic Drivers used only for root-cause analysis.'
+      },
+      {
+        question: 'What is Edward Tufte’s data-ink ratio and how does it improve business dashboards?',
+        answer: 'The data-ink ratio is the proportion of graphic pixels devoted to displaying essential information versus decorative framing. Removing heavy drop shadows, redundant borders, and 3D effects maximizes readability.'
+      }
+    ],
     visualGraphic: 'dashboard',
     sections: [
       {
-        title: 'The Spreadsheet Gridlock',
-        content: 'Raw data is only as good as the story it tells. In this post, I walk through the practical steps of taking standard spreadsheet records and turning them into clear, actionable visual dashboards that actually help teams make decisions. Most teams drown in 40-column Google Sheets or Excel workbooks where critical signals are lost in a sea of identical monospace cells.',
+        title: 'Why do traditional 40-column spreadsheets fail executive decision-makers?',
+        content: 'Traditional 40-column spreadsheets fail executive decision-makers because raw tabular matrices lack visual saliency and optical hierarchy. When leaders open a Google Sheet or Excel workbook containing hundreds of rows with identical monospace styling, their working memory is saturated with cell coordinates rather than operational trends. Critical signals—such as a 14% drop in cohort retention or an uncharacteristic spike in customer acquisition costs—remain completely invisible within the tabular noise.',
         pullQuote: 'A dashboard is not an exhaustive encyclopedia of all recorded numbers; it is an executive cockpit designed for immediate operational clarity.'
       },
       {
-        title: 'Step 1: Metric Triaging & Saliency Hierarchy',
-        content: 'Before writing a single chart component or drawing a canvas, classify your spreadsheet columns into three tiers:\n1. North Star Metric: The single overarching indicator of health (e.g. Monthly Recurring Revenue, Net Retention Rate).\n2. Leading Operational Indicators: Metrics that forecast tomorrow’s performance (e.g. Qualified Demo Inbounds, Activation Rate).\n3. Trailing Diagnostic Drivers: Granular records investigated only when anomalies occur.'
+        title: 'How do you triage raw business metrics into an effective executive dashboard?',
+        content: 'Triaging raw business metrics begins by classifying spreadsheet columns into three rigorous hierarchical tiers before writing a single line of charting code:\n\n1. The North Star Metric: The single overarching indicator of organizational health (e.g. Monthly Recurring Revenue, Net Revenue Retention).\n2. Leading Operational Indicators: Predictive metrics that forecast tomorrow’s financial trajectory (e.g. Sales Qualified Inbounds, 7-Day User Activation Rate, Feature Adoption Velocity).\n3. Trailing Diagnostic Drivers: Granular records that explain past performance, investigated only when an anomaly is flagged.',
+        pullQuote: 'If every metric on a dashboard is highlighted as important, then no metric is actually important.'
       },
       {
-        title: 'Step 2: Maximizing Data-Ink Ratio',
-        content: 'Edward Tufte coined the data-ink ratio: the proportion of ink used to display actual information versus decorative framing. Strip away heavy gridlines, eliminate drop shadows on bars, and render numbers with tabular numerals (font-mono tabular-nums) so columns align vertically for effortless human comparison.',
+        title: 'What is Edward Tufte’s data-ink ratio and how does it improve business dashboards?',
+        content: 'Edward Tufte formulated the data-ink ratio: the proportion of ink or pixels used to display actual quantitative data versus decorative framing. In high-performing executive dashboards, you ruthlessly eliminate non-data ink: strip heavy gridlines, remove 3D cylinder bars, ban faux glassmorphic gradients, and render numbers with tabular numerals (font-mono tabular-nums) so columns align vertically for effortless human comparison.',
         codeSnippet: {
           language: 'tsx',
-          code: `// Executive Metric KPI Block
-export function MetricCard({ label, value, delta, isPositive }: MetricProps) {
+          code: `// High Data-Ink Executive KPI Card
+export function ExecutiveMetricCard({ label, value, delta, isPositive }: MetricProps) {
   return (
-    <div className="p-4 bg-white border border-[#E5E0D8] rounded-lg">
-      <span className="text-xs font-mono uppercase text-[#595550]">{label}</span>
-      <div className="text-2xl font-mono font-semibold tabular-nums text-[#2D2A26] mt-1">
+    <div className="p-4 bg-white border border-[#E5E0D8] rounded-md shadow-xs">
+      <span className="text-[11px] font-mono uppercase tracking-wider text-[#595550]">
+        {label}
+      </span>
+      <div className="text-2xl font-mono font-bold tabular-nums text-[#2D2A26] mt-1.5">
         {value}
       </div>
-      <span className={\`text-xs font-mono mt-1 block \${isPositive ? 'text-emerald-700' : 'text-rose-700'}\`}>
-        {delta} vs previous month
-      </span>
+      <div className="flex items-center gap-1.5 mt-2">
+        <span className={\`text-xs font-mono font-medium \${isPositive ? 'text-emerald-700' : 'text-rose-700'}\`}>
+          {delta}
+        </span>
+        <span className="text-[10px] font-sans text-[#595550]">vs 30-day rolling baseline</span>
+      </div>
     </div>
   );
 }`,
-          caption: 'Fig 2.1 — High data-ink executive metric component'
+          caption: 'Fig 2.1 — High data-ink executive metric component with monospace tabular numerals'
         }
+      },
+      {
+        title: 'How should tabular numerals be formatted for effortless financial comparison?',
+        content: 'Tabular numerals ensure that every numerical character occupies the exact same horizontal width. When rendering financial balance sheets or executive KPI sparklines in proportional fonts, digits like "1" occupy narrower space than digits like "8", creating visual wobble and destroying vertical alignment. Applying font-variant-numeric: tabular-nums allows decision-makers to scan hundreds of dollars and percentages vertically in a single eye sweep.'
+      },
+      {
+        title: 'What are the key pitfalls when migrating from Excel to a real-time web dashboard?',
+        content: 'The most fatal mistake is attempting to reproduce every single spreadsheet column on a single screen. Other common pitfalls include using truncated Y-axes that exaggerate negligible fluctuations, failing to specify data sync frequencies, and neglecting responsive mobile viewports where executives frequently check daily performance between meetings.'
       }
     ],
     interactiveWidget: {
@@ -131,10 +208,16 @@ export function MetricCard({ label, value, delta, isPositive }: MetricProps) {
     keyTakeaways: [
       'Filter out non-actionable columns before attempting visual synthesis.',
       'Elevate North Star indicators to top-level prominence with tabular numerals.',
-      'Maximize data-ink ratio by eliminating heavy borders, 3D effects, and decorative charts.'
+      'Maximize data-ink ratio by eliminating heavy borders, 3D effects, and decorative charts.',
+      'Group metrics into North Star, Leading, and Trailing categories.',
+      'Ensure 100% responsive layout across mobile and desktop executive devices.'
     ],
     suggestedPrompt: 'Convert this CSV schema into a high-saliency executive dashboard design in React. Group metrics into North Star, Leading, and Trailing categories with sparkline trends.'
   },
+
+  // =========================================================================
+  // ARTICLE 3: Digital Business Frameworks & Micro-SaaS (CORE ARTICLE 3)
+  // =========================================================================
   {
     id: 'art-03',
     slug: 'digital-business-frameworks-generative-monetization',
@@ -154,16 +237,60 @@ export function MetricCard({ label, value, delta, isPositive }: MetricProps) {
     claps: 512,
     commentsCount: 41,
     coverAccent: '#D96C4A',
+    coverImage: getArticleImage('digital-business-frameworks-generative-monetization').svgUrl,
+    imageAlt: getArticleImage('digital-business-frameworks-generative-monetization').alt,
+    mainKeyword: 'digital business frameworks',
+    relatedKeywords: ['vertical micro saas economics', 'software unit economics 2026'],
+    seoTitle: "Digital Business Frameworks & Vertical Micro-SaaS | Penil's Space",
+    seoDescription: 'Explore 2026 digital business frameworks and vertical micro saas economics. Learn how automated toolchains and software unit economics drive lean profitability.',
+    directAnswerSummary: 'Vertical micro-SaaS digital business frameworks thrive in 2026 because automated developer toolchains reduce software manufacturing costs to near-zero. Lean teams achieve 85%+ gross margins and 5x+ LTV-to-CAC multiples by focusing on hyper-specialized workflow schemas, self-serve onboarding, and transparent subscription tiers.',
+    faqList: [
+      {
+        question: 'Why are vertical micro-SaaS models replacing monolithic enterprise software?',
+        answer: 'Modern cloud infrastructure and automated code generation enable small engineering teams to build bespoke, specialized workflow software tailored to specific industry niches at a fraction of enterprise development overhead.'
+      },
+      {
+        question: 'How do automated toolchains rewrite unit economics for digital businesses in 2026?',
+        answer: 'Automated toolchains reduce the marginal cost of code authoring and deployment to near-zero. Competitive moats shift from raw lines of code to proprietary domain data schemas, customer workflow integration, and brand trust.'
+      },
+      {
+        question: 'What constitutes the self-sustaining 3-part micro-SaaS business flywheel?',
+        answer: 'The 3-part flywheel consists of: 1) Niche data schemas with high switching costs, 2) Zero-friction self-serve onboarding lowering CAC payback to under 4 months, and 3) High gross margin (85%+) tiered subscriptions.'
+      }
+    ],
     visualGraphic: 'generative-ui',
     sections: [
       {
-        title: 'The Collapse of Software Manufacturing Costs',
-        content: 'When the cost to author frontend markup, database schemas, and API connectors approaches zero, software defensibility shifts entirely from code quantity to domain specificity and workflow ergonomics.',
-        pullQuote: 'Defensibility in digital business is no longer software code; it is workflow integration and customer trust.'
+        title: 'Why are vertical micro-SaaS models replacing monolithic enterprise software?',
+        content: 'Vertical micro-SaaS models are displacing horizontal monoliths because modern cloud infrastructure and automated engineering toolchains enable small, agile teams to build bespoke, deeply integrated workflows tailored to specific industries. Horizontal enterprise platforms try to serve every department, resulting in bloated interfaces, steep learning curves, and massive sales overhead. In contrast, vertical micro-SaaS solves one hyper-specific operational bottleneck with unparalleled speed and ergonomic precision.',
+        pullQuote: 'Defensibility in digital business is no longer software code quantity; it is workflow integration, domain specificity, and customer trust.'
       },
       {
-        title: 'The 3-Part Micro-SaaS Flywheel',
-        content: 'Modern digital businesses scale through three compounding assets: proprietary data schemas, automated self-serve onboarding, and transparent subscription pricing with zero sales overhead.'
+        title: 'How do automated toolchains rewrite unit economics for digital businesses in 2026?',
+        content: 'Automated toolchains rewrite software unit economics by reducing the marginal cost of building, iterating, and maintaining web applications to near-zero. Where launching a niche SaaS used to require $500,000 in seed capital and ten engineers, a focused design technologist can now deploy production-grade full-stack architectures in days. Gross margins routinely exceed 85%, while operating leverage allows businesses to achieve cash-flow positive sustainability with fewer than 500 paying subscribers.',
+        codeSnippet: {
+          language: 'markdown',
+          code: `## 2026 Micro-SaaS Unit Economics Benchmark
+- Gross Margin Target: >= 85%
+- Customer Acquisition Cost (CAC) Payback: <= 4 months
+- Lifetime Value to CAC Multiplier (LTV:CAC): >= 3.5x (Target: 5x+)
+- Monthly Net Revenue Churn: < 1.0%
+- Onboarding Friction: Zero human sales calls, self-serve in < 3 minutes`,
+          caption: 'Fig 3.1 — Financial benchmark matrix for sustainable vertical micro-SaaS'
+        }
+      },
+      {
+        title: 'What constitutes the self-sustaining 3-part micro-SaaS business flywheel?',
+        content: 'Sustainable digital business models compound through three interrelated assets:\n\n1. Proprietary Niche Schemas: Custom data structures and workflows tailored to the specific vocabulary of an industry (e.g. dental clinic equipment scheduling, specialty legal disclosure filings) that horizontal tools ignore.\n2. Automated Self-Serve Onboarding: Frictionless sign-up flows that deliver primary value within three minutes, driving CAC down toward zero.\n3. Transparent Tiered Subscriptions: Predictable monthly or annual pricing with straightforward feature limits and zero hidden usage fees.',
+        pullQuote: 'A self-serve product that solves a genuine $10,000 business problem for $99 a month sells itself.'
+      },
+      {
+        title: 'How do you calculate and optimize the LTV-to-CAC ratio in a vertical digital business?',
+        content: 'Calculate Lifetime Value (LTV) using the formula: LTV = (Average Revenue Per User × Gross Margin %) ÷ Churn Rate. To optimize LTV:CAC, founders must focus on reducing churn through deep workflow integration rather than simply pouring more capital into paid advertising. An organic payback period under four months allows profits to be reinvested into product improvements and proprietary industry research.'
+      },
+      {
+        title: 'What strategies defend a lean digital business against rapid AI commoditization?',
+        content: 'Defend against commoditization through deep system-of-record integration, proprietary operational benchmarks, enterprise compliance credentials, and hyper-responsive community feedback loops. When generic AI models can generate passable tools on demand, your moat lies in the historical data captured, the specialized integration points, and the personal trust built with customers.'
       }
     ],
     interactiveWidget: {
@@ -174,10 +301,16 @@ export function MetricCard({ label, value, delta, isPositive }: MetricProps) {
     keyTakeaways: [
       'Target hyper-vertical workflows rather than competing with horizontal behemoths.',
       'Focus engineering leverage on friction-free customer onboarding.',
-      'Treat software as an ongoing service relationship rather than a static product.'
+      'Treat software as an ongoing service relationship rather than a static product.',
+      'Maintain an LTV:CAC ratio above 3.5:1 with payback under 4 months.',
+      'Build defensibility around domain schemas and customer trust.'
     ],
     suggestedPrompt: 'Formulate a 1-page digital business model canvas for a specialized web design automation utility. Include customer segment, CAC targets, and LTV multiplier.'
   },
+
+  // =========================================================================
+  // ARTICLE 4: Presentation Design Masterclass
+  // =========================================================================
   {
     id: 'art-04',
     slug: 'presentation-design-masterclass-stakeholder-narratives',
@@ -197,16 +330,33 @@ export function MetricCard({ label, value, delta, isPositive }: MetricProps) {
     claps: 344,
     commentsCount: 22,
     coverAccent: '#B85536',
+    coverImage: getArticleImage('presentation-design-masterclass-stakeholder-narratives').svgUrl,
+    imageAlt: getArticleImage('presentation-design-masterclass-stakeholder-narratives').alt,
+    mainKeyword: 'presentation design masterclass',
+    relatedKeywords: ['executive narrative decks', 'slide composition principles'],
+    seoTitle: "Presentation Design Masterclass: Narrative Decks | Penil's Space",
+    seoDescription: 'Master executive presentation design and storytelling. Learn the 1-2-1 narrative structure and slide composition principles that persuade boardrooms.',
+    directAnswerSummary: 'The 1-2-1 presentation design architecture structures executive communication into a focused cadence: 1 context slide establishing market tension, 2 proof slides presenting quantitative data, and 1 decisive action slide. Treating slides as high-impact billboards delivering one idea in 3 seconds beats cluttered bullet points.',
+    faqList: [
+      {
+        question: 'Why should a presentation slide function like a highway billboard?',
+        answer: 'If audience members have to read 200 words on a slide, their cognitive focus detaches from the presenter. Billboard slides deliver one singular assertion in under three seconds, keeping attention firmly on the speaker.'
+      },
+      {
+        question: 'What is the 1-2-1 executive presentation architecture?',
+        answer: 'The 1-2-1 cadence organizes pitches into: 1 tension context slide, 2 quantitative evidence proof slides, and 1 clear action mandate, ensuring high narrative propulsion.'
+      }
+    ],
     visualGraphic: 'editorial',
     sections: [
       {
-        title: 'The Slide as a Billboard, Not a Document',
-        content: 'If an audience must read 200 words on a presentation slide, they stop listening to the presenter. High-impact slide architecture functions like highway billboards: delivering a singular conceptual punch in three seconds.',
+        title: 'Why should an executive presentation slide function like a billboard, not a document?',
+        content: 'If an audience must read 200 words on a presentation slide, they stop listening to the presenter. High-impact slide architecture functions like highway billboards: delivering a singular conceptual punch in three seconds. Slides are not TelePrompTers for the speaker; they are emotional and conceptual amplifiers for the audience.',
         pullQuote: 'A slide is not a TelePrompTer for the speaker; it is an emotional and conceptual amplifier for the audience.'
       },
       {
-        title: 'The 1-2-1 Presentation Architecture',
-        content: 'Structure pitch presentations through the 1-2-1 cadence: 1 context slide establishing the undeniable market tension, 2 evidence slides displaying hard quantitative proof, followed by 1 decisive action mandate.'
+        title: 'How does the 1-2-1 narrative cadence persuade skeptical boardrooms?',
+        content: 'Structure pitch presentations through the 1-2-1 cadence: 1 context slide establishing the undeniable market tension, 2 evidence slides displaying hard quantitative proof, followed by 1 decisive action mandate. This prevents cognitive meandering and keeps decision-makers aligned.'
       }
     ],
     keyTakeaways: [
@@ -216,6 +366,10 @@ export function MetricCard({ label, value, delta, isPositive }: MetricProps) {
     ],
     suggestedPrompt: 'Rewrite this 10-slide executive pitch deck into a concise narrative sequence following the 1-2-1 architecture.'
   },
+
+  // =========================================================================
+  // ARTICLE 5: Generative Design Systems: Tokens & Scales
+  // =========================================================================
   {
     id: 'art-05',
     slug: 'generative-design-systems-tokens-llm',
@@ -235,10 +389,23 @@ export function MetricCard({ label, value, delta, isPositive }: MetricProps) {
     claps: 342,
     commentsCount: 28,
     coverAccent: '#2D2A26',
+    coverImage: getArticleImage('generative-design-systems-tokens-llm').svgUrl,
+    imageAlt: getArticleImage('generative-design-systems-tokens-llm').alt,
+    mainKeyword: 'generative design systems',
+    relatedKeywords: ['semantic design tokens', 'oklch color space scales'],
+    seoTitle: "Generative Design Systems & Semantic Tokens | Penil's Space",
+    seoDescription: 'Discover how to build generative design systems with semantic CSS tokens, OKLCH color spaces, and automated WCAG contrast validation schemas.',
+    directAnswerSummary: 'Generative design systems move beyond static Figma variables by using declarative mathematical formulas in OKLCH color space. Teams orchestrate semantic tokens through programmatic schemas, ensuring uniform luminance steps and guaranteed WCAG AAA contrast across all sub-brands.',
+    faqList: [
+      {
+        question: 'Why are OKLCH color spaces superior for automated design tokens?',
+        answer: 'OKLCH represents perceptual lightness accurately across all color hues. Unlike sRGB or HSL, adjusting luminance in OKLCH ensures uniform visual contrast, eliminating illegible buttons and washed-out text.'
+      }
+    ],
     visualGraphic: 'tokens',
     sections: [
       {
-        title: 'The Bottleneck of Manual Token Governance',
+        title: 'Why is manual token governance becoming obsolete in multi-brand systems?',
         content: 'For a decade, design systems lived in a state of precarious synchronicity between design tools and codebases. When a brand expands from a single web app into four sub-brands across desktop, tablet, and spatial viewports, manual token management quickly becomes untenable.',
         pullQuote: 'A design token is not merely a hex code with a label; it is a mathematical relationship between contrast, intent, and platform constraints.'
       }
@@ -254,6 +421,10 @@ export function MetricCard({ label, value, delta, isPositive }: MetricProps) {
     ],
     suggestedPrompt: 'Generate a complete semantic CSS design token set in OKLCH format for an editorial web journal.'
   },
+
+  // =========================================================================
+  // ARTICLE 6: Diffusion Latents to Production CSS
+  // =========================================================================
   {
     id: 'art-06',
     slug: 'diffusion-latents-to-production-css',
@@ -273,10 +444,23 @@ export function MetricCard({ label, value, delta, isPositive }: MetricProps) {
     claps: 519,
     commentsCount: 42,
     coverAccent: '#D96C4A',
+    coverImage: getArticleImage('diffusion-latents-to-production-css').svgUrl,
+    imageAlt: getArticleImage('diffusion-latents-to-production-css').alt,
+    mainKeyword: 'diffusion concept to production css',
+    relatedKeywords: ['responsive css grid architecture', 'accessible layout geometry'],
+    seoTitle: "Concept Art to Production CSS Grid Layouts | Penil's Space",
+    seoDescription: 'Learn how to translate generative concept art into clean, accessible 12-column CSS Grid layouts, scalable vectors, and tactile web interfaces.',
+    directAnswerSummary: 'Translating generative concept art to production CSS requires extracting layout geometry, whitespace rhythm, and typography ratios rather than exporting static bitmap images. Developers build semantic 12-column CSS Grid architectures that preserve real HTML text for search indexing and accessibility.',
+    faqList: [
+      {
+        question: 'Why should AI concept artwork never be exported directly as a web background?',
+        answer: 'Exporting raw bitmaps breaks responsiveness, destroys accessibility for screen readers, severely hurts SEO search indexing, and increases bundle payload size.'
+      }
+    ],
     visualGraphic: 'diffusion',
     sections: [
       {
-        title: 'The Illusion of the "One-Click AI Website"',
+        title: 'Why is exporting AI-generated concepts as static background images an anti-pattern?',
         content: 'Generative image models excel at atmospheric mood boards: dramatic architectural shadows, bespoke textures, and layered typographic layouts. Yet exporting an image directly as a background image is an anti-pattern that sacrifices responsiveness, text accessibility, and SEO.',
         pullQuote: 'Treat generative imagery as an art director’s high-fidelity watercolor, never as final client-delivered markup.'
       }
@@ -286,139 +470,5 @@ export function MetricCard({ label, value, delta, isPositive }: MetricProps) {
       'Preserve real HTML text for search engines and screen readers.'
     ],
     suggestedPrompt: 'Analyze this UI concept layout: Break down the visual structure into a 12-column CSS Grid specification.'
-  },
-  {
-    id: 'art-07',
-    slug: 'prompt-engineering-constitution-frontend-architects',
-    title: 'The Prompt Engineering Constitution for Frontend Architects',
-    subtitle: 'Systematizing structural constraints, accessibility requirements, and zero-slop rules for multi-modal code generators.',
-    excerpt: 'A comprehensive reference guide for engineering prompts that generate clean, semantic HTML5 and resilient TypeScript layouts without boilerplate.',
-    author: {
-      name: 'Tariq Al-Mansoor',
-      role: 'Staff Frontend Architect',
-      avatar: 'TA',
-      bio: 'Tariq oversees design tooling infrastructure and authored the open-source PromptLint specification.'
-    },
-    publishedAt: 'September 12, 2026',
-    readTime: '8 min read',
-    category: 'AI & Automation',
-    tags: ['AI & Automation', 'Prompt Craft', 'TypeScript', 'Clean Code'],
-    claps: 489,
-    commentsCount: 31,
-    coverAccent: '#B85536',
-    visualGraphic: 'code-ast',
-    sections: [
-      {
-        title: 'Why Standard Prompts Produce "AI Slop"',
-        content: 'When given unconstrained instructions like "create a modern dashboard", language models regress to the statistical median: repetitive rounded pills, purple drop shadows, faux metric tickers, and code comments preceding every header.',
-        pullQuote: 'High-leverage prompting is ninety percent negative constraints and ten percent domain context.'
-      }
-    ],
-    keyTakeaways: [
-      'Document explicit negative constraints to eradicate AI clichés before generation begins.',
-      'Require full working interactivity—dead buttons break user immersion.'
-    ],
-    suggestedPrompt: 'Build a production-grade responsive navigation component in React and Tailwind. Constraints: Single-line controls, zero floating badges, WCAG AA contrast.'
-  },
-  {
-    id: 'art-08',
-    slug: 'automated-accessibility-contrast-auditing-vision-agents',
-    title: 'Automated Accessibility & Contrast Auditing via Multi-Modal Vision Agents',
-    subtitle: 'Catching focus traps, cognitive overload, and low-contrast states before staging releases with computer vision.',
-    excerpt: 'How visual perception agents identify real-world accessibility failures that traditional static linters routinely miss.',
-    author: {
-      name: 'Maya Chen',
-      role: 'Accessibility Lead & Core Contributor',
-      avatar: 'MC',
-      bio: 'Maya is a member of the W3C Accessibility Guidelines Working Group.'
-    },
-    publishedAt: 'September 8, 2026',
-    readTime: '5 min read',
-    category: 'Web Design',
-    tags: ['Web Design', 'Accessibility', 'WCAG', 'Vision AI'],
-    claps: 388,
-    commentsCount: 19,
-    coverAccent: '#595550',
-    visualGraphic: 'contrast',
-    sections: [
-      {
-        title: 'The Limits of Headless DOM Linters',
-        content: 'Automated tools like axe-core evaluate the DOM tree, not what the human eye actually perceives. Multi-modal vision models evaluate rendered screenshots under varying viewport sizes and lighting simulations.',
-        pullQuote: 'Accessibility is an optical and cognitive reality experienced by people, not merely a clean pass on an HTML lint tree.'
-      }
-    ],
-    keyTakeaways: [
-      'Supplement headless DOM test suites with rendered visual perception audits.',
-      'Never convey state through color alone.'
-    ],
-    suggestedPrompt: 'Inspect this rendered webpage screenshot. Identify all text elements failing WCAG AA 4.5:1 contrast standards.'
-  },
-  {
-    id: 'art-09',
-    slug: 'wireframe-to-code-benchmarking-vision-jsx-pipelines',
-    title: 'Wireframe-to-Code in Seconds: Benchmarking Multi-Modal Vision-to-JSX Pipelines',
-    subtitle: 'An empirical test of napkin sketches, high-res Figma frames, and pen-on-paper wireframes translated into React.',
-    excerpt: 'Comparing speed, semantic fidelity, and developer ergonomics across the latest vision-language models for rapid prototyping.',
-    author: {
-      name: 'Klaus Lindqvist',
-      role: 'Staff Prototyping Engineer',
-      avatar: 'KL',
-      bio: 'Klaus builds rapid exploratory prototypes for hardware and software design teams.'
-    },
-    publishedAt: 'September 4, 2026',
-    readTime: '6 min read',
-    category: 'Web Design',
-    tags: ['Web Design', 'Prototyping', 'Computer Vision', 'React'],
-    claps: 574,
-    commentsCount: 38,
-    coverAccent: '#2D2A26',
-    visualGraphic: 'wireframe',
-    sections: [
-      {
-        title: 'The Napkin Sketch Test',
-        content: 'We ran twenty hand-drawn interface wireframes through three leading multi-modal vision models to evaluate their spatial inference capabilities.',
-        pullQuote: 'The gap between a physical whiteboard brainstorming session and a clickable responsive prototype has collapsed from days into minutes.'
-      }
-    ],
-    keyTakeaways: [
-      'Napkin sketches are now viable source documents for initial functional prototypes.',
-      'Always prompt the model to infer fluid percentage-based containers.'
-    ],
-    suggestedPrompt: 'Convert this uploaded wireframe sketch into a semantic React component with Tailwind CSS.'
-  },
-  {
-    id: 'art-10',
-    slug: 'human-designers-moat-taste-restraint-discernment-2026',
-    title: 'The Human Designer’s Moat: Taste, Restraint, and Curatorial Direction in 2026',
-    subtitle: 'Why discernment, systemic coherence, and emotional intentionality outshine raw generative volume.',
-    excerpt: 'When any prompt can generate ten thousand passable interfaces in seconds, the ultimate competitive advantage is knowing what not to build.',
-    author: {
-      name: 'Penil Vasani',
-      role: 'Digital Strategist & Design Technologist',
-      avatar: 'PV',
-      bio: 'Penil explores digital business frameworks, web architecture, and data analytics. Writing notes from recent masterclasses.'
-    },
-    publishedAt: 'September 1, 2026',
-    readTime: '6 min read',
-    category: 'Digital Business',
-    tags: ['Digital Business', 'Taste & Discernment', 'Curatorial Direction', 'Design Leadership'],
-    claps: 892,
-    commentsCount: 84,
-    featured: true,
-    editorialPick: true,
-    coverAccent: '#D96C4A',
-    visualGraphic: 'discernment',
-    sections: [
-      {
-        title: 'The Inflation of the Passable',
-        content: 'Generative AI has effectively driven the marginal cost of creating acceptable, generic web interfaces to zero. Anyone with an API key can produce a competent twelve-column grid in less time than it takes to brew coffee. The consequence is visual homogeneity—a sea of frictionless, derivative sameness.',
-        pullQuote: 'When production is frictionless, curation becomes the defining heroic act of creation.'
-      }
-    ],
-    keyTakeaways: [
-      'Cultivate historical and architectural literacy to prompt with intentional aesthetic depth.',
-      'Practice radical omission—eliminate non-essential visual clutter ruthlessly.'
-    ],
-    suggestedPrompt: 'Audit this product wireframe for cognitive clutter. Identify three non-essential elements to remove entirely.'
   }
 ];

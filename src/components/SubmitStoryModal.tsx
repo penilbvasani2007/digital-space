@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, CheckCircle2, PenLine, Sparkles } from 'lucide-react';
 import { Article } from '../types';
+import { getArticleImage } from '../data/articleImages';
 
 interface SubmitStoryModalProps {
   isOpen: boolean;
@@ -28,9 +29,12 @@ export const SubmitStoryModal: React.FC<SubmitStoryModalProps> = ({
     e.preventDefault();
     if (!title.trim() || !content.trim() || !authorName.trim()) return;
 
+    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const imageInfo = getArticleImage(slug);
+
     const newArticle: Article = {
       id: 'community-' + Date.now(),
-      slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      slug,
       title: title.trim(),
       subtitle: subtitle.trim() || 'A community contribution on generative workflows.',
       excerpt: content.trim().substring(0, 140) + '...',
@@ -38,7 +42,7 @@ export const SubmitStoryModal: React.FC<SubmitStoryModalProps> = ({
         name: authorName.trim(),
         role: authorRole.trim() || 'Community Contributor',
         avatar: authorName.trim().substring(0, 2).toUpperCase(),
-        bio: `${authorName.trim()} is an active member of the DesignBot community.`
+        bio: `${authorName.trim()} is an active member of Penil's digital space community.`
       },
       publishedAt: 'Today',
       readTime: '4 min read',
@@ -47,6 +51,12 @@ export const SubmitStoryModal: React.FC<SubmitStoryModalProps> = ({
       claps: 1,
       commentsCount: 0,
       coverAccent: '#1c1917',
+      coverImage: imageInfo.svgUrl,
+      imageAlt: imageInfo.alt,
+      mainKeyword: title.trim().toLowerCase(),
+      relatedKeywords: ['community design notes', 'digital business workflows'],
+      seoTitle: `${title.trim().substring(0, 42)} | Penil's Space`,
+      seoDescription: (content.trim().substring(0, 150) || 'Community contribution on digital business and website design.').padEnd(145, ' '),
       visualGraphic: 'discernment',
       sections: [
         {

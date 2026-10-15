@@ -3,7 +3,8 @@ import { Article, Comment } from '../types';
 import { 
   ArrowLeft, Bookmark, Heart, Share2, Copy, Check, 
   MessageSquare, Send, Volume2, VolumeX, Type, 
-  Clock, BookOpen, Compass, Sparkles 
+  Clock, BookOpen, Compass, Sparkles, HelpCircle, 
+  Globe, ShieldCheck, ArrowRight, Tag
 } from 'lucide-react';
 import { EditorialArtwork } from './EditorialArtwork';
 import { InteractiveWidget } from './InteractiveWidget';
@@ -63,7 +64,100 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
   const [newCommentText, setNewCommentText] = useState('');
   const [commentLiked, setCommentLiked] = useState<Record<string, boolean>>({});
 
+  // STEP 3 ON-PAGE SEO: Dynamically manage Title, Meta Description, OpenGraph, Canonical, and Schema.org JSON-LD
   useEffect(() => {
+    // 1. Title Tag
+    const originalTitle = document.title;
+    document.title = article.seoTitle || `${article.title} | Penil's Digital Space`;
+
+    // 2. Meta Description
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    const originalDesc = metaDesc.getAttribute('content') || '';
+    metaDesc.setAttribute('content', article.seoDescription || article.excerpt);
+
+    // 3. OpenGraph Tags
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', article.seoTitle || article.title);
+
+    let ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', article.seoDescription || article.excerpt);
+
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (!ogUrl) {
+      ogUrl = document.createElement('meta');
+      ogUrl.setAttribute('property', 'og:url');
+      document.head.appendChild(ogUrl);
+    }
+    ogUrl.setAttribute('content', `${window.location.origin}/articles/${article.slug}`);
+
+    // 4. Canonical Link Tag
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', `${window.location.origin}/articles/${article.slug}`);
+
+    // 5. Schema.org JSON-LD (Article + FAQPage for AEO)
+    const jsonLdId = 'schema-article-faq';
+    let scriptTag = document.getElementById(jsonLdId);
+    if (!scriptTag) {
+      scriptTag = document.createElement('script');
+      scriptTag.id = jsonLdId;
+      scriptTag.setAttribute('type', 'application/ld+json');
+      document.head.appendChild(scriptTag);
+    }
+
+    const schemaData = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'Article',
+          'headline': article.title,
+          'description': article.seoDescription || article.excerpt,
+          'author': {
+            '@type': 'Person',
+            'name': article.author.name,
+            'jobTitle': article.author.role,
+          },
+          'datePublished': '2026-10-06T08:00:00+00:00',
+          'publisher': {
+            '@type': 'Organization',
+            'name': "Penil's Digital Space",
+            'url': window.location.origin,
+          },
+          'mainEntityOfPage': {
+            '@type': 'WebPage',
+            '@id': `${window.location.origin}/articles/${article.slug}`,
+          },
+          'keywords': [article.mainKeyword, ...article.relatedKeywords].join(', '),
+        },
+        ...(article.faqList && article.faqList.length > 0
+          ? [
+              {
+                '@type': 'FAQPage',
+                'mainEntity': article.faqList.map((faq) => ({
+                  '@type': 'Question',
+                  'name': faq.question,
+                  'acceptedAnswer': {
+                    '@type': 'Answer',
+                    'text': faq.answer,
+                  },
+                })),
+              },
+            ]
+          : []),
+      ],
+    };
+    scriptTag.textContent = JSON.stringify(schemaData);
+
+    // Scroll progress handler
     const handleScroll = () => {
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       if (totalHeight > 0) {
@@ -71,8 +165,16 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
       }
     };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+
+    return () => {
+      document.title = originalTitle;
+      if (metaDesc) metaDesc.setAttribute('content', originalDesc);
+      window.removeEventListener('scroll', handleScroll);
+      if (scriptTag && scriptTag.parentNode) {
+        scriptTag.parentNode.removeChild(scriptTag);
+      }
+    };
+  }, [article]);
 
   const handleCopyPrompt = () => {
     navigator.clipboard.writeText(article.suggestedPrompt);
@@ -105,7 +207,6 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
       return;
     }
 
-    // Synthesize audio narration via server-side TTS
     try {
       setAudioLoading(true);
       const narrationText = `${article.title}. By ${article.author.name}. ${article.excerpt} ${article.sections.map(s => s.title + '. ' + s.content).join(' ')}`.substring(0, 450);
@@ -179,45 +280,49 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
         />
       </div>
 
-      {/* Navigation Sub-bar */}
-      <div className="max-w-[1140px] mx-auto px-6 md:px-8 pt-8 pb-4 flex items-center justify-between border-b border-[#E5E0D8]/60">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-xs font-sans font-semibold text-[#595550] hover:text-[#D96C4A] transition-colors cursor-pointer group"
+      {/* Top Floating Action Bar with Semantic Back Anchor */}
+      <div className="sticky top-[57px] z-20 bg-[#FAF8F5]/90 backdrop-blur-sm border-b border-[#E5E0D8]/60 py-2.5 px-6 md:px-8 max-w-[1140px] mx-auto flex items-center justify-between">
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            onBack();
+          }}
+          className="inline-flex items-center gap-1.5 text-xs font-sans text-[#595550] hover:text-[#2D2A26] transition-colors cursor-pointer group"
+          title="Return to Digital Business and Design Notes articles index"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span>RETURN TO NOTEBOOK</span>
-        </button>
+          <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+          <span className="font-medium">Return to Notebook Articles Index</span>
+        </a>
 
-        {/* User-Centric Reader Controls */}
+        {/* Reading Controls */}
         <div className="flex items-center gap-3">
-          {/* Font Size Adjuster */}
-          <div className="hidden sm:flex items-center gap-1 bg-white border border-[#E5E0D8] rounded px-2 py-1 text-xs font-sans text-[#595550]">
-            <Type className="w-3 h-3 text-[#595550]" />
+          {/* Typography scale */}
+          <div className="hidden sm:flex items-center gap-1 bg-white border border-[#E5E0D8] rounded px-1.5 py-0.5 text-xs font-mono text-[#595550]">
             <button
               onClick={() => setFontSize('sm')}
               className={`px-1.5 py-0.5 rounded cursor-pointer ${fontSize === 'sm' ? 'bg-[#2D2A26] text-white font-bold' : 'hover:text-[#2D2A26]'}`}
-              title="Compact text"
+              title="Compact text size"
             >
               A-
             </button>
             <button
               onClick={() => setFontSize('base')}
               className={`px-1.5 py-0.5 rounded cursor-pointer ${fontSize === 'base' ? 'bg-[#2D2A26] text-white font-bold' : 'hover:text-[#2D2A26]'}`}
-              title="Standard text"
+              title="Standard text size"
             >
               A
             </button>
             <button
               onClick={() => setFontSize('lg')}
               className={`px-1.5 py-0.5 rounded cursor-pointer ${fontSize === 'lg' ? 'bg-[#2D2A26] text-white font-bold' : 'hover:text-[#2D2A26]'}`}
-              title="Large text"
+              title="Large text size"
             >
               A+
             </button>
           </div>
 
-          {/* Audio TTS Narrator Button */}
+          {/* Audio TTS Narrator */}
           <button
             onClick={handleToggleAudio}
             disabled={audioLoading}
@@ -226,7 +331,7 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
                 ? 'bg-[#D96C4A] text-white border-[#D96C4A]'
                 : 'bg-white border-[#E5E0D8] text-[#2D2A26] hover:border-[#D96C4A]'
             }`}
-            title="Listen to AI Audio narration"
+            title="Listen to AI voice narration"
           >
             {audioLoading ? (
               <span className="animate-spin text-xs">·</span>
@@ -259,7 +364,7 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
                 ? 'bg-[#2D2A26] border-[#2D2A26] text-white'
                 : 'bg-white border-[#E5E0D8] text-[#595550] hover:border-[#D96C4A]'
             }`}
-            title={isSaved ? 'Saved to personal reading list' : 'Save for later'}
+            title={isSaved ? 'Saved to personal reading archive' : 'Save for later'}
           >
             <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-white' : ''}`} />
           </button>
@@ -275,8 +380,35 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
         </div>
       </div>
 
-      {/* Article Header */}
-      <header className="max-w-[1140px] mx-auto px-6 md:px-8 pt-8 pb-6 border-b border-[#E5E0D8]">
+      {/* On-Page SEO Verified Metadata Ribbon */}
+      <div className="max-w-[1140px] mx-auto px-6 md:px-8 pt-4">
+        <div className="p-3 bg-white border border-[#E5E0D8] rounded-md flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="flex items-center gap-1 font-semibold text-[#D96C4A]">
+              <Tag className="w-3 h-3" />
+              <span>MAIN KEYWORD:</span>
+            </span>
+            <span className="bg-[#FAF8F5] px-2 py-0.5 rounded border border-[#E5E0D8] text-[#2D2A26] font-semibold">
+              {article.mainKeyword}
+            </span>
+            <span className="text-[#E5E0D8]">|</span>
+            <span className="text-[#595550]">RELATED:</span>
+            <span className="bg-[#FAF8F5] px-1.5 py-0.5 rounded border border-[#E5E0D8] text-[#595550]">
+              {article.relatedKeywords[0]}
+            </span>
+            <span className="bg-[#FAF8F5] px-1.5 py-0.5 rounded border border-[#E5E0D8] text-[#595550]">
+              {article.relatedKeywords[1]}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-[#595550]">
+            <Globe className="w-3 h-3 text-emerald-700" />
+            <span>URL: /articles/{article.slug}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Article Header (H1) */}
+      <header className="max-w-[1140px] mx-auto px-6 md:px-8 pt-6 pb-6 border-b border-[#E5E0D8]">
         <div className="max-w-[850px]">
           <span className="font-sans text-[0.85rem] uppercase tracking-[1px] text-[#D96C4A] font-semibold block mb-2">
             {article.category}
@@ -289,6 +421,19 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
           <p className="text-xl font-serif text-[#595550] leading-relaxed mb-6">
             {article.subtitle}
           </p>
+
+          {/* Direct Answer Summary Box for AEO (Answer Engine Optimization) */}
+          {article.directAnswerSummary && (
+            <div className="my-5 p-4 bg-amber-50/80 border-l-3 border-[#D96C4A] rounded-r-md">
+              <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#D96C4A] mb-1.5">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>EXECUTIVE DIRECT ANSWER SUMMARY (AEO &amp; AI OVERVIEWS)</span>
+              </div>
+              <p className="text-sm font-serif text-[#2D2A26] leading-relaxed">
+                {article.directAnswerSummary}
+              </p>
+            </div>
+          )}
 
           {/* Metadata & Author Bar */}
           <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[#E5E0D8]/60 text-xs font-sans">
@@ -315,30 +460,40 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
         </div>
       </header>
 
-      {/* Visual Artwork Banner */}
+      {/* Dedicated Small-Size Vector Artwork & Specimen Image with Descriptive Alt Text */}
       <figure className="max-w-[1140px] mx-auto px-6 md:px-8 my-8">
-        <div className="w-full h-64 sm:h-80 md:h-96 rounded-lg overflow-hidden border border-[#E5E0D8] shadow-sm bg-white">
-          <EditorialArtwork
-            type={article.visualGraphic}
-            accent={article.coverAccent}
-            className="w-full h-full"
+        <div className="w-full h-72 sm:h-88 md:h-[420px] rounded-lg overflow-hidden border border-[#E5E0D8] shadow-sm bg-white relative">
+          <img
+            src={article.coverImage}
+            alt={article.imageAlt}
+            width={800}
+            height={450}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover"
           />
+          <div className="absolute bottom-3 right-3 bg-[#2D2A26]/85 backdrop-blur-xs text-white text-[10px] font-mono px-2.5 py-1 rounded border border-white/20">
+            Vector SVG Asset · &lt; 3KB · Zero CLS
+          </div>
         </div>
         <figcaption className="text-xs font-serif italic text-[#595550] text-center mt-2.5">
-          Fig 1.0 — Visual schematic and layout specimen for {article.title}
+          {article.imageAlt}
         </figcaption>
       </figure>
 
-      {/* Main Two-Column Reading Layout for Optimum White Space Utilization */}
+      {/* Main Two-Column Reading Layout */}
       <div className="max-w-[1140px] mx-auto px-6 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 mt-6">
         {/* Left / Center Prose Column (8 cols ~ 68ch measure) */}
         <main className="lg:col-span-8 font-serif">
           {article.sections.map((section, idx) => (
             <section key={idx} id={`section-${idx}`} className="my-8 scroll-mt-24">
-              <h2 className="text-2xl font-sans font-semibold text-[#2D2A26] mb-4">
-                {section.title}
+              {/* Question Subheading (H2) for AEO */}
+              <h2 className="text-2xl font-sans font-semibold text-[#2D2A26] mb-3 flex items-start gap-2">
+                <span className="text-[#D96C4A] font-mono text-lg shrink-0 mt-0.5">Q:</span>
+                <span>{section.title}</span>
               </h2>
 
+              {/* Direct Answer Paragraph & Prose Content */}
               <p
                 className={`text-[#2D2A26] ${proseSizeClass} mb-6 font-serif ${
                   idx === 0
@@ -386,7 +541,7 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
                     <code>{section.codeSnippet.code}</code>
                   </pre>
                   {section.codeSnippet.caption && (
-                    <div className="px-4 py-2 bg-black/50 border-t border-stone-800 text-[10px] text-stone-400 font-mono italic">
+                    <div className="px-4 py-2 bg-stone-900 border-t border-stone-800 text-[11px] text-stone-400 font-sans italic">
                       {section.codeSnippet.caption}
                     </div>
                   )}
@@ -395,206 +550,200 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
             </section>
           ))}
 
-          {/* Embedded Interactive Lab Widget */}
+          {/* Interactive Widget if present */}
           {article.interactiveWidget && (
-            <InteractiveWidget config={article.interactiveWidget} />
+            <div className="my-10">
+              <InteractiveWidget config={article.interactiveWidget} />
+            </div>
+          )}
+
+          {/* Schema.org FAQPage Accordion for AEO Direct Answers */}
+          {article.faqList && article.faqList.length > 0 && (
+            <section className="my-12 p-6 bg-white border border-[#E5E0D8] rounded-lg">
+              <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#E5E0D8]">
+                <HelpCircle className="w-4 h-4 text-[#D96C4A]" />
+                <h3 className="font-sans font-semibold text-lg text-[#2D2A26]">
+                  Frequently Asked Questions (Schema.org FAQPage)
+                </h3>
+              </div>
+              <div className="space-y-4 font-sans text-xs">
+                {article.faqList.map((faq, i) => (
+                  <div key={i} className="p-3.5 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+                    <div className="font-semibold text-sm text-[#2D2A26] mb-1.5">
+                      {faq.question}
+                    </div>
+                    <div className="font-serif text-sm text-[#595550] leading-relaxed">
+                      {faq.answer}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
           )}
 
           {/* Key Takeaways */}
-          <div className="my-10 p-6 bg-white border border-[#E5E0D8] rounded-lg shadow-sm font-sans">
-            <h3 className="text-xs font-mono uppercase tracking-wider text-[#D96C4A] font-semibold mb-3">
-              Core Masterclass Takeaways
+          <div className="my-10 p-6 bg-white border border-[#E5E0D8] rounded-lg shadow-xs">
+            <h3 className="font-sans font-semibold text-base text-[#2D2A26] mb-3 uppercase tracking-wider text-xs">
+              Key Strategic Takeaways
             </h3>
-            <ul className="space-y-2.5 text-sm text-[#2D2A26]">
+            <ul className="space-y-2.5 font-serif text-base text-[#2D2A26]">
               {article.keyTakeaways.map((takeaway, i) => (
                 <li key={i} className="flex items-start gap-2.5">
-                  <span className="text-[#D96C4A] font-mono text-xs pt-0.5">0{i + 1}.</span>
-                  <span className="leading-relaxed font-serif">{takeaway}</span>
+                  <span className="text-[#D96C4A] font-bold mt-1 text-sm">•</span>
+                  <span>{takeaway}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Suggested Prompt Box */}
-          <div className="my-8 p-6 bg-[#2D2A26] text-stone-100 rounded-lg border border-stone-800 font-mono shadow-sm">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs text-[#D96C4A] uppercase tracking-widest font-semibold">
-                Practical Workflow Formula
-              </span>
-              <button
-                onClick={handleCopyPrompt}
-                className="flex items-center gap-1.5 px-2.5 py-1 bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs rounded transition-colors cursor-pointer"
-              >
-                {copiedPrompt ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">Copied</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>Copy Prompt</span>
-                  </>
-                )}
-              </button>
-            </div>
-            <p className="text-xs text-stone-300 leading-relaxed bg-black/30 p-3.5 rounded border border-stone-700 font-sans">
-              "{article.suggestedPrompt}"
-            </p>
-          </div>
-
-          {/* Author Spotlight */}
-          <div className="my-12 p-6 bg-white border border-[#E5E0D8] rounded-lg flex flex-col sm:flex-row items-start sm:items-center gap-5 font-sans shadow-sm">
-            <div className="w-14 h-14 rounded-full bg-[#2D2A26] text-white flex items-center justify-center font-mono text-base font-semibold shrink-0">
-              {article.author.avatar}
-            </div>
-            <div className="flex-1">
-              <h4 className="text-base font-semibold text-[#2D2A26]">{article.author.name}</h4>
-              <p className="text-xs text-[#D96C4A] mb-1">{article.author.role}</p>
-              <p className="text-xs text-[#595550] leading-relaxed font-serif">{article.author.bio}</p>
-            </div>
-          </div>
-
-          {/* Discussion Section */}
-          <section className="my-12 pt-6 font-sans">
-            <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-3 mb-6">
-              <div className="flex items-center gap-2">
-                <MessageSquare className="w-4 h-4 text-[#D96C4A]" />
-                <h3 className="text-lg font-semibold text-[#2D2A26]">
-                  Notes & Discussion ({comments.length})
-                </h3>
+          {/* Suggested Prompt Block */}
+          {article.suggestedPrompt && (
+            <div className="my-10 p-5 bg-[#FAF8F5] border border-[#E5E0D8] rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-mono uppercase tracking-wider text-[#D96C4A] font-semibold flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Suggested AI Workflow Prompt
+                </span>
+                <button
+                  onClick={handleCopyPrompt}
+                  className="flex items-center gap-1 text-xs font-mono text-[#595550] hover:text-[#2D2A26] transition-colors cursor-pointer"
+                >
+                  {copiedPrompt ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedPrompt ? 'Copied' : 'Copy'}</span>
+                </button>
               </div>
-              <span className="text-xs font-mono text-[#595550]">Open Exchange</span>
+              <p className="font-mono text-xs text-[#2D2A26] bg-white p-3 rounded border border-[#E5E0D8] leading-relaxed">
+                {article.suggestedPrompt}
+              </p>
             </div>
+          )}
+
+          {/* Reader Discussion / Comments */}
+          <div className="mt-12 pt-8 border-t border-[#E5E0D8]">
+            <h3 className="font-sans font-semibold text-xl text-[#2D2A26] mb-6 flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-[#D96C4A]" />
+              <span>Reader Notes &amp; Observations ({comments.length})</span>
+            </h3>
 
             {/* Comment Form */}
-            <form onSubmit={handleAddComment} className="bg-white p-5 rounded-lg border border-[#E5E0D8] mb-8 space-y-3 shadow-sm">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <form onSubmit={handleAddComment} className="bg-white border border-[#E5E0D8] rounded-lg p-5 mb-8 shadow-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                 <input
                   type="text"
-                  placeholder="Your Name (e.g. Liam Patel)"
+                  placeholder="Your Name (e.g. Maya Chen)"
                   value={newCommentName}
                   onChange={(e) => setNewCommentName(e.target.value)}
-                  className="text-xs px-3 py-2 bg-[#FAF8F5] border border-[#E5E0D8] rounded focus:outline-none focus:border-[#D96C4A] font-sans"
+                  className="px-3 py-2 border border-[#E5E0D8] rounded text-xs font-sans focus:outline-none focus:border-[#D96C4A] bg-[#FAF8F5]"
                 />
                 <input
                   type="text"
-                  placeholder="Your Role or Company (e.g. Product Lead)"
+                  placeholder="Your Role (e.g. Design Technologist)"
                   value={newCommentRole}
                   onChange={(e) => setNewCommentRole(e.target.value)}
-                  className="text-xs px-3 py-2 bg-[#FAF8F5] border border-[#E5E0D8] rounded focus:outline-none focus:border-[#D96C4A] font-sans"
+                  className="px-3 py-2 border border-[#E5E0D8] rounded text-xs font-sans focus:outline-none focus:border-[#D96C4A] bg-[#FAF8F5]"
                 />
               </div>
               <textarea
                 rows={3}
-                placeholder="Leave a reflection, question, or note from your own practice..."
+                placeholder="Share a perspective on typography, unit economics, or executive metrics..."
                 value={newCommentText}
                 onChange={(e) => setNewCommentText(e.target.value)}
-                className="w-full text-xs p-3 bg-[#FAF8F5] border border-[#E5E0D8] rounded focus:outline-none focus:border-[#D96C4A] resize-none font-serif leading-relaxed"
-                required
+                className="w-full px-3 py-2 border border-[#E5E0D8] rounded text-xs font-serif focus:outline-none focus:border-[#D96C4A] bg-[#FAF8F5] mb-3 leading-relaxed"
               />
-              <div className="flex justify-between items-center pt-1">
-                <span className="text-[11px] text-[#595550] font-mono">Friendly discourse</span>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-[#D96C4A] hover:bg-[#B85536] text-white text-xs font-semibold rounded flex items-center gap-1.5 cursor-pointer shadow-sm"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>Post Note</span>
-                </button>
-              </div>
+              <button
+                type="submit"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#2D2A26] hover:bg-[#D96C4A] text-white rounded text-xs font-sans font-semibold transition-colors cursor-pointer shadow-xs"
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>Post Reader Note</span>
+              </button>
             </form>
 
-            {/* Comments List */}
+            {/* Existing Comments */}
             <div className="space-y-4">
               {comments.map((comment) => (
-                <div key={comment.id} className="bg-white p-5 rounded-lg border border-[#E5E0D8] shadow-xs">
+                <div key={comment.id} className="p-4 bg-white border border-[#E5E0D8] rounded-lg">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-7 h-7 rounded-full bg-[#FAF8F5] text-[#2D2A26] border border-[#E5E0D8] flex items-center justify-center font-mono text-xs font-semibold">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-[#FAF8F5] border border-[#E5E0D8] text-[#2D2A26] flex items-center justify-center font-mono text-[10px] font-semibold">
                         {comment.avatar}
                       </div>
-                      <div>
-                        <span className="text-xs font-semibold text-[#2D2A26]">{comment.author}</span>
-                        <span className="text-[11px] text-[#595550] ml-2">· {comment.role}</span>
-                      </div>
+                      <span className="font-sans font-semibold text-xs text-[#2D2A26]">{comment.author}</span>
+                      <span className="text-[#E5E0D8]">·</span>
+                      <span className="text-[11px] text-[#595550]">{comment.role}</span>
                     </div>
                     <span className="text-[11px] font-mono text-[#595550]">{comment.createdAt}</span>
                   </div>
-                  <p className="text-xs text-[#2D2A26] leading-relaxed font-serif pl-9">
+                  <p className="font-serif text-sm text-[#2D2A26] leading-relaxed">
                     {comment.content}
                   </p>
-                  <div className="pl-9 mt-3 flex items-center gap-4 text-xs text-[#595550]">
+                  <div className="flex items-center gap-3 mt-3 pt-2 border-t border-[#E5E0D8]/60 text-xs text-[#595550]">
                     <button
                       onClick={() => handleToggleLikeComment(comment.id)}
-                      className={`flex items-center gap-1 transition-colors cursor-pointer ${
-                        commentLiked[comment.id] ? 'text-[#D96C4A] font-semibold' : 'hover:text-[#2D2A26]'
-                      }`}
+                      className="flex items-center gap-1 hover:text-rose-600 transition-colors cursor-pointer"
                     >
-                      <Heart className={`w-3.5 h-3.5 ${commentLiked[comment.id] ? 'fill-[#D96C4A]' : ''}`} />
-                      <span className="font-mono tabular-nums">{comment.likes}</span>
+                      <Heart className={`w-3.5 h-3.5 ${commentLiked[comment.id] ? 'fill-rose-600 text-rose-600' : ''}`} />
+                      <span className="font-mono text-[11px]">{comment.likes}</span>
                     </button>
                   </div>
                 </div>
               ))}
             </div>
-          </section>
+          </div>
         </main>
 
-        {/* Right Sticky Companion Rail (4 cols): Optimum White Space Utilization */}
-        <aside className="hidden lg:block lg:col-span-4 space-y-6">
-          <div className="sticky top-24 space-y-6">
-            {/* Table of Contents Box */}
-            <div className="bg-white border border-[#E5E0D8] rounded-lg p-6 shadow-xs font-sans">
-              <div className="flex items-center justify-between pb-3 border-b border-[#E5E0D8] mb-4">
-                <span className="text-xs font-mono uppercase tracking-wider text-[#D96C4A] font-semibold flex items-center gap-1.5">
-                  <Compass className="w-3.5 h-3.5" />
-                  <span>Article Outline</span>
-                </span>
-                <span className="text-xs font-mono text-[#595550]">
-                  {Math.round(scrollProgress)}%
-                </span>
+        {/* Right Sidebar Rail (4 cols) */}
+        <aside className="lg:col-span-4 space-y-6">
+          {/* Table of Contents */}
+          <div className="p-5 bg-white border border-[#E5E0D8] rounded-lg shadow-xs sticky top-28">
+            <h4 className="font-sans font-semibold text-xs uppercase tracking-wider text-[#595550] mb-3 flex items-center gap-1.5">
+              <Compass className="w-3.5 h-3.5 text-[#D96C4A]" />
+              <span>Section Questions (AEO Index)</span>
+            </h4>
+            <nav className="space-y-2">
+              {article.sections.map((section, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => scrollToSection(idx)}
+                  className="w-full text-left font-serif text-xs text-[#595550] hover:text-[#D96C4A] transition-colors line-clamp-2 block py-1 border-b border-[#E5E0D8]/40 cursor-pointer"
+                >
+                  <span className="font-mono text-[10px] text-[#D96C4A] mr-1.5 font-semibold">Q{idx + 1}.</span>
+                  {section.title}
+                </button>
+              ))}
+            </nav>
+
+            {/* Author Card */}
+            <div className="mt-6 pt-5 border-t border-[#E5E0D8]">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-full bg-[#2D2A26] text-white flex items-center justify-center font-mono text-xs font-semibold">
+                  {article.author.avatar}
+                </div>
+                <div>
+                  <div className="font-semibold text-sm text-[#2D2A26]">{article.author.name}</div>
+                  <div className="text-[11px] text-[#595550]">{article.author.role}</div>
+                </div>
               </div>
-              <nav className="space-y-2 text-xs">
-                {article.sections.map((sec, i) => (
-                  <button
-                    key={i}
-                    onClick={() => scrollToSection(i)}
-                    className="w-full text-left py-1 text-[#595550] hover:text-[#D96C4A] transition-colors flex items-start gap-2 cursor-pointer font-serif"
-                  >
-                    <span className="font-mono text-[#D96C4A] text-[11px] pt-0.5">0{i + 1}.</span>
-                    <span className="line-clamp-1">{sec.title}</span>
-                  </button>
+              <p className="font-serif text-xs text-[#595550] leading-relaxed">
+                {article.author.bio}
+              </p>
+            </div>
+
+            {/* Related Topics Anchor Links */}
+            <div className="mt-6 pt-5 border-t border-[#E5E0D8]">
+              <div className="text-xs font-mono font-semibold text-[#2D2A26] mb-2">
+                Target SEO Keywords
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                <span className="text-[11px] font-mono bg-white border border-[#D96C4A] text-[#D96C4A] px-2 py-0.5 rounded font-semibold">
+                  {article.mainKeyword}
+                </span>
+                {article.relatedKeywords.map((kw, i) => (
+                  <span key={i} className="text-[11px] font-mono bg-[#FAF8F5] border border-[#E5E0D8] text-[#595550] px-2 py-0.5 rounded">
+                    {kw}
+                  </span>
                 ))}
-              </nav>
-            </div>
-
-            {/* Quick Audio Narration & Stats Card */}
-            <div className="bg-[#FAF8F5] border border-[#E5E0D8] rounded-lg p-5 font-sans space-y-3">
-              <div className="flex items-center justify-between text-xs font-mono text-[#595550]">
-                <span>READING PACE</span>
-                <span>{article.readTime}</span>
               </div>
-              <button
-                onClick={handleToggleAudio}
-                className="w-full py-2.5 bg-[#2D2A26] hover:bg-[#D96C4A] text-white rounded text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs"
-              >
-                <Volume2 className="w-4 h-4" />
-                <span>{isPlayingAudio ? 'Pause Narration' : 'Listen with Audio TTS'}</span>
-              </button>
-              <p className="text-[11px] font-serif text-[#595550] leading-snug text-center">
-                Hands-free audio synthesis powered by Gemini 3.8.
-              </p>
-            </div>
-
-            {/* Core Takeaways Summary Badge */}
-            <div className="bg-white border border-[#E5E0D8] rounded-lg p-5 font-sans space-y-2 shadow-xs">
-              <span className="text-[11px] font-mono uppercase text-[#D96C4A] font-semibold block">
-                Quick Takeaway Snapshot
-              </span>
-              <p className="text-xs font-serif text-[#595550] leading-relaxed">
-                "{article.keyTakeaways[0]}"
-              </p>
             </div>
           </div>
         </aside>

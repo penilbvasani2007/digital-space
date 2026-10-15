@@ -46,7 +46,14 @@ export interface Article {
   featured?: boolean;
   editorialPick?: boolean;
   coverAccent: string;
-  coverImage?: string;
+  coverImage: string;
+  imageAlt: string;
+  mainKeyword: string;
+  relatedKeywords: [string, string];
+  seoTitle: string;
+  seoDescription: string;
+  directAnswerSummary?: string;
+  faqList?: { question: string; answer: string }[];
   visualGraphic: 'tokens' | 'generative-ui' | 'diffusion' | 'code-ast' | 'contrast' | 'kinetic' | 'editorial' | 'wireframe' | 'canvas' | 'discernment' | 'first-impressions' | 'dashboard';
   sections: ArticleSection[];
   interactiveWidget?: InteractiveComponentConfig;

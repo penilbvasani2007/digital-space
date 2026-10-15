@@ -1,24 +1,24 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { ArticleView } from './components/ArticleView';
 import { AboutView } from './components/AboutView';
 import { ProjectsSection } from './components/ProjectsSection';
 import { ContactSection } from './components/ContactSection';
+import { SeoResearchView } from './components/SeoResearchView';
 import { GeminiStudio } from './components/GeminiStudio';
-import { EditorialArtwork } from './components/EditorialArtwork';
 import { INITIAL_ARTICLES } from './data/articles';
 import { Article } from './types';
 import { 
   Search, Heart, Bookmark, ArrowRight, Mail, Sparkles, 
   LayoutGrid, List, Volume2, Clock, CheckCircle2, 
-  BookOpen, ChevronRight, Filter 
+  BookOpen, ChevronRight, Filter, Table2, Tag, ShieldCheck, Globe
 } from 'lucide-react';
 
 export default function App() {
   const [articles, setArticles] = useState<Article[]>(INITIAL_ARTICLES);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
-  const [currentTab, setCurrentTab] = useState<'articles' | 'about' | 'projects' | 'contact' | 'saved'>('articles');
+  const [currentTab, setCurrentTab] = useState<'articles' | 'about' | 'projects' | 'contact' | 'saved' | 'seo'>('articles');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [savedArticleIds, setSavedArticleIds] = useState<Set<string>>(new Set(['art-01', 'art-02']));
@@ -34,8 +34,69 @@ export default function App() {
     'Data Analytics',
     'Digital Business',
     'Presentation Design',
-    'AI & Automation',
   ];
+
+  // STEP 3 ON-PAGE SEO: Real Clean URL routing via History API (pushState & popstate)
+  useEffect(() => {
+    const handleLocationChange = () => {
+      const path = window.location.pathname;
+      if (path.startsWith('/articles/')) {
+        const slug = path.replace('/articles/', '');
+        const match = articles.find((a) => a.slug === slug);
+        if (match) {
+          setSelectedArticle(match);
+          return;
+        }
+      }
+      setSelectedArticle(null);
+      if (path === '/about') setCurrentTab('about');
+      else if (path === '/projects') setCurrentTab('projects');
+      else if (path === '/contact') setCurrentTab('contact');
+      else if (path === '/saved') setCurrentTab('saved');
+      else if (path === '/seo-research') setCurrentTab('seo');
+      else setCurrentTab('articles');
+    };
+
+    handleLocationChange();
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
+  }, [articles]);
+
+  // Synchronize document.title on tab change
+  useEffect(() => {
+    if (!selectedArticle) {
+      if (currentTab === 'seo') {
+        document.title = "SEO Keyword Research Table & On-Page Audit | Penil's Space";
+      } else if (currentTab === 'about') {
+        document.title = "About Penil Vasani — Web Design Technologist | Penil's Space";
+      } else if (currentTab === 'projects') {
+        document.title = "Digital Business Projects & Design Prototypes | Penil's Space";
+      } else if (currentTab === 'contact') {
+        document.title = "Contact Penil Vasani — Digital Strategy Inquiries | Penil's Space";
+      } else {
+        document.title = "Digital Business & Design Notes | Penil's Digital Space";
+      }
+    }
+  }, [currentTab, selectedArticle]);
+
+  // Navigation handler
+  const navigateTo = (tab: 'articles' | 'about' | 'projects' | 'contact' | 'saved' | 'seo', article?: Article | null) => {
+    if (article) {
+      setSelectedArticle(article);
+      window.history.pushState({}, '', `/articles/${article.slug}`);
+    } else {
+      setSelectedArticle(null);
+      setCurrentTab(tab);
+      const targetPath = 
+        tab === 'about' ? '/about' :
+        tab === 'projects' ? '/projects' :
+        tab === 'contact' ? '/contact' :
+        tab === 'saved' ? '/saved' :
+        tab === 'seo' ? '/seo-research' : '/';
+      window.history.pushState({}, '', targetPath);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Upvote / Clap handler
   const handleClap = (id: string, e?: React.MouseEvent) => {
@@ -112,6 +173,7 @@ export default function App() {
           art.subtitle.toLowerCase().includes(q) ||
           art.excerpt.toLowerCase().includes(q) ||
           art.category.toLowerCase().includes(q) ||
+          art.mainKeyword.toLowerCase().includes(q) ||
           art.tags.some((t) => t.toLowerCase().includes(q))
       );
     }
@@ -120,29 +182,24 @@ export default function App() {
   }, [articles, currentTab, selectedCategory, searchQuery, savedArticleIds]);
 
   const handleSelectArticle = (article: Article) => {
-    setSelectedArticle(article);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigateTo('articles', article);
   };
 
   const handleBackToArticles = () => {
-    setSelectedArticle(null);
+    navigateTo('articles', null);
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#2D2A26] font-serif">
-      {/* Header with Navigation */}
+      {/* Header with Navigation & SEO Research Tab */}
       <Header
         currentTab={currentTab}
-        onSelectTab={(tab) => {
-          setSelectedArticle(null);
-          setCurrentTab(tab);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
+        onSelectTab={(tab) => navigateTo(tab, null)}
         savedCount={savedArticleIds.size}
         onOpenStudio={() => setIsStudioOpen(true)}
       />
 
-      {/* Main Container with Optimum Utilization of White Space */}
+      {/* Main Container */}
       <div className="flex-1">
         {selectedArticle ? (
           <ArticleView
@@ -153,8 +210,16 @@ export default function App() {
             onClap={handleClap}
             hasClapped={clappedArticleIds.has(selectedArticle.id)}
           />
+        ) : currentTab === 'seo' ? (
+          <SeoResearchView
+            onNavigateToArticle={(slug) => {
+              const match = articles.find((a) => a.slug === slug);
+              if (match) navigateTo('articles', match);
+            }}
+            onNavigateHome={() => navigateTo('articles', null)}
+          />
         ) : currentTab === 'about' ? (
-          <AboutView onNavigateToContact={() => setCurrentTab('contact')} />
+          <AboutView onNavigateToContact={() => navigateTo('contact', null)} />
         ) : currentTab === 'projects' ? (
           <ProjectsSection onExploreArticle={(slug) => {
             const match = articles.find((a) => a.slug === slug);
@@ -171,7 +236,7 @@ export default function App() {
                   Personal Reading Archive
                 </span>
                 <h1 className="font-sans font-semibold text-3xl md:text-4xl text-[#2D2A26] leading-tight mb-4">
-                  Saved Notes & Essays ({savedArticleIds.size})
+                  Saved Notes &amp; Essays ({savedArticleIds.size})
                 </h1>
                 <p className="font-serif text-lg text-[#595550]">
                   Articles and masterclass frameworks you've pinned for thoughtful reading.
@@ -180,60 +245,81 @@ export default function App() {
             ) : (
               <section className="py-6 md:py-8 mb-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start pb-6 border-b border-[#E5E0D8]/60">
                 <div className="lg:col-span-8 space-y-3">
+                  {/* Target Keywords Badge for Homepage */}
+                  <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono text-[#595550]">
+                    <span className="flex items-center gap-1 font-semibold text-[#D96C4A]">
+                      <Tag className="w-3 h-3" />
+                      <span>TARGET KEYWORDS:</span>
+                    </span>
+                    <span className="bg-white px-2 py-0.5 rounded border border-[#E5E0D8] text-[#2D2A26] font-semibold">
+                      digital business and design notes
+                    </span>
+                    <span className="text-[#E5E0D8]">·</span>
+                    <span className="bg-white px-1.5 py-0.5 rounded border border-[#E5E0D8]">
+                      modern website architecture
+                    </span>
+                    <span className="text-[#E5E0D8]">·</span>
+                    <span className="bg-white px-1.5 py-0.5 rounded border border-[#E5E0D8]">
+                      business data analytics frameworks
+                    </span>
+                  </div>
+
                   <h1 className="font-sans font-semibold text-3xl sm:text-4xl lg:text-[2.75rem] text-[#2D2A26] leading-[1.12] tracking-[-0.8px]">
                     Bridging the gap between digital business and thoughtful design.
                   </h1>
                   <p className="font-serif text-base sm:text-lg text-[#595550] leading-relaxed max-w-2xl">
-                    Hi there. I'm exploring modern website architecture, data analytics, and digital business strategy. Welcome to my personal notebook sharing practical tutorials and insights from my latest masterclasses.
+                    Welcome to my personal notebook exploring modern website architecture, executive data analytics frameworks, and vertical micro-SaaS unit economics. Every article is engineered with in-depth analysis, bespoke small-size imagery, and Answer Engine Optimization (AEO).
                   </p>
                   
-                  {/* Action buttons */}
+                  {/* Action buttons with descriptive anchor text */}
                   <div className="flex flex-wrap items-center gap-2.5 pt-1">
                     <button
-                      onClick={() => setIsStudioOpen(true)}
-                      className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#2D2A26] hover:bg-[#D96C4A] text-white rounded-md text-xs font-sans font-semibold transition-all cursor-pointer shadow-xs"
+                      onClick={() => navigateTo('seo', null)}
+                      className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#D96C4A] hover:bg-[#B85536] text-white rounded-md text-xs font-sans font-semibold transition-all cursor-pointer shadow-xs"
+                      title="Inspect Keyword Research Table for Homepage and 3 Articles"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-[#D96C4A]" />
-                      <span>Launch AI Assistant (Chatbot · Search · Voice)</span>
+                      <Table2 className="w-3.5 h-3.5 text-white" />
+                      <span>Keyword Research Table &amp; On-Page SEO (Steps 1–3)</span>
                     </button>
                     <button
-                      onClick={() => {
-                        const el = document.getElementById('notebook-feed');
-                        el?.scrollIntoView({ behavior: 'smooth' });
-                      }}
-                      className="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-[#E5E0D8] hover:border-[#D96C4A] rounded-md text-xs font-sans font-semibold text-[#2D2A26] hover:text-[#D96C4A] transition-all cursor-pointer shadow-xs"
+                      onClick={() => setIsStudioOpen(true)}
+                      className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#2D2A26] hover:bg-[#3E3A36] text-white rounded-md text-xs font-sans font-semibold transition-all cursor-pointer shadow-xs"
                     >
-                      <BookOpen className="w-3.5 h-3.5 text-[#D96C4A]" />
-                      <span>Browse 10 Masterclass Notes</span>
+                      <Sparkles className="w-3.5 h-3.5 text-[#D96C4A]" />
+                      <span>Launch AI Studio (Chatbot · Search · Voice)</span>
                     </button>
                   </div>
                 </div>
 
-                {/* Right Hero Overview Card: Eliminates Empty White Space */}
+                {/* Right Hero Overview Card */}
                 <div className="lg:col-span-4 bg-white border border-[#E5E0D8] rounded-lg p-4 shadow-xs font-sans space-y-2.5">
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-[#D96C4A] font-semibold block">
-                    Notebook Quick Metrics
-                  </span>
+                  <div className="flex items-center justify-between pb-1 border-b border-[#E5E0D8]/80">
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-[#D96C4A] font-semibold block">
+                      ON-PAGE SEO AUDIT
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded font-semibold">
+                      VERIFIED 100%
+                    </span>
+                  </div>
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
-                      <span className="text-[9px] text-[#595550] block font-mono">ESSAYS</span>
-                      <span className="text-sm font-bold text-[#2D2A26] tabular-nums">10 In-Depth</span>
+                      <span className="text-[9px] text-[#595550] block font-mono">IMAGE ASSETS</span>
+                      <span className="text-xs font-bold text-[#2D2A26] font-mono">&lt; 3KB Vector</span>
                     </div>
                     <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
-                      <span className="text-[9px] text-[#595550] block font-mono">STUDIES</span>
-                      <span className="text-sm font-bold text-[#2D2A26] tabular-nums">4 Disciplines</span>
+                      <span className="text-[9px] text-[#595550] block font-mono">AEO FORMAT</span>
+                      <span className="text-xs font-bold text-[#2D2A26] font-mono">H2 Q&amp;A Pairs</span>
                     </div>
                   </div>
                   <div className="text-[11px] text-[#595550] font-serif leading-snug pt-0.5">
-                    Interactive simulators, code formulas, and AI audio narration enabled.
+                    Unique URLs, title rules (50–60), meta description (140–160), anchor text, and Schema.org FAQPage active.
                   </div>
                 </div>
               </section>
             )}
 
-            {/* User-Centric Controls: Categories, View Mode & Instant Search */}
+            {/* Category Filters, Search & View Controls */}
             <div id="notebook-feed" className="mb-6 pb-3 border-b border-[#E5E0D8] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 font-sans scroll-mt-20">
-              {/* Category Filter Tabs with Counts */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
                 {categories.map((cat) => {
                   const count = categoryCounts[cat] || 0;
@@ -258,7 +344,6 @@ export default function App() {
 
               {/* View Switcher & Search */}
               <div className="flex items-center gap-3">
-                {/* View Mode Switcher */}
                 <div className="flex items-center bg-white border border-[#E5E0D8] rounded p-0.5">
                   <button
                     onClick={() => setViewMode('magazine')}
@@ -280,23 +365,21 @@ export default function App() {
                   </button>
                 </div>
 
-                {/* Instant Search Bar */}
                 <div className="relative flex-1 md:w-56">
                   <Search className="w-3.5 h-3.5 text-[#595550] absolute left-2.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search notes & tokens..."
+                    placeholder="Search notes & keywords..."
                     className="pl-7 pr-3 py-1.5 text-xs bg-white border border-[#E5E0D8] rounded focus:outline-none focus:border-[#D96C4A] w-full text-[#2D2A26]"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Balanced Two-Column Grid (8 cols articles, 4 cols sticky companion sidebar) */}
+            {/* Articles Stream and Companion Rail */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-start" id="articles">
-              {/* Articles Main Stream (8 cols) */}
               <div className="lg:col-span-8">
                 {filteredArticles.length === 0 ? (
                   <div className="py-16 text-center bg-white rounded-lg border border-[#E5E0D8] p-8">
@@ -311,103 +394,81 @@ export default function App() {
                       Clear search filters
                     </button>
                   </div>
-                ) : viewMode === 'compact' ? (
-                  /* Compact View Mode: High information density, quick scanning */
-                  <div className="space-y-4">
-                    {filteredArticles.map((article) => (
-                      <article
-                        key={article.id}
-                        onClick={() => handleSelectArticle(article)}
-                        className="p-4 bg-white border border-[#E5E0D8] rounded-lg hover:border-[#D96C4A]/60 transition-all cursor-pointer group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs"
-                      >
-                        <div className="flex items-start gap-4 flex-1">
-                          {/* Mini Thumbnail */}
-                          <div className="w-16 h-16 rounded overflow-hidden border border-[#E5E0D8] shrink-0 bg-[#FAF8F5]">
-                            <EditorialArtwork
-                              type={article.visualGraphic}
-                              accent={article.coverAccent}
-                              className="w-full h-full"
-                            />
-                          </div>
-
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2 text-[11px] font-sans">
-                              <span className="font-semibold text-[#D96C4A] uppercase tracking-wider">{article.category}</span>
-                              <span className="text-[#E5E0D8]">·</span>
-                              <span className="text-[#595550] font-mono">{article.readTime}</span>
-                            </div>
-                            <h3 className="font-sans font-semibold text-base text-[#2D2A26] group-hover:text-[#D96C4A] transition-colors leading-snug">
-                              {article.title}
-                            </h3>
-                            <p className="font-serif text-xs text-[#595550] line-clamp-1">
-                              {article.excerpt}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-3 text-xs font-sans text-[#595550] self-end sm:self-center shrink-0">
-                          <button
-                            onClick={(e) => handleClap(article.id, e)}
-                            className="flex items-center gap-1 hover:text-[#D96C4A]"
-                          >
-                            <Heart className={`w-3.5 h-3.5 ${clappedArticleIds.has(article.id) ? 'fill-[#D96C4A] text-[#D96C4A]' : ''}`} />
-                            <span className="font-mono tabular-nums">{article.claps}</span>
-                          </button>
-                          <button
-                            onClick={(e) => handleToggleSave(article.id, e)}
-                            className="p-1 hover:text-[#2D2A26]"
-                          >
-                            <Bookmark className={`w-3.5 h-3.5 ${savedArticleIds.has(article.id) ? 'fill-[#2D2A26] text-[#2D2A26]' : ''}`} />
-                          </button>
-                          <ChevronRight className="w-4 h-4 text-[#D96C4A] group-hover:translate-x-1 transition-transform" />
-                        </div>
-                      </article>
-                    ))}
-                  </div>
                 ) : (
-                  /* Magazine Card Mode: Rich visual storytelling with optimal white space */
                   <div className="space-y-6 sm:space-y-7">
                     {filteredArticles.map((article) => (
                       <article
                         key={article.id}
                         onClick={() => handleSelectArticle(article)}
-                        className="bg-white border border-[#E5E0D8] rounded-lg p-5 sm:p-6 hover:border-[#D96C4A]/60 transition-all cursor-pointer group shadow-[0_2px_10px_rgba(0,0,0,0.02)]"
+                        className="bg-white border border-[#E5E0D8] rounded-lg p-5 sm:p-6 hover:border-[#D96C4A]/60 transition-all cursor-pointer group shadow-xs"
                       >
-                        {/* Visual Editorial Image */}
-                        <div className="w-full h-44 sm:h-52 rounded-md overflow-hidden mb-4 border border-[#E5E0D8] bg-[#FAF8F5] shadow-xs group-hover:border-[#D96C4A]/50 transition-all">
-                          <EditorialArtwork
-                            type={article.visualGraphic}
-                            accent={article.coverAccent}
-                            className="w-full h-full"
+                        {/* Dedicated Small Vector Image with Alt Text (< 3KB) */}
+                        <div className="w-full h-48 sm:h-56 rounded-md overflow-hidden mb-4 border border-[#E5E0D8] bg-[#FAF8F5] relative group-hover:border-[#D96C4A]/50 transition-all">
+                          <img
+                            src={article.coverImage}
+                            alt={article.imageAlt}
+                            width={800}
+                            height={450}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover"
                           />
+                          <div className="absolute bottom-2 right-2 bg-[#2D2A26]/85 backdrop-blur-xs text-white text-[9px] font-mono px-2 py-0.5 rounded">
+                            SVG · &lt; 3KB · Zero CLS
+                          </div>
                         </div>
 
-                        {/* Tag & Read Time */}
-                        <div className="flex items-center justify-between text-xs font-sans mb-2">
-                          <span className="text-[0.8rem] uppercase tracking-[1px] text-[#D96C4A] font-semibold">
-                            {article.category}
-                          </span>
+                        {/* Category & Keywords */}
+                        <div className="flex flex-wrap items-center justify-between text-xs font-sans mb-2 gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[0.8rem] uppercase tracking-[1px] text-[#D96C4A] font-semibold">
+                              {article.category}
+                            </span>
+                            <span className="text-[#E5E0D8]">·</span>
+                            <span className="font-mono text-[#595550] text-[11px] bg-[#FAF8F5] px-1.5 py-0.5 rounded border border-[#E5E0D8]">
+                              KW: {article.mainKeyword}
+                            </span>
+                          </div>
                           <span className="font-mono text-[#595550] text-[11px] flex items-center gap-1">
                             <Clock className="w-3 h-3 text-[#D96C4A]" />
                             {article.readTime}
                           </span>
                         </div>
 
-                        {/* Title */}
+                        {/* Title with Semantic Anchor */}
                         <h2 className="font-sans font-semibold text-2xl sm:text-[1.75rem] text-[#2D2A26] group-hover:text-[#D96C4A] transition-colors leading-[1.25] my-2">
-                          {article.title}
+                          <a
+                            href={`/articles/${article.slug}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleSelectArticle(article);
+                            }}
+                            className="hover:underline focus:outline-none"
+                            title={`Read complete article: ${article.title}`}
+                          >
+                            {article.title}
+                          </a>
                         </h2>
 
-                        {/* Excerpt */}
+                        {/* Subtitle / Excerpt */}
                         <p className="font-serif text-[#2D2A26] text-base leading-[1.65] my-3">
                           {article.excerpt}
                         </p>
 
-                        {/* Footnote & User-Centric Actions */}
-                        <div className="flex items-center justify-between text-xs text-[#595550] font-sans pt-3 border-t border-[#E5E0D8]/60 mt-4">
-                          <span className="text-[#D96C4A] font-semibold group-hover:underline flex items-center gap-1">
-                            Read Full Masterclass Notes <ArrowRight className="w-3.5 h-3.5" />
-                          </span>
+                        {/* Actions & Explicit Anchor Text */}
+                        <div className="flex flex-wrap items-center justify-between text-xs text-[#595550] font-sans pt-3 border-t border-[#E5E0D8]/60 mt-4 gap-3">
+                          <a
+                            href={`/articles/${article.slug}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleSelectArticle(article);
+                            }}
+                            className="text-[#D96C4A] font-semibold group-hover:underline inline-flex items-center gap-1"
+                            title={`Read the full masterclass guide: ${article.title}`}
+                          >
+                            <span>Read complete guide on {article.mainKeyword}</span>
+                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                          </a>
 
                           <div className="flex items-center gap-4">
                             <button
@@ -438,121 +499,58 @@ export default function App() {
                 )}
               </div>
 
-              {/* Right Sticky Sidebar (4 cols): Fully Utilizes White Space */}
+              {/* Right Companion Rail */}
               <aside className="lg:col-span-4 space-y-6">
                 <div className="sticky top-24 space-y-6">
-                  {/* Current Focus Card with Organic Subtle Tilt (-0.5deg) */}
-                  <div className="bg-[#FFFFFF] p-7 rounded-[8px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] organic-tilt border border-[#E5E0D8]/40">
-                    <h3 className="font-sans font-semibold text-[1.15rem] text-[#2D2A26] border-b-2 border-[#D96C4A] inline-block pb-1 mb-3">
+                  {/* SEO Hub Card */}
+                  <div className="bg-white p-5 rounded-lg border border-[#E5E0D8] shadow-xs space-y-3 font-sans">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-md bg-[#D96C4A]/10 text-[#D96C4A] flex items-center justify-center font-bold">
+                        <Table2 className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-sm text-[#2D2A26]">SEO &amp; AEO Engine</h3>
+                        <span className="text-[10px] font-mono text-emerald-700">Steps 1, 2, 3 Active</span>
+                      </div>
+                    </div>
+                    <p className="font-serif text-xs text-[#595550] leading-relaxed">
+                      Every page features unique clean URLs, 1 main + 2 related keywords, strict title/meta limits, vector artwork with alt text, and question-answer H2 subheadings for AI answer engines.
+                    </p>
+                    <button
+                      onClick={() => navigateTo('seo', null)}
+                      className="w-full py-2 px-3 bg-[#FAF8F5] hover:bg-[#D96C4A] hover:text-white border border-[#E5E0D8] rounded text-xs font-semibold text-[#2D2A26] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <span>Open Keyword Research Table</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
+                  </div>
+
+                  {/* Current Focus Card */}
+                  <div className="bg-white p-6 rounded-lg shadow-xs border border-[#E5E0D8]/80 font-sans space-y-3">
+                    <h3 className="font-semibold text-base text-[#2D2A26] border-b-2 border-[#D96C4A] inline-block pb-1">
                       Current Focus
                     </h3>
-                    <p className="font-serif text-[#2D2A26] text-sm leading-[1.6] mb-3">
-                      Right now, I'm diving deep into digital business frameworks and experimenting with presentation design. I believe the best way to learn is by building and sharing the process publicly.
+                    <p className="font-serif text-[#2D2A26] text-xs leading-[1.6]">
+                      Right now, I'm diving deep into digital business frameworks, high data-ink executive dashboards, and experimenting with presentation narrative architecture.
                     </p>
-                    <p className="font-serif text-[#2D2A26] text-sm leading-[1.6] mb-5">
-                      Feel free to reach out if you want to collaborate on a project or discuss the latest trends in the tech ecosystem.
-                    </p>
-                    <div className="flex flex-col gap-2 font-sans">
-                      <button
-                        onClick={() => setCurrentTab('contact')}
-                        className="px-4 py-2 bg-[#D96C4A] hover:bg-[#B85536] text-white text-xs font-semibold rounded text-center transition-colors cursor-pointer shadow-xs flex items-center justify-center gap-1.5"
-                      >
-                        <Mail className="w-3.5 h-3.5" />
-                        <span>Send Penil a Message</span>
-                      </button>
-                      <button
-                        onClick={() => setCurrentTab('projects')}
-                        className="px-4 py-2 bg-[#FAF8F5] hover:bg-[#E5E0D8] text-[#2D2A26] text-xs font-semibold rounded text-center border border-[#E5E0D8] transition-colors cursor-pointer"
-                      >
-                        Explore Active Projects
-                      </button>
+                    <div className="pt-2 border-t border-[#E5E0D8]/60 text-xs text-[#595550] flex items-center justify-between font-mono text-[11px]">
+                      <span>Penil Vasani</span>
+                      <span className="text-[#D96C4A]">2026 Masterclasses</span>
                     </div>
                   </div>
 
-                  {/* Inline AI Studio Quick-Prompt Widget */}
-                  <div className="bg-white p-5 rounded-[8px] border border-[#E5E0D8] shadow-xs font-sans space-y-3">
-                    <div className="flex items-center justify-between pb-2 border-b border-[#E5E0D8]">
-                      <span className="text-[11px] font-mono uppercase text-[#D96C4A] font-semibold flex items-center gap-1">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span>Ask AI Companion</span>
-                      </span>
-                      <span className="text-[10px] font-mono text-[#595550]">Gemini 3.5</span>
-                    </div>
-                    <p className="text-xs font-serif text-[#595550]">
-                      Ask questions about website architecture, design tokens, or spreadsheet KPIs:
-                    </p>
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        setIsStudioOpen(true);
-                      }}
-                      className="flex gap-2"
-                    >
-                      <input
-                        type="text"
-                        value={sidebarPrompt}
-                        onChange={(e) => setSidebarPrompt(e.target.value)}
-                        placeholder="e.g. How to structure CAC?"
-                        className="flex-1 text-xs px-3 py-1.5 bg-[#FAF8F5] border border-[#E5E0D8] rounded focus:outline-none focus:border-[#D96C4A]"
-                      />
-                      <button
-                        type="submit"
-                        className="px-3 py-1.5 bg-[#2D2A26] hover:bg-[#D96C4A] text-white text-xs font-semibold rounded cursor-pointer transition-colors"
-                      >
-                        Ask
-                      </button>
-                    </form>
-                  </div>
-
-                  {/* Masterclass Study Notes Index */}
-                  <div className="bg-white p-5 rounded-[8px] border border-[#E5E0D8] shadow-xs font-sans space-y-3">
-                    <span className="text-[11px] font-mono uppercase tracking-wider text-[#D96C4A] font-semibold block">
-                      Masterclass Index
-                    </span>
-                    <ul className="text-xs space-y-2 text-[#2D2A26]">
-                      <li
-                        onClick={() => setSelectedCategory('Web Design')}
-                        className="flex items-center justify-between hover:text-[#D96C4A] cursor-pointer pb-1.5 border-b border-[#E5E0D8]/60"
-                      >
-                        <span>Web Design & Ergonomics</span>
-                        <span className="font-mono text-[#595550]">5 notes</span>
-                      </li>
-                      <li
-                        onClick={() => setSelectedCategory('Data Analytics')}
-                        className="flex items-center justify-between hover:text-[#D96C4A] cursor-pointer pb-1.5 border-b border-[#E5E0D8]/60"
-                      >
-                        <span>Data Analytics & KPIs</span>
-                        <span className="font-mono text-[#595550]">2 notes</span>
-                      </li>
-                      <li
-                        onClick={() => setSelectedCategory('Digital Business')}
-                        className="flex items-center justify-between hover:text-[#D96C4A] cursor-pointer pb-1.5 border-b border-[#E5E0D8]/60"
-                      >
-                        <span>Digital Business & Strategy</span>
-                        <span className="font-mono text-[#595550]">2 notes</span>
-                      </li>
-                      <li
-                        onClick={() => setSelectedCategory('Presentation Design')}
-                        className="flex items-center justify-between hover:text-[#D96C4A] cursor-pointer pb-1.5 border-b border-[#E5E0D8]/60"
-                      >
-                        <span>Presentation Design</span>
-                        <span className="font-mono text-[#595550]">1 note</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Monthly Curatorial Digest */}
-                  <div className="bg-[#FAF8F5] p-5 rounded-[8px] border border-[#E5E0D8] font-sans space-y-2.5">
-                    <span className="text-[11px] font-mono uppercase text-[#D96C4A] font-semibold block">
-                      Notebook Dispatch
-                    </span>
-                    <p className="text-xs font-serif text-[#595550] leading-snug">
-                      Monthly summaries of masterclass learnings, design formulas, and tools.
+                  {/* Newsletter Signup */}
+                  <div className="bg-white p-6 rounded-lg border border-[#E5E0D8] shadow-xs font-sans">
+                    <h3 className="font-semibold text-base text-[#2D2A26] mb-1.5">
+                      The Digital Space Notebook
+                    </h3>
+                    <p className="font-serif text-xs text-[#595550] mb-4 leading-relaxed">
+                      Bi-weekly masterclass notes on modern web architecture, unit economics, and data analytics. No marketing clutter.
                     </p>
                     {newsletterSubscribed ? (
-                      <div className="text-xs font-mono text-emerald-800 bg-emerald-50 p-2 rounded border border-emerald-200 flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>Subscribed to notebook notes!</span>
+                      <div className="p-3 bg-emerald-50 border border-emerald-200 rounded text-xs text-emerald-800 flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span>Subscribed! Check your inbox for the architecture notes.</span>
                       </div>
                     ) : (
                       <form
@@ -560,19 +558,19 @@ export default function App() {
                           e.preventDefault();
                           setNewsletterSubscribed(true);
                         }}
-                        className="flex gap-2 pt-1"
+                        className="space-y-2.5"
                       >
                         <input
                           type="email"
                           required
-                          placeholder="your@email.com"
-                          className="flex-1 text-xs px-2.5 py-1.5 bg-white border border-[#E5E0D8] rounded focus:outline-none focus:border-[#D96C4A]"
+                          placeholder="your.email@company.com"
+                          className="w-full px-3 py-2 text-xs border border-[#E5E0D8] rounded focus:outline-none focus:border-[#D96C4A] bg-[#FAF8F5]"
                         />
                         <button
                           type="submit"
-                          className="px-3 py-1.5 bg-[#D96C4A] hover:bg-[#B85536] text-white text-xs font-semibold rounded cursor-pointer transition-colors"
+                          className="w-full py-2 bg-[#2D2A26] hover:bg-[#D96C4A] text-white text-xs font-semibold rounded transition-colors cursor-pointer shadow-xs"
                         >
-                          Join
+                          Join 2,400+ Readers
                         </button>
                       </form>
                     )}
@@ -584,21 +582,11 @@ export default function App() {
         )}
       </div>
 
-      {/* Footer */}
-      <Footer
-        onSelectTab={(tab) => {
-          setSelectedArticle(null);
-          setCurrentTab(tab);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-        onSelectCategory={(cat) => setSelectedCategory(cat)}
-      />
+      {/* Footer with Semantic Anchor Links */}
+      <Footer onSelectTab={(tab) => navigateTo(tab, null)} />
 
-      {/* Multimodal AI Studio Modal */}
-      <GeminiStudio
-        isOpen={isStudioOpen}
-        onClose={() => setIsStudioOpen(false)}
-      />
+      {/* AI Studio Drawer */}
+      <GeminiStudio isOpen={isStudioOpen} onClose={() => setIsStudioOpen(false)} />
     </div>
   );
 }
