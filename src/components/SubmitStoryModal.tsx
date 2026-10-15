@@ -89,9 +89,12 @@ export const SubmitStoryModal: React.FC<SubmitStoryModalProps> = ({
             <span className="text-[11px] font-mono uppercase tracking-widest text-stone-500">
               Community Dispatch
             </span>
-            <h2 className="text-xl font-serif font-medium text-stone-900">
-              Submit an Article or Workflow
+            <h2 className="text-lg font-serif font-medium text-stone-900">
+              How do you submit a masterclass article or workflow note?
             </h2>
+            <p className="text-[11px] text-stone-600 font-sans mt-0.5">
+              <span className="font-mono text-[#D96C4A] font-semibold">Answer:</span> Complete the submission schema below to publish your case study or masterclass notes to the community feed.
+            </p>
           </div>
           <button
             onClick={onClose}

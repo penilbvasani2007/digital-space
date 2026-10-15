@@ -13,7 +13,9 @@ export const ProjectsSection: React.FC<{ onExploreArticle?: (slug: string) => vo
       icon: BarChart2,
       metrics: '3.4x faster reporting · 14k monthly views',
       status: 'Live & Open Source',
-      demoDetail: 'Includes automated column classification into Leading, North Star, and Trailing KPIs with zero manual charting effort.'
+      demoDetail: 'Includes automated column classification into Leading, North Star, and Trailing KPIs with zero manual charting effort.',
+      relatedArticleSlug: 'organizing-business-data-spreadsheets-to-dashboards',
+      relatedAnchorText: 'Read complete guide on spreadsheets to dashboards'
     },
     {
       id: 'proj-2',
@@ -23,7 +25,9 @@ export const ProjectsSection: React.FC<{ onExploreArticle?: (slug: string) => vo
       icon: Layout,
       metrics: 'WCAG 2.2 compliant · 0 layout shifts',
       status: 'Active Tool',
-      demoDetail: 'Ensures landing pages maintain 65-75ch line lengths, single-line header contracts, and anti-slop color discipline.'
+      demoDetail: 'Ensures landing pages maintain 65-75ch line lengths, single-line header contracts, and anti-slop color discipline.',
+      relatedArticleSlug: 'why-first-impressions-matter-in-website-architecture',
+      relatedAnchorText: 'Read complete guide on website architecture design principles'
     },
     {
       id: 'proj-3',
@@ -33,7 +37,9 @@ export const ProjectsSection: React.FC<{ onExploreArticle?: (slug: string) => vo
       icon: Sliders,
       metrics: '10 verified workflow formulas',
       status: 'Engine v2.4',
-      demoDetail: 'Eradicates generic AI aesthetics by enforcing zero-pill metadata discipline and mathematical luminance uniformity.'
+      demoDetail: 'Eradicates generic AI aesthetics by enforcing zero-pill metadata discipline and mathematical luminance uniformity.',
+      relatedArticleSlug: 'generative-design-systems-tokens-llm',
+      relatedAnchorText: 'Read complete guide on generative design tokens'
     },
     {
       id: 'proj-4',
@@ -43,7 +49,9 @@ export const ProjectsSection: React.FC<{ onExploreArticle?: (slug: string) => vo
       icon: Presentation,
       metrics: 'Used in $4.2M seed rounds',
       status: 'Framework Guide',
-      demoDetail: 'Follows the strict billboard paradigm: 1 context slide, 2 quantitative proof slides, and 1 decisive action mandate.'
+      demoDetail: 'Follows the strict billboard paradigm: 1 context slide, 2 quantitative proof slides, and 1 decisive action mandate.',
+      relatedArticleSlug: 'presentation-design-masterclass-stakeholder-narratives',
+      relatedAnchorText: 'Read complete guide on executive presentation narratives'
     }
   ];
 
@@ -51,13 +59,17 @@ export const ProjectsSection: React.FC<{ onExploreArticle?: (slug: string) => vo
     <div className="max-w-[1000px] mx-auto px-6 py-12">
       <div className="max-w-2xl mb-12">
         <span className="text-xs uppercase tracking-widest font-sans font-semibold text-[#D96C4A] block mb-2">
-          Projects & Experiments
+          Projects &amp; Experiments
         </span>
         <h1 className="text-4xl font-sans font-semibold text-[#2D2A26] leading-tight mb-4">
           Building tools at the intersection of design and business.
         </h1>
-        <p className="text-lg font-serif text-[#595550] leading-relaxed">
-          Practical systems, open prototypes, and tools developed during my research into modern web architecture and data analytics.
+        <h2 className="text-xl font-sans font-semibold text-[#2D2A26] mb-2">
+          What tools and prototypes translate masterclass theory into practice?
+        </h2>
+        <p className="text-base font-serif text-[#595550] leading-relaxed">
+          <strong className="font-mono text-xs text-[#D96C4A] mr-1.5 font-bold">Answer:</strong>
+          These practical open prototypes—including an Executive Metrics Canvas with high data-ink ratios, a 50ms First Impressions layout auditor, and a declarative CSS token synthesizer—translate theoretical research into living, accessible web utilities.
         </p>
       </div>
 
@@ -91,9 +103,27 @@ export const ProjectsSection: React.FC<{ onExploreArticle?: (slug: string) => vo
                   {proj.desc}
                 </p>
 
-                <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8] text-xs font-mono text-[#2D2A26] mb-6">
+                <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8] text-xs font-mono text-[#2D2A26] mb-5">
                   <span className="text-[#595550] block text-[10px] uppercase">Impact & Performance:</span>
                   <span className="font-semibold">{proj.metrics}</span>
+                </div>
+
+                {/* Explicit In-Context Link with Rich Anchor Text */}
+                <div className="mb-4">
+                  <a
+                    href={`/articles/${proj.relatedArticleSlug}`}
+                    onClick={(e) => {
+                      if (onExploreArticle) {
+                        e.preventDefault();
+                        onExploreArticle(proj.relatedArticleSlug);
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold text-[#D96C4A] hover:text-[#B85536] transition-colors"
+                    title={proj.relatedAnchorText}
+                  >
+                    <span>{proj.relatedAnchorText}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
                 </div>
               </div>
 

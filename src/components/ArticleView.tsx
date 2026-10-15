@@ -8,10 +8,12 @@ import {
 } from 'lucide-react';
 import { EditorialArtwork } from './EditorialArtwork';
 import { InteractiveWidget } from './InteractiveWidget';
+import { INITIAL_ARTICLES } from '../data/articles';
 
 interface ArticleViewProps {
   article: Article;
   onBack: () => void;
+  onSelectArticle?: (article: Article) => void;
   isSaved: boolean;
   onToggleSave: (id: string) => void;
   onClap: (id: string) => void;
@@ -21,6 +23,7 @@ interface ArticleViewProps {
 export const ArticleView: React.FC<ArticleViewProps> = ({
   article,
   onBack,
+  onSelectArticle,
   isSaved,
   onToggleSave,
   onClap,
@@ -429,7 +432,11 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>EXECUTIVE DIRECT ANSWER SUMMARY (AEO &amp; AI OVERVIEWS)</span>
               </div>
+              <h2 className="text-base font-sans font-semibold text-[#2D2A26] mb-1">
+                What is the direct executive answer for {article.title}?
+              </h2>
               <p className="text-sm font-serif text-[#2D2A26] leading-relaxed">
+                <strong className="font-mono text-xs text-[#D96C4A] mr-1.5">Answer:</strong>
                 {article.directAnswerSummary}
               </p>
             </div>
@@ -486,23 +493,29 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
         {/* Left / Center Prose Column (8 cols ~ 68ch measure) */}
         <main className="lg:col-span-8 font-serif">
           {article.sections.map((section, idx) => (
-            <section key={idx} id={`section-${idx}`} className="my-8 scroll-mt-24">
+            <section key={idx} id={`section-${idx}`} className="my-8 scroll-mt-24" itemScope itemType="https://schema.org/Question">
               {/* Question Subheading (H2) for AEO */}
-              <h2 className="text-2xl font-sans font-semibold text-[#2D2A26] mb-3 flex items-start gap-2">
+              <h2 className="text-2xl font-sans font-semibold text-[#2D2A26] mb-3 flex items-start gap-2" itemProp="name">
                 <span className="text-[#D96C4A] font-mono text-lg shrink-0 mt-0.5">Q:</span>
                 <span>{section.title}</span>
               </h2>
 
-              {/* Direct Answer Paragraph & Prose Content */}
-              <p
-                className={`text-[#2D2A26] ${proseSizeClass} mb-6 font-serif ${
-                  idx === 0
-                    ? 'first-letter:text-5xl first-letter:font-serif first-letter:font-normal first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-[#D96C4A]'
-                    : ''
-                }`}
-              >
-                {section.content}
-              </p>
+              {/* Direct Answer Paragraph & Prose Content for Answer Engine Optimization */}
+              <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
+                <p
+                  itemProp="text"
+                  className={`text-[#2D2A26] ${proseSizeClass} mb-6 font-serif ${
+                    idx === 0
+                      ? 'first-letter:text-5xl first-letter:font-serif first-letter:font-normal first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-[#D96C4A]'
+                      : ''
+                  }`}
+                >
+                  <span className="inline-flex items-center font-mono text-[11px] font-bold text-[#D96C4A] bg-[#FAF8F5] border border-[#E5E0D8] px-2 py-0.5 rounded mr-2 align-middle">
+                    Answer:
+                  </span>
+                  {section.content}
+                </p>
+              </div>
 
               {/* Pull Quote */}
               {section.pullQuote && (
@@ -562,18 +575,20 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
             <section className="my-12 p-6 bg-white border border-[#E5E0D8] rounded-lg">
               <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#E5E0D8]">
                 <HelpCircle className="w-4 h-4 text-[#D96C4A]" />
-                <h3 className="font-sans font-semibold text-lg text-[#2D2A26]">
-                  Frequently Asked Questions (Schema.org FAQPage)
-                </h3>
+                <h2 className="font-sans font-semibold text-lg text-[#2D2A26]">
+                  Frequently Asked Questions: What key answers resolve common doubts?
+                </h2>
               </div>
               <div className="space-y-4 font-sans text-xs">
                 {article.faqList.map((faq, i) => (
                   <div key={i} className="p-3.5 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
-                    <div className="font-semibold text-sm text-[#2D2A26] mb-1.5">
-                      {faq.question}
+                    <div className="font-semibold text-sm text-[#2D2A26] mb-1.5 flex items-start gap-2">
+                      <span className="text-[#D96C4A] font-mono text-xs shrink-0 mt-0.5 font-bold">Q:</span>
+                      <span>{faq.question}</span>
                     </div>
-                    <div className="font-serif text-sm text-[#595550] leading-relaxed">
-                      {faq.answer}
+                    <div className="font-serif text-sm text-[#595550] leading-relaxed flex items-start gap-2">
+                      <span className="text-[#2D2A26] font-mono text-xs shrink-0 mt-0.5 font-bold">A:</span>
+                      <span>{faq.answer}</span>
                     </div>
                   </div>
                 ))}
@@ -690,6 +705,93 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
               ))}
             </div>
           </div>
+
+          {/* Related Masterclass Guides Internal Linking Section with Rich Anchor Text */}
+          <section className="mt-14 pt-8 border-t border-[#E5E0D8]">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[#D96C4A] font-semibold block">
+                  CONTINUE READING
+                </span>
+                <h3 className="font-sans font-semibold text-xl text-[#2D2A26]">
+                  Related Architecture &amp; Strategy Guides
+                </h3>
+              </div>
+              <a
+                href="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onBack();
+                }}
+                className="text-xs font-sans font-semibold text-[#D96C4A] hover:underline hidden sm:inline"
+                title="Browse all notebook articles"
+              >
+                View all articles &rarr;
+              </a>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {INITIAL_ARTICLES.filter((item) => item.id !== article.id).slice(0, 2).map((rel) => (
+                <div
+                  key={rel.id}
+                  className="p-5 bg-white border border-[#E5E0D8] rounded-lg hover:border-[#D96C4A] transition-all group flex flex-col justify-between shadow-xs"
+                >
+                  <div>
+                    {/* Small vector image with alt text */}
+                    <div className="w-full h-32 rounded overflow-hidden mb-3 border border-[#E5E0D8] bg-[#FAF8F5]">
+                      <img
+                        src={rel.coverImage}
+                        alt={rel.imageAlt}
+                        width={400}
+                        height={225}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
+                      />
+                    </div>
+                    <span className="text-[10px] font-mono uppercase text-[#D96C4A] font-semibold block mb-1">
+                      {rel.category} · {rel.readTime}
+                    </span>
+                    <h4 className="font-sans font-semibold text-sm text-[#2D2A26] group-hover:text-[#D96C4A] transition-colors leading-snug mb-2 line-clamp-2">
+                      <a
+                        href={`/articles/${rel.slug}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (onSelectArticle) {
+                            onSelectArticle(rel);
+                          }
+                        }}
+                        className="hover:underline focus:outline-none"
+                        title={`Read full guide: ${rel.title}`}
+                      >
+                        {rel.title}
+                      </a>
+                    </h4>
+                    <p className="font-serif text-xs text-[#595550] line-clamp-2 mb-3">
+                      {rel.excerpt}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 border-t border-[#E5E0D8]/60">
+                    <a
+                      href={`/articles/${rel.slug}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onSelectArticle) {
+                          onSelectArticle(rel);
+                        }
+                      }}
+                      className="inline-flex items-center gap-1 text-xs font-sans font-semibold text-[#D96C4A] group-hover:text-[#B85536]"
+                      title={`Read complete guide on ${rel.mainKeyword}`}
+                    >
+                      <span>Read complete guide on {rel.mainKeyword}</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
         </main>
 
         {/* Right Sidebar Rail (4 cols) */}

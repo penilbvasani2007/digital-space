@@ -30,7 +30,7 @@ export const INITIAL_ARTICLES: Article[] = [
     imageAlt: getArticleImage('why-first-impressions-matter-in-website-architecture').alt,
     mainKeyword: 'website architecture first impressions',
     relatedKeywords: ['readable typography guidelines', 'landing page cognitive threshold'],
-    seoTitle: "Website Architecture First Impressions: Typography & UX | Penil's Space",
+    seoTitle: "Website Architecture First Impressions | Penil's Space",
     seoDescription: 'Master website architecture first impressions. Learn why readable typography guidelines beat visual clutter within the 50ms landing page cognitive threshold.',
     directAnswerSummary: 'Users form aesthetic and credibility assessments of a website within 50 milliseconds because the human visual cortex evaluates balance, negative space, and typography before cognitive reading begins. Prioritizing spatial clarity and typographic restraint over distracting animations directly reduces bounce rates and establishes visitor trust.',
     faqList: [
@@ -135,7 +135,7 @@ export const INITIAL_ARTICLES: Article[] = [
     imageAlt: getArticleImage('organizing-business-data-spreadsheets-to-dashboards').alt,
     mainKeyword: 'spreadsheets to dashboards',
     relatedKeywords: ['executive business metrics', 'high data ink ratio'],
-    seoTitle: "Spreadsheets to Dashboards: Executive Business Metrics | Penil's Space",
+    seoTitle: "Spreadsheets to Dashboards: KPI Metrics | Penil's Space",
     seoDescription: 'Transform messy spreadsheets to dashboards with executive business metrics. Discover Edward Tufte\'s high data ink ratio principles for clear decision-making.',
     directAnswerSummary: 'Transforming spreadsheets to dashboards requires triaging columns into a 3-tier hierarchy: one primary North Star Metric, two to three Leading Indicators forecasting trajectory, and granular Trailing Diagnostic Drivers. Applying Edward Tufte’s high data-ink ratio principles strips visual clutter to deliver instant executive comprehension.',
     faqList: [
@@ -241,7 +241,7 @@ export function ExecutiveMetricCard({ label, value, delta, isPositive }: MetricP
     imageAlt: getArticleImage('digital-business-frameworks-generative-monetization').alt,
     mainKeyword: 'digital business frameworks',
     relatedKeywords: ['vertical micro saas economics', 'software unit economics 2026'],
-    seoTitle: "Digital Business Frameworks & Vertical Micro-SaaS | Penil's Space",
+    seoTitle: "Digital Business Frameworks & Micro-SaaS | Penil's Space",
     seoDescription: 'Explore 2026 digital business frameworks and vertical micro saas economics. Learn how automated toolchains and software unit economics drive lean profitability.',
     directAnswerSummary: 'Vertical micro-SaaS digital business frameworks thrive in 2026 because automated developer toolchains reduce software manufacturing costs to near-zero. Lean teams achieve 85%+ gross margins and 5x+ LTV-to-CAC multiples by focusing on hyper-specialized workflow schemas, self-serve onboarding, and transparent subscription tiers.',
     faqList: [
@@ -334,7 +334,7 @@ export function ExecutiveMetricCard({ label, value, delta, isPositive }: MetricP
     imageAlt: getArticleImage('presentation-design-masterclass-stakeholder-narratives').alt,
     mainKeyword: 'presentation design masterclass',
     relatedKeywords: ['executive narrative decks', 'slide composition principles'],
-    seoTitle: "Presentation Design Masterclass: Narrative Decks | Penil's Space",
+    seoTitle: "Presentation Design: Narrative Decks | Penil's Space",
     seoDescription: 'Master executive presentation design and storytelling. Learn the 1-2-1 narrative structure and slide composition principles that persuade boardrooms.',
     directAnswerSummary: 'The 1-2-1 presentation design architecture structures executive communication into a focused cadence: 1 context slide establishing market tension, 2 proof slides presenting quantitative data, and 1 decisive action slide. Treating slides as high-impact billboards delivering one idea in 3 seconds beats cluttered bullet points.',
     faqList: [
@@ -394,7 +394,7 @@ export function ExecutiveMetricCard({ label, value, delta, isPositive }: MetricP
     mainKeyword: 'generative design systems',
     relatedKeywords: ['semantic design tokens', 'oklch color space scales'],
     seoTitle: "Generative Design Systems & Semantic Tokens | Penil's Space",
-    seoDescription: 'Discover how to build generative design systems with semantic CSS tokens, OKLCH color spaces, and automated WCAG contrast validation schemas.',
+    seoDescription: 'Discover how to build generative design systems with semantic CSS tokens, OKLCH color spaces, and automated WCAG contrast validation schemas for web apps.',
     directAnswerSummary: 'Generative design systems move beyond static Figma variables by using declarative mathematical formulas in OKLCH color space. Teams orchestrate semantic tokens through programmatic schemas, ensuring uniform luminance steps and guaranteed WCAG AAA contrast across all sub-brands.',
     faqList: [
       {
@@ -408,6 +408,14 @@ export function ExecutiveMetricCard({ label, value, delta, isPositive }: MetricP
         title: 'Why is manual token governance becoming obsolete in multi-brand systems?',
         content: 'For a decade, design systems lived in a state of precarious synchronicity between design tools and codebases. When a brand expands from a single web app into four sub-brands across desktop, tablet, and spatial viewports, manual token management quickly becomes untenable.',
         pullQuote: 'A design token is not merely a hex code with a label; it is a mathematical relationship between contrast, intent, and platform constraints.'
+      },
+      {
+        title: 'How does OKLCH color space guarantee WCAG AAA contrast compliance?',
+        content: 'OKLCH color space mathematically guarantees WCAG AAA compliance by separating perceptual lightness (L) from chroma (C) and hue (H). In traditional RGB or HSL, a 60% lightness produces wildly inconsistent visual contrast across yellow and blue. In OKLCH, uniform luminance steps deliver guaranteed contrast ratios across all brand variations, eliminating unreadable text and inaccessible button states.'
+      },
+      {
+        title: 'What architecture connects declarative token schemas to production CSS variables?',
+        content: 'Declarative token architecture maps high-level brand primitives to machine-validated JSON schemas. When an automated toolchain adjusts the primary brand hue, mathematical derivative formulas calculate surface, border, and text pairings, compiling clean CSS custom properties directly into the runtime stylesheet with zero human overhead.'
       }
     ],
     interactiveWidget: {
@@ -417,7 +425,8 @@ export function ExecutiveMetricCard({ label, value, delta, isPositive }: MetricP
     },
     keyTakeaways: [
       'Define systemic rules and schema boundaries rather than hand-picking individual color values.',
-      'Always prompt in OKLCH or CIELAB color spaces to ensure uniform luminance steps.'
+      'Always prompt in OKLCH or CIELAB color spaces to ensure uniform luminance steps.',
+      'Automate contrast checking at build time to prevent WCAG accessibility violations.'
     ],
     suggestedPrompt: 'Generate a complete semantic CSS design token set in OKLCH format for an editorial web journal.'
   },
@@ -449,12 +458,16 @@ export function ExecutiveMetricCard({ label, value, delta, isPositive }: MetricP
     mainKeyword: 'diffusion concept to production css',
     relatedKeywords: ['responsive css grid architecture', 'accessible layout geometry'],
     seoTitle: "Concept Art to Production CSS Grid Layouts | Penil's Space",
-    seoDescription: 'Learn how to translate generative concept art into clean, accessible 12-column CSS Grid layouts, scalable vectors, and tactile web interfaces.',
+    seoDescription: 'Learn how to translate generative concept art into clean, accessible 12-column CSS Grid layouts, scalable vectors, and tactile production web interfaces.',
     directAnswerSummary: 'Translating generative concept art to production CSS requires extracting layout geometry, whitespace rhythm, and typography ratios rather than exporting static bitmap images. Developers build semantic 12-column CSS Grid architectures that preserve real HTML text for search indexing and accessibility.',
     faqList: [
       {
         question: 'Why should AI concept artwork never be exported directly as a web background?',
         answer: 'Exporting raw bitmaps breaks responsiveness, destroys accessibility for screen readers, severely hurts SEO search indexing, and increases bundle payload size.'
+      },
+      {
+        question: 'How do you extract responsive grid ratios from an AI concept mockup?',
+        answer: 'Measure whitespace intervals and column proportions into a 12-column CSS Grid container, converting fixed pixel bounds into flexible fractional units (fr) and clamp() font scales.'
       }
     ],
     visualGraphic: 'diffusion',
@@ -463,11 +476,20 @@ export function ExecutiveMetricCard({ label, value, delta, isPositive }: MetricP
         title: 'Why is exporting AI-generated concepts as static background images an anti-pattern?',
         content: 'Generative image models excel at atmospheric mood boards: dramatic architectural shadows, bespoke textures, and layered typographic layouts. Yet exporting an image directly as a background image is an anti-pattern that sacrifices responsiveness, text accessibility, and SEO.',
         pullQuote: 'Treat generative imagery as an art director’s high-fidelity watercolor, never as final client-delivered markup.'
+      },
+      {
+        title: 'How do you deconstruct a visual concept render into a 12-column CSS Grid?',
+        content: 'Deconstructing a visual concept render begins by identifying underlying spatial bounding boxes and typographic measure. Rather than slicing images into raster tiles, designers extract proportional ratios, baseline vertical intervals, and asymmetrical whitespace gutters, encoding them into semantic 12-column CSS Grid definitions (grid-template-columns: repeat(12, 1fr)) that adapt gracefully across viewports.'
+      },
+      {
+        title: 'How can tactile visual depth be recreated in CSS without heavyweight images?',
+        content: 'Tactile visual depth is achieved in modern CSS by combining subtle SVG noise textures, multi-layered box shadows with low alpha opacity (rgba(0,0,0,0.03)), and crisp 1-pixel micro-borders. This lightweight mathematical approach creates tangible editorial tactility while maintaining bundle sizes under 3KB and guaranteeing zero Cumulative Layout Shift.'
       }
     ],
     keyTakeaways: [
       'Extract layout geometry and negative space rather than exporting static bitmaps.',
-      'Preserve real HTML text for search engines and screen readers.'
+      'Preserve real HTML text for search engines and screen readers.',
+      'Use lightweight SVG micro-textures and subtle CSS shadows for tangible visual depth.'
     ],
     suggestedPrompt: 'Analyze this UI concept layout: Break down the visual structure into a 12-column CSS Grid specification.'
   }

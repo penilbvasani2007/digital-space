@@ -17,11 +17,12 @@ export const NewsletterSection: React.FC = () => {
         <span className="text-xs font-mono uppercase tracking-widest text-stone-500 block mb-2">
           Weekly Curatorial Dispatch
         </span>
-        <h2 className="text-3xl font-serif font-medium text-stone-900 mb-3 text-balance">
-          The DesignBot Dispatches
+        <h2 className="text-2xl sm:text-3xl font-serif font-medium text-stone-900 mb-3 text-balance">
+          Why subscribe to The DesignBot weekly dispatches on web architecture?
         </h2>
         <p className="text-stone-600 font-serif text-base max-w-xl mx-auto mb-6 leading-relaxed">
-          One weekly essay on generative UI patterns, verified prompt templates, and architectural restraint. No spam, ever.
+          <strong className="font-mono text-xs text-[#D96C4A] mr-1.5 font-bold">Answer:</strong>
+          Every Thursday, you receive one focused masterclass essay dissecting generative UI patterns, executive business metrics, and architectural restraint directly in your inbox—free of algorithmic marketing noise.
         </p>
 
         {subscribed ? (

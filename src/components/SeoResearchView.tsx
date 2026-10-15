@@ -5,14 +5,31 @@ import { Search, CheckCircle2, Globe, FileText, Image as ImageIcon, Link as Link
 interface SeoResearchViewProps {
   onNavigateToArticle: (slug: string) => void;
   onNavigateHome: () => void;
+  onNavigateToTab?: (tab: 'articles' | 'about' | 'projects' | 'contact') => void;
 }
 
 export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
   onNavigateToArticle,
   onNavigateHome,
+  onNavigateToTab,
 }) => {
   const [selectedEntry, setSelectedEntry] = useState<KeywordResearchEntry>(KEYWORD_RESEARCH_TABLE[1]);
   const [activeTab, setActiveTab] = useState<'table' | 'checklist' | 'aeo'>('table');
+
+  const handleNavigate = (url: string) => {
+    if (url === '/') {
+      onNavigateHome();
+    } else if (url.startsWith('/articles/')) {
+      const slug = url.replace('/articles/', '');
+      onNavigateToArticle(slug);
+    } else if (url === '/about') {
+      onNavigateToTab ? onNavigateToTab('about') : onNavigateHome();
+    } else if (url === '/projects') {
+      onNavigateToTab ? onNavigateToTab('projects') : onNavigateHome();
+    } else if (url === '/contact') {
+      onNavigateToTab ? onNavigateToTab('contact') : onNavigateHome();
+    }
+  };
 
   return (
     <div className="max-w-[1140px] mx-auto px-6 md:px-8 py-8 font-sans">
@@ -25,10 +42,10 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
           <span className="text-xs font-mono text-[#595550]">On-Page SEO &amp; AEO Architecture</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-sans font-semibold text-[#2D2A26] leading-tight mb-3">
-          Keyword Research Table &amp; On-Page SEO Engine
+          Step 2 Keyword Research &amp; AEO Questions Table
         </h1>
         <p className="font-serif text-lg text-[#595550] max-w-3xl leading-relaxed">
-          Comprehensive SEO keyword mapping for the Homepage and core articles, demonstrating unique clean URLs, strict title/meta formatting, lightweight images with alt text, descriptive anchor links, and Answer Engine Optimization (AEO) question-answer hierarchies.
+          Comprehensive SEO specification table mapping every page to its main keyword, 2 related keywords, search intent, monthly search volume, and the exact user question it answers for Answer Engine Optimization.
         </p>
 
         {/* Tab Switcher */}
@@ -41,7 +58,7 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
                 : 'bg-white border border-[#E5E0D8] text-[#595550] hover:text-[#2D2A26]'
             }`}
           >
-            1. Keyword Research Table (Homepage + 3 Articles)
+            Tab 1: Step 2 SEO Table (10 Pages)
           </button>
           <button
             onClick={() => setActiveTab('checklist')}
@@ -51,7 +68,7 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
                 : 'bg-white border border-[#E5E0D8] text-[#595550] hover:text-[#2D2A26]'
             }`}
           >
-            2. On-Page SEO Verification Checklist
+            Tab 2: On-Page SEO Checklist (8 Rules)
           </button>
           <button
             onClick={() => setActiveTab('aeo')}
@@ -63,6 +80,15 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
           >
             3. AEO Answer Engine Snippet Matrix
           </button>
+          <a
+            href="/SEO_Keyword_Research_Table.doc"
+            download="SEO_Keyword_Research_Table.doc"
+            className="px-4 py-2 rounded-md text-xs font-semibold transition-all cursor-pointer bg-emerald-700 hover:bg-emerald-800 text-white flex items-center gap-1.5 shadow-xs ml-auto"
+            title="Download Word Document (.doc) for Step 2 and Step 3 SEO Report"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>Download Word Document (.doc)</span>
+          </a>
         </div>
       </div>
 
@@ -73,10 +99,11 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
             <div className="p-4 bg-[#FAF8F5] border-b border-[#E5E0D8] flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-semibold text-[#2D2A26]">
-                  Master Keyword Research Table (Homepage &amp; 3 Core Articles)
+                  What keywords and SEO specifications target each page on Penil's Space?
                 </h2>
                 <p className="text-xs text-[#595550] mt-0.5">
-                  Every page has 1 Main Keyword + 2 Related Keywords with search volume, intent, clean URLs, and title/meta specs.
+                  <strong className="font-mono text-[11px] text-[#D96C4A] mr-1">Answer:</strong>
+                  Every page maps to 1 Main Keyword and 2 Related Keywords with documented search volume, informational intent, clean URLs, and strict title/meta length rules.
                 </p>
               </div>
               <span className="text-[11px] font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded">
@@ -88,13 +115,13 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
                   <tr className="bg-[#FAF8F5] border-b border-[#E5E0D8] text-[#595550] font-mono uppercase tracking-wider text-[10px]">
-                    <th className="py-3 px-4 font-semibold">Target Page</th>
-                    <th className="py-3 px-4 font-semibold">Unique Clean URL</th>
-                    <th className="py-3 px-4 font-semibold text-[#D96C4A]">Main Keyword</th>
-                    <th className="py-3 px-4 font-semibold">Related Keyword 1</th>
-                    <th className="py-3 px-4 font-semibold">Related Keyword 2</th>
-                    <th className="py-3 px-4 font-semibold">Search Intent</th>
-                    <th className="py-3 px-4 font-semibold">Action</th>
+                    <th className="py-3 px-3.5 font-semibold">Page</th>
+                    <th className="py-3 px-3.5 font-semibold text-[#D96C4A]">Main Keyword</th>
+                    <th className="py-3 px-3.5 font-semibold">2 Related Keywords</th>
+                    <th className="py-3 px-3 font-semibold">Intent</th>
+                    <th className="py-3 px-3 font-semibold">Volume</th>
+                    <th className="py-3 px-4 font-semibold min-w-[280px]">Questions It Answers (AEO)</th>
+                    <th className="py-3 px-3 font-semibold text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E5E0D8]/60 text-[#2D2A26]">
@@ -106,53 +133,62 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
                         selectedEntry.url === item.url ? 'bg-[#D96C4A]/5 font-medium' : ''
                       }`}
                     >
-                      <td className="py-3.5 px-4 font-sans font-semibold text-[#2D2A26]">
-                        {item.pageName}
-                      </td>
-                      <td className="py-3.5 px-4 font-mono text-[11px] text-[#595550]">
-                        <code className="bg-[#FAF8F5] px-1.5 py-0.5 rounded border border-[#E5E0D8]">
+                      <td className="py-3.5 px-3.5 font-sans">
+                        <div className="font-semibold text-[#2D2A26] leading-snug">{item.pageName}</div>
+                        <code className="text-[10px] font-mono text-[#595550] bg-[#FAF8F5] px-1 py-0.2 rounded border border-[#E5E0D8] mt-1 inline-block">
                           {item.url}
                         </code>
                       </td>
-                      <td className="py-3.5 px-4 font-semibold text-[#D96C4A]">
-                        {item.mainKeyword}
+                      <td className="py-3.5 px-3.5 font-semibold text-[#D96C4A]">
+                        <span className="bg-[#D96C4A]/10 px-2 py-0.5 rounded inline-block text-[11px]">
+                          {item.mainKeyword}
+                        </span>
                       </td>
-                      <td className="py-3.5 px-4 text-[#595550]">
-                        {item.relatedKeyword1}
+                      <td className="py-3.5 px-3.5 text-[#595550] space-y-1">
+                        <div className="flex items-center gap-1 text-[11px]">
+                          <span className="text-[#D96C4A] text-[9px] font-mono font-bold">1.</span>
+                          <span>{item.relatedKeyword1}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-[11px]">
+                          <span className="text-[#D96C4A] text-[9px] font-mono font-bold">2.</span>
+                          <span>{item.relatedKeyword2}</span>
+                        </div>
                       </td>
-                      <td className="py-3.5 px-4 text-[#595550]">
-                        {item.relatedKeyword2}
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <span className="font-mono text-[10px] uppercase px-2 py-0.5 rounded bg-stone-100 text-[#595550]">
+                      <td className="py-3.5 px-3">
+                        <span className={`font-mono text-[10px] uppercase px-2 py-0.5 rounded font-semibold ${
+                          item.searchIntent === 'Informational' ? 'bg-blue-50 text-blue-700 border border-blue-200' :
+                          item.searchIntent === 'Commercial' ? 'bg-purple-50 text-purple-700 border border-purple-200' :
+                          item.searchIntent === 'Transactional' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                          'bg-amber-50 text-amber-700 border border-amber-200'
+                        }`}>
                           {item.searchIntent}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4">
-                        {item.url === '/' ? (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onNavigateHome();
-                            }}
-                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#D96C4A] hover:underline cursor-pointer"
-                          >
-                            <span>View Page</span>
-                            <ExternalLink className="w-3 h-3" />
-                          </button>
-                        ) : (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              const slug = item.url.replace('/articles/', '');
-                              onNavigateToArticle(slug);
-                            }}
-                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#D96C4A] hover:underline cursor-pointer"
-                          >
-                            <span>Read Article</span>
-                            <ExternalLink className="w-3 h-3" />
-                          </button>
-                        )}
+                      <td className="py-3.5 px-3 font-mono font-semibold text-[11px] text-[#2D2A26] tabular-nums whitespace-nowrap">
+                        {item.monthlyVolumeEst} <span className="text-[10px] text-[#595550] font-normal">/mo</span>
+                      </td>
+                      <td className="py-3.5 px-4 text-xs font-serif text-[#2D2A26] leading-snug">
+                        <span className="font-sans font-medium text-amber-900 block mb-0.5 text-[11px]">
+                          "{item.targetAeoQuestion}"
+                        </span>
+                        <span className="text-[11px] text-[#595550] line-clamp-2">
+                          {item.aeoSnippetAnswer}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-3 text-right whitespace-nowrap">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleNavigate(item.url);
+                          }}
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#D96C4A] hover:underline cursor-pointer bg-white px-2 py-1 rounded border border-[#E5E0D8] hover:border-[#D96C4A]"
+                          title={`Navigate to ${item.pageName}`}
+                        >
+                          <span>Open</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -254,6 +290,16 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
       {/* TAB 2: ON-PAGE SEO CHECKLIST */}
       {activeTab === 'checklist' && (
         <section className="space-y-6">
+          <div className="bg-white border border-[#E5E0D8] rounded-lg p-5 shadow-xs">
+            <h2 className="text-base font-semibold text-[#2D2A26] mb-1">
+              How does Penil's Space systematically satisfy all technical on-page SEO and AEO criteria?
+            </h2>
+            <p className="text-xs text-[#595550] leading-relaxed">
+              <strong className="font-mono text-[11px] text-[#D96C4A] mr-1">Answer:</strong>
+              Every page and article complies with 10 strict on-page optimization rules—spanning clean unique URLs, keyword density, mobile responsiveness, Schema.org FAQPage structured data, lightweight vector imagery with descriptive alt text, and question-and-answer subheadings for Answer Engine Optimization.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {ON_PAGE_SEO_CHECKLIST.map((item, idx) => (
               <div key={idx} className="bg-white border border-[#E5E0D8] rounded-lg p-5 shadow-xs">
@@ -276,6 +322,105 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Dedicated Good URL Rules & Site-Wide Clean URL Directory */}
+          <div className="bg-white border border-[#E5E0D8] rounded-lg p-6 shadow-xs space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E5E0D8]">
+              <div>
+                <h3 className="font-sans font-semibold text-base text-[#2D2A26] flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-[#D96C4A]" />
+                  <span>Good URL Rules — Complete Site-Wide URL Directory</span>
+                </h3>
+                <p className="text-xs text-[#595550] mt-0.5">
+                  Every page has its own unique, permanent URL engineered to follow strict search engine URL standards.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded font-medium">
+                100% CLEAN URLS
+              </span>
+            </div>
+
+            {/* 6 Good URL Rules Summary */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+              <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+                <strong className="text-[#2D2A26] block font-mono text-[11px] mb-1">1. Lowercase Only</strong>
+                <span className="text-[#595550]">Zero uppercase characters to prevent duplicate content canonical fragmentation.</span>
+              </div>
+              <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+                <strong className="text-[#2D2A26] block font-mono text-[11px] mb-1">2. Kebab-Case Hyphens</strong>
+                <span className="text-[#595550]">Words separated strictly by hyphens, never underscores or encoded spaces (%20).</span>
+              </div>
+              <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+                <strong className="text-[#2D2A26] block font-mono text-[11px] mb-1">3. Zero File Extensions</strong>
+                <span className="text-[#595550]">No legacy .html, .php, or .aspx extensions for clean RESTful web standards.</span>
+              </div>
+              <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+                <strong className="text-[#2D2A26] block font-mono text-[11px] mb-1">4. No Query Parameters</strong>
+                <span className="text-[#595550]">Core content paths avoid ?page= or ?id= strings to maximize crawl efficiency.</span>
+              </div>
+              <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+                <strong className="text-[#2D2A26] block font-mono text-[11px] mb-1">5. Keyword-Rich Slugs</strong>
+                <span className="text-[#595550]">Target keywords are naturally embedded directly within the URL pathname.</span>
+              </div>
+              <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+                <strong className="text-[#2D2A26] block font-mono text-[11px] mb-1">6. Canonicalized History</strong>
+                <span className="text-[#595550]">Backed by HTML5 pushState &amp; &lt;link rel="canonical"&gt; matching each URL.</span>
+              </div>
+            </div>
+
+            {/* Complete URL Manifest */}
+            <div className="pt-2">
+              <span className="text-xs font-mono font-semibold text-[#2D2A26] block mb-2">
+                Active Clean URL Route Manifest:
+              </span>
+              <div className="space-y-1.5 font-mono text-xs">
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>Homepage:</strong> <code>/</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">REST / Clean Root</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>Article 1:</strong> <code>/articles/why-first-impressions-matter-in-website-architecture</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Kebab-case / Clean Slug</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>Article 2:</strong> <code>/articles/organizing-business-data-spreadsheets-to-dashboards</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Kebab-case / Clean Slug</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>Article 3:</strong> <code>/articles/digital-business-frameworks-generative-monetization</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Kebab-case / Clean Slug</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>Article 4:</strong> <code>/articles/presentation-design-masterclass-stakeholder-narratives</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Kebab-case / Clean Slug</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>Article 5:</strong> <code>/articles/generative-design-systems-tokens-llm</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Kebab-case / Clean Slug</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>Article 6:</strong> <code>/articles/diffusion-latents-to-production-css</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Kebab-case / Clean Slug</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>About Page:</strong> <code>/about</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Semantic / Clean</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>Projects Page:</strong> <code>/projects</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Semantic / Clean</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>Contact Page:</strong> <code>/contact</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Semantic / Clean</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>SEO Hub:</strong> <code>/seo-research</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Semantic / Clean</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="p-5 bg-stone-900 text-white rounded-lg border border-stone-800">
@@ -348,16 +493,19 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
                   </div>
                   <div className="flex items-center justify-between text-[11px] text-[#595550] pt-1">
                     <span>Target Placement: {item.featuredSnippetOpportunity}</span>
-                    <button
-                      onClick={() => {
+                    <a
+                      href={item.url}
+                      onClick={(e) => {
+                        e.preventDefault();
                         if (item.url === '/') onNavigateHome();
                         else onNavigateToArticle(item.url.replace('/articles/', ''));
                       }}
                       className="inline-flex items-center gap-1 font-semibold text-[#D96C4A] hover:underline cursor-pointer"
+                      title={`Inspect H2 Q&A and direct answer paragraph live in ${item.pageName}`}
                     >
-                      <span>Inspect H2 Q&amp;A Live in Page</span>
+                      <span>Inspect H2 Q&amp;A Live in {item.pageName}</span>
                       <ArrowRight className="w-3 h-3" />
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>

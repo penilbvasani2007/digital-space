@@ -23,8 +23,12 @@ export const ContactSection: React.FC = () => {
         <h1 className="text-4xl font-sans font-semibold text-[#2D2A26] leading-tight mb-4">
           Let’s discuss digital business and thoughtful design.
         </h1>
-        <p className="text-lg font-serif text-[#595550] leading-relaxed">
-          Whether you want to collaborate on a new website architecture, discuss data dashboard strategy, or exchange notes from recent masterclasses — my inbox is always open.
+        <h2 className="text-xl font-sans font-semibold text-[#2D2A26] mb-2">
+          How can you get in touch with Penil Vasani for collaborations and inquiries?
+        </h2>
+        <p className="text-base font-serif text-[#595550] leading-relaxed">
+          <strong className="font-mono text-xs text-[#D96C4A] mr-1.5 font-bold">Answer:</strong>
+          Whether you want to collaborate on a new website architecture review, discuss executive data dashboard strategy, or exchange insights from recent design masterclasses—submit a message via the dispatch form below or send an email directly to penilbvasani2007@gmail.com.
         </p>
       </div>
 
@@ -120,7 +124,13 @@ export const ContactSection: React.FC = () => {
             <div className="space-y-2 text-xs font-mono text-[#2D2A26]">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-[#D96C4A]" />
-                <span>penilbvasani2007@gmail.com</span>
+                <a
+                  href="mailto:penilbvasani2007@gmail.com"
+                  className="hover:text-[#D96C4A] hover:underline transition-colors"
+                  title="Send an email to Penil Vasani at penilbvasani2007@gmail.com"
+                >
+                  penilbvasani2007@gmail.com
+                </a>
               </div>
               <div className="flex items-center gap-2 pt-2 text-[#595550]">
                 <span>Location: Remote / Global</span>

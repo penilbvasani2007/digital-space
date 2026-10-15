@@ -1,7 +1,10 @@
 import React from 'react';
 import { ArrowRight, BookOpen, Layers, BarChart2, Sparkles, Mail } from 'lucide-react';
 
-export const AboutView: React.FC<{ onNavigateToContact: () => void }> = ({ onNavigateToContact }) => {
+export const AboutView: React.FC<{ 
+  onNavigateToContact: () => void;
+  onNavigateToArticle?: (slug: string) => void;
+}> = ({ onNavigateToContact, onNavigateToArticle }) => {
   return (
     <div className="max-w-[900px] mx-auto px-6 md:px-8 py-12">
       {/* Editorial Intro */}
@@ -44,47 +47,113 @@ export const AboutView: React.FC<{ onNavigateToContact: () => void }> = ({ onNav
         </div>
       </div>
 
-      {/* Masterclass Notes & Recent Studies */}
-      <div className="space-y-6 my-10">
-        <h2 className="text-2xl font-sans font-semibold text-[#2D2A26]">
-          Recent Masterclass Notebook Highlights
-        </h2>
+      {/* Masterclass Notes & Recent Studies in Question-and-Answer AEO Format */}
+      <div className="space-y-6 my-10" itemScope itemType="https://schema.org/FAQPage">
+        <div>
+          <h2 className="text-2xl font-sans font-semibold text-[#2D2A26] mb-2">
+            What core insights and frameworks emerge from Penil's recent masterclasses?
+          </h2>
+          <p className="text-sm font-serif text-[#595550] leading-relaxed">
+            <strong className="font-mono text-xs text-[#D96C4A] mr-1.5 font-bold">Answer:</strong>
+            Across website architecture, business intelligence, and stakeholder storytelling, empirical evidence proves that disciplined typography (65–75ch measure), Edward Tufte high data-ink ratios, and 1-2-1 narrative structures dramatically outperform visual noise and decorative complexity in both user comprehension and business conversion.
+          </p>
+        </div>
 
         <div className="space-y-4">
-          <div className="bg-white border border-[#E5E0D8] p-6 rounded-lg shadow-sm">
+          <div className="bg-white border border-[#E5E0D8] p-6 rounded-lg shadow-sm" itemScope itemType="https://schema.org/Question">
             <span className="text-xs font-sans uppercase font-semibold text-[#D96C4A] block mb-1">
               Website Architecture Masterclass
             </span>
-            <h4 className="text-lg font-sans font-semibold text-[#2D2A26] mb-2">
-              The 50ms Eye-Tracking Threshold in Responsive Layouts
-            </h4>
-            <p className="text-sm font-serif text-[#595550] leading-relaxed">
-              Users make subconscious credibility judgments almost immediately. Leading with clear typography (Georgia 18px body, 65–75ch measure) fosters trust far faster than elaborate hero video sliders.
-            </p>
+            <h3 className="text-lg font-sans font-semibold text-[#2D2A26] mb-2 flex items-start gap-2" itemProp="name">
+              <span className="text-[#D96C4A] font-mono text-sm shrink-0 mt-0.5 font-bold">Q:</span>
+              <span>Why does the 50-millisecond cognitive threshold dictate website architecture?</span>
+            </h3>
+            <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
+              <p className="text-sm font-serif text-[#595550] leading-relaxed" itemProp="text">
+                <span className="font-mono text-xs text-[#2D2A26] font-bold mr-1.5">Answer:</span>
+                Users make subconscious credibility judgments almost immediately upon landing. Leading with clear typography (Georgia 18px body, 65–75ch measure) and optical balance establishes visitor trust far faster than elaborate video reels or intrusive hero animations.
+              </p>
+            </div>
+            <div className="mt-3 pt-3 border-t border-[#E5E0D8]/60">
+              <a
+                href="/articles/why-first-impressions-matter-in-website-architecture"
+                onClick={(e) => {
+                  if (onNavigateToArticle) {
+                    e.preventDefault();
+                    onNavigateToArticle('why-first-impressions-matter-in-website-architecture');
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold text-[#D96C4A] hover:text-[#B85536] transition-colors"
+                title="Read complete masterclass guide on website architecture design principles"
+              >
+                <span>Read complete masterclass guide on website architecture design principles</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
 
-          <div className="bg-white border border-[#E5E0D8] p-6 rounded-lg shadow-sm">
+          <div className="bg-white border border-[#E5E0D8] p-6 rounded-lg shadow-sm" itemScope itemType="https://schema.org/Question">
             <span className="text-xs font-sans uppercase font-semibold text-[#D96C4A] block mb-1">
-              Data Analytics & Executive Dashboards
+              Data Analytics &amp; Executive Dashboards
             </span>
-            <h4 className="text-lg font-sans font-semibold text-[#2D2A26] mb-2">
-              From Dense Spreadsheets to Operational Clarity
-            </h4>
-            <p className="text-sm font-serif text-[#595550] leading-relaxed">
-              Triaging metrics into North Star, Leading, and Trailing categories. Designing with Edward Tufte's data-ink ratio principles so variance is immediately obvious.
-            </p>
+            <h3 className="text-lg font-sans font-semibold text-[#2D2A26] mb-2 flex items-start gap-2" itemProp="name">
+              <span className="text-[#D96C4A] font-mono text-sm shrink-0 mt-0.5 font-bold">Q:</span>
+              <span>How do you transform dense spreadsheets into actionable executive dashboards?</span>
+            </h3>
+            <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
+              <p className="text-sm font-serif text-[#595550] leading-relaxed" itemProp="text">
+                <span className="font-mono text-xs text-[#2D2A26] font-bold mr-1.5">Answer:</span>
+                Triage raw tabular columns into a 3-tier hierarchy: one North Star metric, 2-3 predictive Leading Indicators, and Trailing Diagnostic Drivers. Applying Edward Tufte's data-ink ratio strips non-essential borders and gridlines so statistical variance is immediately obvious.
+              </p>
+            </div>
+            <div className="mt-3 pt-3 border-t border-[#E5E0D8]/60">
+              <a
+                href="/articles/organizing-business-data-spreadsheets-to-dashboards"
+                onClick={(e) => {
+                  if (onNavigateToArticle) {
+                    e.preventDefault();
+                    onNavigateToArticle('organizing-business-data-spreadsheets-to-dashboards');
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold text-[#D96C4A] hover:text-[#B85536] transition-colors"
+                title="Read complete masterclass guide on spreadsheets to dashboards"
+              >
+                <span>Read complete masterclass guide on spreadsheets to dashboards</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
 
-          <div className="bg-white border border-[#E5E0D8] p-6 rounded-lg shadow-sm">
+          <div className="bg-white border border-[#E5E0D8] p-6 rounded-lg shadow-sm" itemScope itemType="https://schema.org/Question">
             <span className="text-xs font-sans uppercase font-semibold text-[#D96C4A] block mb-1">
-              Digital Business & Presentation Craft
+              Digital Business &amp; Presentation Craft
             </span>
-            <h4 className="text-lg font-sans font-semibold text-[#2D2A26] mb-2">
-              The 1-2-1 Executive Deck Structure
-            </h4>
-            <p className="text-sm font-serif text-[#595550] leading-relaxed">
-              Presentations should function as high-clarity billboards, not dense documents. Structuring slides around a single decisive narrative punch per frame.
-            </p>
+            <h3 className="text-lg font-sans font-semibold text-[#2D2A26] mb-2 flex items-start gap-2" itemProp="name">
+              <span className="text-[#D96C4A] font-mono text-sm shrink-0 mt-0.5 font-bold">Q:</span>
+              <span>What is the 1-2-1 executive deck structure for stakeholder buy-in?</span>
+            </h3>
+            <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
+              <p className="text-sm font-serif text-[#595550] leading-relaxed" itemProp="text">
+                <span className="font-mono text-xs text-[#2D2A26] font-bold mr-1.5">Answer:</span>
+                Presentations should function as high-clarity billboards rather than dense documents. Structure pitches around 1 context slide establishing market tension, 2 evidence proof slides showing hard data, and 1 decisive action mandate to preserve boardroom momentum.
+              </p>
+            </div>
+            <div className="mt-3 pt-3 border-t border-[#E5E0D8]/60">
+              <a
+                href="/articles/presentation-design-masterclass-stakeholder-narratives"
+                onClick={(e) => {
+                  if (onNavigateToArticle) {
+                    e.preventDefault();
+                    onNavigateToArticle('presentation-design-masterclass-stakeholder-narratives');
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 text-xs font-sans font-semibold text-[#D96C4A] hover:text-[#B85536] transition-colors"
+                title="Read complete masterclass guide on executive presentation design"
+              >
+                <span>Read complete masterclass guide on executive presentation design</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -99,13 +168,18 @@ export const AboutView: React.FC<{ onNavigateToContact: () => void }> = ({ onNav
             I'm always open to discussing web design, data strategy, or business frameworks.
           </p>
         </div>
-        <button
-          onClick={onNavigateToContact}
+        <a
+          href="/contact"
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigateToContact();
+          }}
           className="px-5 py-2.5 bg-[#D96C4A] hover:bg-[#B85536] text-white text-xs font-sans font-semibold rounded transition-colors whitespace-nowrap cursor-pointer shadow-sm flex items-center gap-1.5"
+          title="Contact Penil Vasani for digital strategy and web architecture inquiries"
         >
           <Mail className="w-3.5 h-3.5" />
-          <span>Get in Touch</span>
-        </button>
+          <span>Get in Touch with Penil</span>
+        </a>
       </div>
     </div>
   );

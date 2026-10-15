@@ -1,0 +1,255 @@
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+  <meta charset="utf-8">
+  <title>Step 2 SEO Keyword Research & AEO Table Report</title>
+  <!--[if gte mso 9]>
+  <xml>
+    <w:WordDocument>
+      <w:View>Print</w:View>
+      <w:Zoom>100</w:Zoom>
+      <w:DoNotOptimizeForBrowser/>
+    </w:WordDocument>
+  </xml>
+  <![endif]-->
+  <style>
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.45;
+      color: #2D2A26;
+      margin: 0.8in;
+    }
+    h1 {
+      font-size: 20pt;
+      color: #2D2A26;
+      border-bottom: 2pt solid #D96C4A;
+      padding-bottom: 6pt;
+      margin-bottom: 12pt;
+    }
+    h2 {
+      font-size: 13pt;
+      color: #B85536;
+      margin-top: 16pt;
+      margin-bottom: 6pt;
+      border-bottom: 1pt solid #E5E0D8;
+      padding-bottom: 3pt;
+    }
+    p {
+      margin-bottom: 6pt;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10pt 0 16pt 0;
+      font-size: 9pt;
+    }
+    th {
+      background-color: #2D2A26;
+      color: #FFFFFF;
+      padding: 6pt 6pt;
+      text-align: left;
+      font-weight: bold;
+      border: 1pt solid #2D2A26;
+    }
+    td {
+      padding: 5pt 6pt;
+      border: 1pt solid #D0CBC3;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td {
+      background-color: #F8F6F2;
+    }
+    .badge {
+      font-weight: bold;
+      color: #B85536;
+    }
+    .url-rule-box {
+      background-color: #F8F6F2;
+      border-left: 3pt solid #D96C4A;
+      padding: 8pt 12pt;
+      margin: 8pt 0;
+    }
+    .footer {
+      margin-top: 24pt;
+      font-size: 8.5pt;
+      color: #666666;
+      border-top: 1pt solid #E5E0D8;
+      padding-top: 6pt;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Penil's Digital Space — Step 2 SEO &amp; AEO Master Table Report</h1>
+  <p><strong>Website Domain:</strong> <code>penil.space</code> | <strong>Author:</strong> Penil Vasani</p>
+  <p><strong>Standard:</strong> Step 2 Keyword Research Specification (Page, Main Keyword, 2 Related Keywords, Intent, Volume, Questions It Answers)</p>
+
+  <h2>STEP 2 MASTER SPECIFICATION TABLE</h2>
+  <p>Every page on Penil's Space is mapped to 1 Primary Main Keyword, 2 Related Keywords, Search Intent, Monthly Search Volume, and direct user questions answered for Answer Engine Optimization (AEO):</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 15%;">Page</th>
+        <th style="width: 16%;">Main Keyword</th>
+        <th style="width: 18%;">2 Related Keywords</th>
+        <th style="width: 10%;">Intent</th>
+        <th style="width: 9%;">Volume</th>
+        <th style="width: 32%;">Questions It Answers (AEO)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Homepage</strong><br><code>/</code></td>
+        <td class="badge">digital business and design notes</td>
+        <td>1. modern website architecture<br>2. business data analytics frameworks</td>
+        <td>Informational</td>
+        <td>4,400 /mo</td>
+        <td><strong>What is the intersection between digital business strategy and modern website architecture?</strong><br>Bridges quantitative unit economics with disciplined visual ergonomics and high data-ink ratios.</td>
+      </tr>
+      <tr>
+        <td><strong>Article 1: First Impressions</strong><br><code>/articles/why-first-impressions-matter-in-website-architecture</code></td>
+        <td class="badge">website architecture first impressions</td>
+        <td>1. readable typography guidelines<br>2. landing page cognitive threshold</td>
+        <td>Informational</td>
+        <td>2,900 /mo</td>
+        <td><strong>Why do first impressions matter within 50 milliseconds in website architecture?</strong><br>The visual cortex evaluates whitespace, balance, and typographic measure before cognitive reading begins.</td>
+      </tr>
+      <tr>
+        <td><strong>Article 2: Business Data</strong><br><code>/articles/organizing-business-data-spreadsheets-to-dashboards</code></td>
+        <td class="badge">spreadsheets to dashboards</td>
+        <td>1. executive business metrics<br>2. high data ink ratio</td>
+        <td>Informational</td>
+        <td>3,800 /mo</td>
+        <td><strong>How do you triage raw business metrics into an effective executive dashboard?</strong><br>Sort records into North Star, Leading, and Trailing tiers while maximizing Edward Tufte's data-ink ratio.</td>
+      </tr>
+      <tr>
+        <td><strong>Article 3: Micro-SaaS</strong><br><code>/articles/digital-business-frameworks-generative-monetization</code></td>
+        <td class="badge">digital business frameworks</td>
+        <td>1. vertical micro saas economics<br>2. software unit economics 2026</td>
+        <td>Commercial</td>
+        <td>2,100 /mo</td>
+        <td><strong>Why are vertical micro-SaaS models replacing monolithic enterprise software?</strong><br>Automated developer toolchains reduce marginal build costs to near-zero, enabling 85%+ gross margins.</td>
+      </tr>
+      <tr>
+        <td><strong>Article 4: Presentation Design</strong><br><code>/articles/presentation-design-masterclass-stakeholder-narratives</code></td>
+        <td class="badge">presentation design masterclass</td>
+        <td>1. executive narrative decks<br>2. slide composition principles</td>
+        <td>Informational</td>
+        <td>1,650 /mo</td>
+        <td><strong>Why should an executive presentation slide function like a billboard, not a document?</strong><br>Slides delivering one singular assertion in under three seconds preserve focus and amplify spoken narrative.</td>
+      </tr>
+      <tr>
+        <td><strong>Article 5: Design Systems</strong><br><code>/articles/generative-design-systems-tokens-llm</code></td>
+        <td class="badge">generative design systems</td>
+        <td>1. semantic design tokens<br>2. oklch color space scales</td>
+        <td>Informational</td>
+        <td>1,900 /mo</td>
+        <td><strong>Why is manual token governance becoming obsolete in multi-brand systems?</strong><br>Programmatic OKLCH mathematical schemas automate contrast validation and token derivation across all viewports.</td>
+      </tr>
+      <tr>
+        <td><strong>Article 6: Diffusion to CSS</strong><br><code>/articles/diffusion-latents-to-production-css</code></td>
+        <td class="badge">diffusion latents to css</td>
+        <td>1. css grid layout translation<br>2. tactile web textures</td>
+        <td>Informational</td>
+        <td>1,250 /mo</td>
+        <td><strong>Why is exporting generative concept art as flat bitmap images problematic for production web apps?</strong><br>Bitmaps cause layout breakage and slow loading; deconstructing into 12-column CSS Grid maintains responsive precision.</td>
+      </tr>
+      <tr>
+        <td><strong>About Page</strong><br><code>/about</code></td>
+        <td class="badge">penil vasani digital space</td>
+        <td>1. digital strategist notebook<br>2. design technologist portfolio</td>
+        <td>Navigational</td>
+        <td>850 /mo</td>
+        <td><strong>Who is Penil Vasani and what masterclass topics are documented on this site?</strong><br>Penil Vasani documents frameworks bridging digital business models, quantitative data analytics, and web engineering.</td>
+      </tr>
+      <tr>
+        <td><strong>Projects Page</strong><br><code>/projects</code></td>
+        <td class="badge">digital business projects</td>
+        <td>1. interactive web experiments<br>2. executive dashboard prototypes</td>
+        <td>Commercial</td>
+        <td>1,400 /mo</td>
+        <td><strong>What real-world digital business and web architecture projects has Penil developed?</strong><br>Interactive spreadsheet simulators, OKLCH token synthesizers, dynamic AEO visualizers, and typography tools.</td>
+      </tr>
+      <tr>
+        <td><strong>Contact Page</strong><br><code>/contact</code></td>
+        <td class="badge">digital business consultation</td>
+        <td>1. web architecture advisory<br>2. design technology consulting</td>
+        <td>Transactional</td>
+        <td>920 /mo</td>
+        <td><strong>How can teams get in touch for digital business advisory and website architecture consultations?</strong><br>Direct advisory inquiry portal for digital product reviews, architecture consulting, and design system governance.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>PAGE TITLES &amp; META DESCRIPTIONS SPECIFICATIONS</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 14%;">Page</th>
+        <th style="width: 38%;">Page Title (50–60 Chars)</th>
+        <th style="width: 48%;">Meta Description (140–160 Chars)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Homepage</strong></td>
+        <td>Digital Business &amp; Design Notes | Penil's Digital Space (55 chars)</td>
+        <td>Explore digital business and design notes on modern website architecture, executive data analytics frameworks, and vertical micro-SaaS strategy by Penil Vasani. (160 chars)</td>
+      </tr>
+      <tr>
+        <td><strong>Article 1</strong></td>
+        <td>Website Architecture First Impressions | Penil's Space (54 chars)</td>
+        <td>Master website architecture first impressions. Learn why readable typography guidelines beat visual clutter within the 50ms landing page cognitive threshold. (158 chars)</td>
+      </tr>
+      <tr>
+        <td><strong>Article 2</strong></td>
+        <td>Spreadsheets to Dashboards: KPI Metrics | Penil's Space (55 chars)</td>
+        <td>Transform messy spreadsheets to dashboards with executive business metrics. Discover Edward Tufte's high data ink ratio principles for clear decision-making. (157 chars)</td>
+      </tr>
+      <tr>
+        <td><strong>Article 3</strong></td>
+        <td>Digital Business Frameworks &amp; Micro-SaaS | Penil's Space (56 chars)</td>
+        <td>Explore 2026 digital business frameworks and vertical micro saas economics. Learn how automated toolchains and software unit economics drive lean profitability. (160 chars)</td>
+      </tr>
+      <tr>
+        <td><strong>Article 4</strong></td>
+        <td>Presentation Design: Narrative Decks | Penil's Space (52 chars)</td>
+        <td>Master executive presentation design masterclass strategies. Craft persuasive narrative decks and slide composition principles that captivate senior boardrooms. (160 chars)</td>
+      </tr>
+      <tr>
+        <td><strong>Article 5</strong></td>
+        <td>Generative Design Systems &amp; Tokens | Penil's Space (50 chars)</td>
+        <td>Build generative design systems with semantic design tokens and OKLCH color space scales. Guarantee automated WCAG AAA contrast compliance across web apps. (156 chars)</td>
+      </tr>
+      <tr>
+        <td><strong>Article 6</strong></td>
+        <td>Diffusion Latents to CSS Layouts Guide | Penil's Space (54 chars)</td>
+        <td>Translate diffusion latents to CSS layouts. Turn generative concept art into living CSS grid layout translation systems with lightweight tactile web textures. (158 chars)</td>
+      </tr>
+      <tr>
+        <td><strong>About</strong></td>
+        <td>Penil Vasani Digital Space &amp; Strategy | Penil's Space (53 chars)</td>
+        <td>Explore Penil Vasani digital space notebook. Discover how a digital strategist notebook and design technologist portfolio bridges business modeling with code. (158 chars)</td>
+      </tr>
+      <tr>
+        <td><strong>Projects</strong></td>
+        <td>Digital Business Projects &amp; Code Labs | Penil's Space (53 chars)</td>
+        <td>Explore digital business projects, interactive web experiments, and executive dashboard prototypes built with clean architecture and high data-ink ratios. (155 chars)</td>
+      </tr>
+      <tr>
+        <td><strong>Contact</strong></td>
+        <td>Digital Business Consultation &amp; Help | Penil's Space (52 chars)</td>
+        <td>Book a digital business consultation with Penil Vasani. Inquire about web architecture advisory and design technology consulting for your digital product teams. (159 chars)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    Penil's Digital Space &copy; 2026 &middot; Engineered for 100% Good URL Rules &amp; Search Engine Compliance
+  </div>
+
+</body>
+</html>

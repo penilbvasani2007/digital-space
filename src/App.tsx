@@ -62,20 +62,58 @@ export default function App() {
     return () => window.removeEventListener('popstate', handleLocationChange);
   }, [articles]);
 
-  // Synchronize document.title on tab change
+  // Synchronize document.title, meta description, canonical, and og:url on route change
   useEffect(() => {
     if (!selectedArticle) {
+      let title = "Digital Business & Design Notes | Penil's Digital Space";
+      let desc = "Explore digital business and design notes on modern website architecture, executive data analytics frameworks, and vertical micro-SaaS strategy by Penil Vasani.";
+      let path = '/';
+
       if (currentTab === 'seo') {
-        document.title = "SEO Keyword Research Table & On-Page Audit | Penil's Space";
+        title = "SEO Keyword Research Table & On-Page Audit | Penil's Space";
+        desc = "Review the comprehensive SEO keyword research table, on-page SEO checklist, and Answer Engine Optimization (AEO) matrix for Penil's Digital Space notebook.";
+        path = '/seo-research';
       } else if (currentTab === 'about') {
-        document.title = "About Penil Vasani — Web Design Technologist | Penil's Space";
+        title = "About Penil Vasani — Web Design Technologist | Penil's Space";
+        desc = "Learn about Penil Vasani, digital strategist and design technologist exploring modern website architecture, business data analytics, and presentation systems.";
+        path = '/about';
       } else if (currentTab === 'projects') {
-        document.title = "Digital Business Projects & Design Prototypes | Penil's Space";
+        title = "Digital Business Projects & Web Prototypes | Penil's Space";
+        desc = "Browse digital business projects, interactive design prototypes, and website architecture case studies built by Penil Vasani. Explore live demos and metrics.";
+        path = '/projects';
       } else if (currentTab === 'contact') {
-        document.title = "Contact Penil Vasani — Digital Strategy Inquiries | Penil's Space";
-      } else {
-        document.title = "Digital Business & Design Notes | Penil's Digital Space";
+        title = "Contact Penil Vasani — Strategy Inquiries | Penil's Space";
+        desc = "Contact Penil Vasani for digital strategy consulting, modern website design inquiries, and business data analytics advisory. Send a message or project brief.";
+        path = '/contact';
+      } else if (currentTab === 'saved') {
+        title = "Saved Notes & Masterclass Essays | Penil's Digital Space";
+        desc = "Curated personal reading archive of masterclass notes on modern website architecture, data analytics dashboards, and digital business frameworks.";
+        path = '/saved';
       }
+
+      document.title = title;
+
+      // Meta Description
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', desc);
+
+      // OpenGraph
+      let ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute('content', title);
+      let ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute('content', desc);
+      let ogUrl = document.querySelector('meta[property="og:url"]');
+      if (ogUrl) ogUrl.setAttribute('content', `${window.location.origin}${path}`);
+
+      // Canonical link
+      let canonical = document.querySelector('link[rel="canonical"]');
+      if (canonical) canonical.setAttribute('href', `${window.location.origin}${path}`);
+
+      // Twitter
+      let twTitle = document.querySelector('meta[name="twitter:title"]');
+      if (twTitle) twTitle.setAttribute('content', title);
+      let twDesc = document.querySelector('meta[name="twitter:description"]');
+      if (twDesc) twDesc.setAttribute('content', desc);
     }
   }, [currentTab, selectedArticle]);
 
@@ -205,6 +243,7 @@ export default function App() {
           <ArticleView
             article={selectedArticle}
             onBack={handleBackToArticles}
+            onSelectArticle={(art) => navigateTo('articles', art)}
             isSaved={savedArticleIds.has(selectedArticle.id)}
             onToggleSave={handleToggleSave}
             onClap={handleClap}
@@ -217,9 +256,16 @@ export default function App() {
               if (match) navigateTo('articles', match);
             }}
             onNavigateHome={() => navigateTo('articles', null)}
+            onNavigateToTab={(tab) => navigateTo(tab, null)}
           />
         ) : currentTab === 'about' ? (
-          <AboutView onNavigateToContact={() => navigateTo('contact', null)} />
+          <AboutView 
+            onNavigateToContact={() => navigateTo('contact', null)} 
+            onNavigateToArticle={(slug) => {
+              const match = articles.find((a) => a.slug === slug);
+              if (match) handleSelectArticle(match);
+            }}
+          />
         ) : currentTab === 'projects' ? (
           <ProjectsSection onExploreArticle={(slug) => {
             const match = articles.find((a) => a.slug === slug);
@@ -273,14 +319,18 @@ export default function App() {
                   
                   {/* Action buttons with descriptive anchor text */}
                   <div className="flex flex-wrap items-center gap-2.5 pt-1">
-                    <button
-                      onClick={() => navigateTo('seo', null)}
+                    <a
+                      href="/seo-research"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigateTo('seo', null);
+                      }}
                       className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#D96C4A] hover:bg-[#B85536] text-white rounded-md text-xs font-sans font-semibold transition-all cursor-pointer shadow-xs"
                       title="Inspect Keyword Research Table for Homepage and 3 Articles"
                     >
                       <Table2 className="w-3.5 h-3.5 text-white" />
-                      <span>Keyword Research Table &amp; On-Page SEO (Steps 1–3)</span>
-                    </button>
+                      <span>Inspect Keyword Research Table &amp; On-Page SEO (Steps 1–3)</span>
+                    </a>
                     <button
                       onClick={() => setIsStudioOpen(true)}
                       className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#2D2A26] hover:bg-[#3E3A36] text-white rounded-md text-xs font-sans font-semibold transition-all cursor-pointer shadow-xs"
@@ -516,13 +566,18 @@ export default function App() {
                     <p className="font-serif text-xs text-[#595550] leading-relaxed">
                       Every page features unique clean URLs, 1 main + 2 related keywords, strict title/meta limits, vector artwork with alt text, and question-answer H2 subheadings for AI answer engines.
                     </p>
-                    <button
-                      onClick={() => navigateTo('seo', null)}
+                    <a
+                      href="/seo-research"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigateTo('seo', null);
+                      }}
                       className="w-full py-2 px-3 bg-[#FAF8F5] hover:bg-[#D96C4A] hover:text-white border border-[#E5E0D8] rounded text-xs font-semibold text-[#2D2A26] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                      title="Inspect Keyword Research Table for Homepage and 3 Articles"
                     >
-                      <span>Open Keyword Research Table</span>
+                      <span>Open Keyword Research Table &amp; Specs</span>
                       <ArrowRight className="w-3 h-3" />
-                    </button>
+                    </a>
                   </div>
 
                   {/* Current Focus Card */}

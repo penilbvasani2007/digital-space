@@ -288,11 +288,11 @@ export const GeminiStudio: React.FC<{ isOpen: boolean; onClose: () => void }> = 
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="font-sans font-semibold text-lg text-[#2D2A26]">
-                Penil's AI Creative & Research Studio
+              <h2 className="font-sans font-semibold text-base sm:text-lg text-[#2D2A26]">
+                How does Penil's AI Creative &amp; Research Studio accelerate digital workflows?
               </h2>
               <span className="text-xs font-mono text-[#595550]">
-                Powered by Gemini 3.5 & Multimodal Tools
+                Answer: Multimodal conversational reasoning, real-time Google Search grounding, image synthesis, and TTS audio via Gemini.
               </span>
             </div>
           </div>
@@ -527,9 +527,10 @@ export const GeminiStudio: React.FC<{ isOpen: boolean; onClose: () => void }> = 
                           target="_blank"
                           rel="noreferrer"
                           className="text-xs px-2.5 py-1 bg-[#FAF8F5] border border-[#E5E0D8] rounded text-[#2D2A26] hover:text-[#D96C4A] hover:border-[#D96C4A] flex items-center gap-1 transition-colors"
+                          title={`Read verified source: ${src.title || src.uri}`}
                         >
-                          <ExternalLink className="w-3 h-3" />
-                          <span className="truncate max-w-[200px]">{src.title}</span>
+                          <ExternalLink className="w-3 h-3 shrink-0" />
+                          <span className="truncate max-w-[220px]">{src.title || src.uri || 'External Source'}</span>
                         </a>
                       ))}
                     </div>
