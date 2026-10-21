@@ -83,15 +83,19 @@ export const NotFoundView: React.FC<NotFoundViewProps> = ({
       <div className="max-w-[680px] mb-8 sm:mb-12">
         <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-[#D96C4A]/10 text-[#D96C4A] font-mono text-xs font-semibold mb-3">
           <Compass className="w-3.5 h-3.5" />
-          <span>ERROR 404 · PAGE NOT FOUND</span>
+          <span>HTTP 404 NOT FOUND</span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#2D2A26] tracking-tight leading-[1.15] mb-3 sm:mb-4">
-          Lost in Thought? This page has moved or doesn't exist.
+          404 Error: Page Not Found
         </h1>
 
-        <p className="text-sm sm:text-base md:text-lg font-serif text-[#595550] leading-relaxed mb-6">
-          The page or note you are looking for might have been relocated, renamed, or is currently being drafted. We invite you to explore the main sections of Penil's notebook or jump straight into popular masterclass essays below.
+        <p className="text-base sm:text-lg md:text-xl font-serif text-[#D96C4A] font-medium mb-3">
+          Lost in Thought? This page has moved or doesn't exist.
+        </p>
+
+        <p className="text-sm sm:text-base font-serif text-[#595550] leading-relaxed mb-6">
+          The page, essay, or resource you are looking for might have been relocated, renamed, or is currently being drafted. We invite you to explore the main sections of Penil's notebook or jump straight into popular masterclass essays below.
         </p>
 
         <div className="flex flex-wrap items-center gap-3">
