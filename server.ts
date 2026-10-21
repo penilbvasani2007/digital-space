@@ -322,6 +322,35 @@ app.post('/api/generate-music', async (req, res) => {
   }
 });
 
+// Static directory for public files (SEO & AI Agent specifications)
+const publicDir = path.resolve(__dirname, 'public');
+app.use(express.static(publicDir));
+
+// Explicit route endpoints for LLM and Agent audits
+app.get('/llms.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.sendFile(path.join(publicDir, 'llms.txt'));
+});
+
+app.get('/llms-full.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.sendFile(path.join(publicDir, 'llms-full.txt'));
+});
+
+app.get(['/ai-catalog.json', '/.well-known/ai-catalog.json'], (req, res) => {
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.sendFile(path.join(publicDir, 'ai-catalog.json'));
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.sendFile(path.join(publicDir, 'robots.txt'));
+});
+
 // Mount Vite or serve static assets
 async function startServer() {
   if (!isProd) {

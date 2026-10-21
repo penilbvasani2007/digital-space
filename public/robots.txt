@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Agentic Resource Discovery & LLM directives
+# Specification: https://llmstxt.org and https://agenticresourcediscovery.org
+LLM-Data: /llms.txt
+LLM-Full-Data: /llms-full.txt
+AI-Catalog: /ai-catalog.json
+
+Sitemap: https://digitalspace.io/sitemap.xml

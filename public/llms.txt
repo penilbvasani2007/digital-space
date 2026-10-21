@@ -1,0 +1,38 @@
+# Penil's Digital Space: Digital Business, Design Notes & Architecture
+
+> A curated technical publication and interactive workspace by Penil Vasani, exploring modern website architecture, executive data analytics frameworks, vertical micro-SaaS business strategy, and high-impact presentation design.
+
+This repository and website serve as a comprehensive reference manual for software engineers, product designers, and digital entrepreneurs. All masterclasses, interactive tools, and frameworks prioritize clean typography, high data-ink ratios, sustainable unit economics, and answer-engine-optimized structured documentation.
+
+## Core Masterclasses & Articles
+
+- [Why First Impressions Matter in Website Architecture](https://digitalspace.io/articles/why-first-impressions-matter-in-website-architecture): Explores the 50-millisecond cognitive threshold, human eye-tracking mechanics, 65-75 character optimal line measure, and zero-pill visual discipline for high-conversion web interfaces.
+- [Transforming Raw Data into Actionable Business Dashboards](https://digitalspace.io/articles/transforming-raw-data-into-actionable-business-dashboards): A practical framework for converting cluttered spreadsheet rows into executive-ready dashboards, categorizing metrics into North Star, Leading, and Trailing KPIs with maximum data-ink ratio.
+- [Building a Sustainable Digital Business from Scratch](https://digitalspace.io/articles/building-a-sustainable-digital-business-from-scratch): Comprehensive unit economics playbook detailing customer acquisition cost (CAC) payback periods, lifetime value (LTV/CAC) multiples, and retention flywheels for bootstrapped digital ventures.
+- [Executive Presentation Design Masterclass: High-Stakes Stakeholder Narratives](https://digitalspace.io/articles/presentation-design-masterclass-stakeholder-narratives): Step-by-step coaching on the 1-2-1 narrative structure (1 context, 2 proof, 1 action) and billboard-clarity slide design to win executive alignment.
+- [Crafting Vertical Micro-SaaS Architecture: A Lean Engineer's Playbook](https://digitalspace.io/articles/crafting-vertical-micro-saas-architecture-guide): Engineering blueprint for multi-tenant database isolation, self-serve onboarding, webhook-driven Stripe billing, and zero-maintenance operations.
+- [From Generative Concept Art to Responsive CSS Layouts](https://digitalspace.io/articles/diffusion-latents-css-layouts-guide): Technical bridge between AI generative diffusion models, color swatch extraction, and production-grade CSS Grid and Flexbox layouts.
+
+## Key Pages & Interactive Tools
+
+- [Homepage & Overview](https://digitalspace.io/): Editorial digest of featured masterclasses, live business metrics, and recent publications.
+- [Masterclass Articles Catalog](https://digitalspace.io/articles): Searchable index of all architectural deep-dives, business case studies, and engineering tutorials.
+- [Step 2 Master Keyword Research & AEO Table](https://digitalspace.io/seo): Comprehensive 10-page master Answer Engine Optimization (AEO) matrix detailing clean URLs, target search queries, monthly volume, search intent, and answered user questions.
+- [Interactive Showcase & Prototypes](https://digitalspace.io/projects): Live interactive engineering demos, dashboard calculators, typography inspectors, and AI agent experiments.
+- [About Penil Vasani](https://digitalspace.io/about): Author background, design philosophy, craftsmanship principles, and contact details.
+- [Contact & Inquiries](https://digitalspace.io/contact): Direct editorial feedback channels, project inquiries, and collaboration requests.
+
+## Questions Answered by This Website
+
+- Why do users form aesthetic assessments of websites in the first 50 milliseconds?
+- How does constraining line length to 65-75 characters enhance reading comprehension and retention?
+- How do you categorize business metrics into North Star, Leading, and Trailing indicators?
+- What constitutes an acceptable CAC payback period and LTV/CAC ratio in modern SaaS?
+- How does the 1-2-1 narrative structure prevent stakeholder derailment in executive slide presentations?
+- How can designers convert generative AI concepts into performant, accessible CSS code?
+
+## Optional & AI Discoverability Resources
+
+- [Full Context LLM Ingestion Document](https://digitalspace.io/llms-full.txt): Complete unabridged text of all masterclasses and technical documentation formatted for large language model ingestion.
+- [Agentic Resource Discovery Manifest (ai-catalog.json)](https://digitalspace.io/ai-catalog.json): Machine-readable ARD 1.0 catalog advertising callable AI advisory agents, roles, and schema definitions.
+- [Downloadable Master Keyword Research Table (.doc)](https://digitalspace.io/SEO_Keyword_Research_Table.doc): Formatted Word document containing the complete 10-page AEO keyword research specification.

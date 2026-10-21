@@ -1,0 +1,130 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ards-project/ard-spec/main/spec/schemas/ai-catalog.schema.json",
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Penil's Digital Space",
+    "documentationUrl": "https://digitalspace.io/llms.txt"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:digitalspace.io:agent:website-architecture-advisor",
+      "displayName": "Website Architecture & Typography Advisor",
+      "type": "application/json",
+      "description": "Interactive AI advisor providing actionable guidance on readable typography, optimal line measure (65-75ch), and 50ms cognitive trust in website architecture.",
+      "tags": ["web-design", "typography", "website-architecture", "ergonomics"],
+      "capabilities": ["ArchitectureAudit", "TypographyAnalysis", "MeasureCheck"],
+      "representativeQueries": [
+        "Why do first impressions matter within 50ms in website architecture?",
+        "How does readable typography outperform visual clutter on landing pages?",
+        "What are the three essential zones of intuitive website navigation?"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-10-21T03:00:00Z",
+      "data": {
+        "name": "website-architecture-advisor",
+        "endpoint": "/api/chat",
+        "method": "POST",
+        "role": "architect",
+        "parameters": {
+          "messages": [
+            {
+              "role": "user",
+              "text": "Your inquiry regarding website architecture or typography"
+            }
+          ],
+          "role": "architect"
+        }
+      }
+    },
+    {
+      "identifier": "urn:air:digitalspace.io:agent:data-analytics-dashboard-coach",
+      "displayName": "Business Analytics & Executive Dashboard Coach",
+      "type": "application/json",
+      "description": "AI advisory service converting raw spreadsheet metrics into high data-ink executive dashboards with North Star, leading, and trailing KPIs.",
+      "tags": ["data-analytics", "dashboards", "business-intelligence", "kpis"],
+      "capabilities": ["DashboardReview", "KpiClassification", "DataInkOptimization"],
+      "representativeQueries": [
+        "How to convert raw spreadsheet rows into an executive dashboard?",
+        "What is the difference between leading and trailing business KPIs?",
+        "How do you calculate and improve the data-ink ratio in charts?"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-10-21T03:00:00Z",
+      "data": {
+        "name": "data-analytics-dashboard-coach",
+        "endpoint": "/api/chat",
+        "method": "POST",
+        "role": "analytics",
+        "parameters": {
+          "messages": [
+            {
+              "role": "user",
+              "text": "Your data analytics or KPI dashboard question"
+            }
+          ],
+          "role": "analytics"
+        }
+      }
+    },
+    {
+      "identifier": "urn:air:digitalspace.io:agent:digital-business-strategist",
+      "displayName": "Digital Business & Micro-SaaS Strategist",
+      "type": "application/json",
+      "description": "Strategic advisory agent providing unit economics evaluation, CAC payback modeling, LTV multiples analysis, and sustainable digital business architecture.",
+      "tags": ["digital-business", "micro-saas", "cac-payback", "unit-economics"],
+      "capabilities": ["UnitEconomicsAudit", "CacPaybackModeling", "LtvMultipleEvaluation"],
+      "representativeQueries": [
+        "What is a healthy CAC payback period for a bootstrapped digital business?",
+        "How do you structure self-serve pricing tiers for micro-SaaS?",
+        "What are the four pillars of building a sustainable digital business?"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-10-21T03:00:00Z",
+      "data": {
+        "name": "digital-business-strategist",
+        "endpoint": "/api/chat",
+        "method": "POST",
+        "role": "strategy",
+        "parameters": {
+          "messages": [
+            {
+              "role": "user",
+              "text": "Your question regarding CAC, LTV, or business models"
+            }
+          ],
+          "role": "strategy"
+        }
+      }
+    },
+    {
+      "identifier": "urn:air:digitalspace.io:agent:presentation-narrative-specialist",
+      "displayName": "Executive Presentation Narrative Specialist",
+      "type": "application/json",
+      "description": "AI coaching agent specializing in the 1-2-1 narrative structure (1 context, 2 proof, 1 action) for high-stakes executive stakeholder decks.",
+      "tags": ["presentation-design", "executive-communication", "narrative-structure"],
+      "capabilities": ["DeckStructureAudit", "NarrativeRefinement", "BillboardClarityCheck"],
+      "representativeQueries": [
+        "What is the 1-2-1 narrative presentation structure?",
+        "How do you design billboard-style executive slides?",
+        "How do you prepare for high-stakes stakeholder questions during presentations?"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-10-21T03:00:00Z",
+      "data": {
+        "name": "presentation-narrative-specialist",
+        "endpoint": "/api/chat",
+        "method": "POST",
+        "role": "presentation",
+        "parameters": {
+          "messages": [
+            {
+              "role": "user",
+              "text": "Your presentation design or narrative question"
+            }
+          ],
+          "role": "presentation"
+        }
+      }
+    }
+  ]
+}
