@@ -56,60 +56,60 @@ export const ProjectsSection: React.FC<{ onExploreArticle?: (slug: string) => vo
   ];
 
   return (
-    <div className="max-w-[1000px] mx-auto px-6 py-12">
-      <div className="max-w-2xl mb-12">
-        <span className="text-xs uppercase tracking-widest font-sans font-semibold text-[#D96C4A] block mb-2">
+    <div className="max-w-[1000px] mx-auto px-3.5 sm:px-6 md:px-8 py-6 sm:py-10 md:py-12">
+      <div className="max-w-2xl mb-6 sm:mb-10">
+        <span className="text-[10px] sm:text-xs uppercase tracking-widest font-sans font-semibold text-[#D96C4A] block mb-1.5 sm:mb-2">
           Projects &amp; Experiments
         </span>
-        <h1 className="text-4xl font-sans font-semibold text-[#2D2A26] leading-tight mb-4">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-sans font-semibold text-[#2D2A26] leading-tight mb-2.5 sm:mb-4">
           Building tools at the intersection of design and business.
         </h1>
-        <h2 className="text-xl font-sans font-semibold text-[#2D2A26] mb-2">
+        <h2 className="text-base sm:text-lg md:text-xl font-sans font-semibold text-[#2D2A26] mb-1.5 sm:mb-2">
           What tools and prototypes translate masterclass theory into practice?
         </h2>
-        <p className="text-base font-serif text-[#595550] leading-relaxed">
-          <strong className="font-mono text-xs text-[#D96C4A] mr-1.5 font-bold">Answer:</strong>
+        <p className="text-xs sm:text-sm md:text-base font-serif text-[#595550] leading-relaxed">
+          <strong className="font-mono text-[10px] sm:text-xs text-[#D96C4A] mr-1.5 font-bold">Answer:</strong>
           These practical open prototypes—including an Executive Metrics Canvas with high data-ink ratios, a 50ms First Impressions layout auditor, and a declarative CSS token synthesizer—translate theoretical research into living, accessible web utilities.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
         {projects.map((proj) => {
           const Icon = proj.icon;
           return (
             <div
               key={proj.id}
-              className="bg-white border border-[#E5E0D8] rounded-lg p-7 hover:border-[#D96C4A]/60 transition-all shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex flex-col justify-between"
+              className="bg-white border border-[#E5E0D8] rounded-lg p-4 sm:p-6 md:p-7 hover:border-[#D96C4A]/60 transition-all shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 rounded-md bg-[#FAF8F5] border border-[#E5E0D8] flex items-center justify-center text-[#D96C4A]">
-                    <Icon className="w-5 h-5" />
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-md bg-[#FAF8F5] border border-[#E5E0D8] flex items-center justify-center text-[#D96C4A] shrink-0">
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <span className="text-xs font-mono text-[#595550] bg-[#FAF8F5] px-2.5 py-1 rounded border border-[#E5E0D8]">
+                  <span className="text-[11px] sm:text-xs font-mono text-[#595550] bg-[#FAF8F5] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded border border-[#E5E0D8]">
                     {proj.status}
                   </span>
                 </div>
 
-                <span className="text-[11px] font-sans uppercase tracking-wider text-[#D96C4A] font-semibold block mb-1">
+                <span className="text-[10px] sm:text-[11px] font-sans uppercase tracking-wider text-[#D96C4A] font-semibold block mb-1">
                   {proj.tag}
                 </span>
 
-                <h3 className="text-2xl font-sans font-semibold text-[#2D2A26] mb-3">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-sans font-semibold text-[#2D2A26] mb-2 sm:mb-3">
                   {proj.title}
                 </h3>
 
-                <p className="text-sm font-serif text-[#595550] leading-relaxed mb-4">
+                <p className="text-xs sm:text-sm font-serif text-[#595550] leading-relaxed mb-3 sm:mb-4">
                   {proj.desc}
                 </p>
 
-                <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8] text-xs font-mono text-[#2D2A26] mb-5">
-                  <span className="text-[#595550] block text-[10px] uppercase">Impact & Performance:</span>
-                  <span className="font-semibold">{proj.metrics}</span>
+                <div className="p-2.5 sm:p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8] text-xs font-mono text-[#2D2A26] mb-4 sm:mb-5">
+                  <span className="text-[#595550] block text-[9px] sm:text-[10px] uppercase">Impact & Performance:</span>
+                  <span className="font-semibold text-xs">{proj.metrics}</span>
                 </div>
 
                 {/* Explicit In-Context Link with Rich Anchor Text */}
-                <div className="mb-4">
+                <div className="mb-3 sm:mb-4">
                   <a
                     href={`/articles/${proj.relatedArticleSlug}`}
                     onClick={(e) => {
@@ -127,7 +127,7 @@ export const ProjectsSection: React.FC<{ onExploreArticle?: (slug: string) => vo
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[#E5E0D8] flex items-center justify-between">
+              <div className="pt-3 sm:pt-4 border-t border-[#E5E0D8] flex items-center justify-between">
                 <button
                   onClick={() => setActiveProject(activeProject === proj.id ? null : proj.id)}
                   className="text-xs font-sans font-semibold text-[#2D2A26] hover:text-[#D96C4A] transition-colors flex items-center gap-1.5 cursor-pointer"
@@ -138,7 +138,7 @@ export const ProjectsSection: React.FC<{ onExploreArticle?: (slug: string) => vo
               </div>
 
               {activeProject === proj.id && (
-                <div className="mt-4 pt-4 border-t border-dashed border-[#E5E0D8] text-xs font-serif text-[#595550] bg-[#FAF8F5] p-3 rounded">
+                <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-dashed border-[#E5E0D8] text-xs font-serif text-[#595550] bg-[#FAF8F5] p-2.5 sm:p-3 rounded">
                   <span className="font-sans font-semibold text-[#2D2A26] block mb-1">Architecture Notes:</span>
                   {proj.demoDetail}
                 </div>

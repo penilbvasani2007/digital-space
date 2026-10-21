@@ -279,37 +279,38 @@ export const GeminiStudio: React.FC<{ isOpen: boolean; onClose: () => void }> = 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl overflow-hidden text-[#2D2A26]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
+      <div className="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] w-full max-w-4xl h-[95vh] sm:h-[90vh] flex flex-col shadow-2xl overflow-hidden text-[#2D2A26]">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-[#E5E0D8] bg-white flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-md bg-[#FAF8F5] border border-[#E5E0D8] flex items-center justify-center text-[#D96C4A]">
-              <Sparkles className="w-4 h-4" />
+        <div className="px-3.5 sm:px-6 py-2.5 sm:py-4 border-b border-[#E5E0D8] bg-white flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-[#FAF8F5] border border-[#E5E0D8] flex items-center justify-center text-[#D96C4A] shrink-0">
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
-            <div>
-              <h2 className="font-sans font-semibold text-base sm:text-lg text-[#2D2A26]">
-                How does Penil's AI Creative &amp; Research Studio accelerate digital workflows?
+            <div className="min-w-0">
+              <h2 className="font-sans font-semibold text-xs sm:text-base text-[#2D2A26] truncate">
+                Penil's AI Creative &amp; Research Studio
               </h2>
-              <span className="text-xs font-mono text-[#595550]">
-                Answer: Multimodal conversational reasoning, real-time Google Search grounding, image synthesis, and TTS audio via Gemini.
+              <span className="text-[10px] sm:text-xs font-mono text-[#595550] hidden sm:block">
+                Multimodal reasoning, Search &amp; Maps grounding, and TTS via Gemini.
               </span>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded text-[#595550] hover:text-[#2D2A26] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
+            className="p-1 sm:p-1.5 rounded text-[#595550] hover:text-[#2D2A26] hover:bg-[#FAF8F5] transition-colors cursor-pointer shrink-0"
+            aria-label="Close AI Studio"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center gap-2 px-6 py-2.5 bg-white border-b border-[#E5E0D8] overflow-x-auto text-xs font-sans font-semibold">
+        <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 bg-white border-b border-[#E5E0D8] overflow-x-auto scrollbar-none text-xs font-sans font-semibold">
           <button
             onClick={() => setActiveTab('chat')}
-            className={`px-3 py-1.5 rounded transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+            className={`px-2.5 sm:px-3 py-1.5 rounded transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap text-xs ${
               activeTab === 'chat' ? 'bg-[#2D2A26] text-white' : 'text-[#595550] hover:bg-[#FAF8F5]'
             }`}
           >

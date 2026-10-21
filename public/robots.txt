@@ -1,10 +1,13 @@
+# robots.txt for Penil's Digital Space
+# Allows all search engine crawlers and lists the sitemap
+
 User-agent: *
 Allow: /
 
-# Agentic Resource Discovery & LLM directives
-# Specification: https://llmstxt.org and https://agenticresourcediscovery.org
+# XML Sitemap listing all pages with full https URLs
+Sitemap: https://digitalspace.io/sitemap.xml
+
+# Agentic Resource Discovery & LLM Directives (llmstxt.org & ARD spec)
 LLM-Data: /llms.txt
 LLM-Full-Data: /llms-full.txt
 AI-Catalog: /ai-catalog.json
-
-Sitemap: https://digitalspace.io/sitemap.xml

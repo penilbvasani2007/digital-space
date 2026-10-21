@@ -7,6 +7,7 @@ import { ProjectsSection } from './components/ProjectsSection';
 import { ContactSection } from './components/ContactSection';
 import { SeoResearchView } from './components/SeoResearchView';
 import { GeminiStudio } from './components/GeminiStudio';
+import { NotFoundView } from './components/NotFoundView';
 import { INITIAL_ARTICLES } from './data/articles';
 import { Article } from './types';
 import { 
@@ -19,6 +20,7 @@ export default function App() {
   const [articles, setArticles] = useState<Article[]>(INITIAL_ARTICLES);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [currentTab, setCurrentTab] = useState<'articles' | 'about' | 'projects' | 'contact' | 'saved' | 'seo'>('articles');
+  const [is404, setIs404] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [savedArticleIds, setSavedArticleIds] = useState<Set<string>>(new Set(['art-01', 'art-02']));
@@ -40,21 +42,54 @@ export default function App() {
   useEffect(() => {
     const handleLocationChange = () => {
       const path = window.location.pathname;
+
+      // Requirement 5: 301 redirect from /old-home to /
+      if (path === '/old-home') {
+        window.history.replaceState({}, '', '/');
+        setCurrentTab('articles');
+        setSelectedArticle(null);
+        setIs404(false);
+        return;
+      }
+
       if (path.startsWith('/articles/')) {
         const slug = path.replace('/articles/', '');
         const match = articles.find((a) => a.slug === slug);
         if (match) {
           setSelectedArticle(match);
+          setIs404(false);
+          return;
+        } else {
+          // Unknown article slug -> 404
+          setSelectedArticle(null);
+          setIs404(true);
           return;
         }
       }
+
       setSelectedArticle(null);
-      if (path === '/about') setCurrentTab('about');
-      else if (path === '/projects') setCurrentTab('projects');
-      else if (path === '/contact') setCurrentTab('contact');
-      else if (path === '/saved') setCurrentTab('saved');
-      else if (path === '/seo-research') setCurrentTab('seo');
-      else setCurrentTab('articles');
+      if (path === '/' || path === '' || path === '/articles') {
+        setCurrentTab('articles');
+        setIs404(false);
+      } else if (path === '/about') {
+        setCurrentTab('about');
+        setIs404(false);
+      } else if (path === '/projects') {
+        setCurrentTab('projects');
+        setIs404(false);
+      } else if (path === '/contact') {
+        setCurrentTab('contact');
+        setIs404(false);
+      } else if (path === '/saved') {
+        setCurrentTab('saved');
+        setIs404(false);
+      } else if (path === '/seo-research') {
+        setCurrentTab('seo');
+        setIs404(false);
+      } else {
+        // Unknown route -> 404 Page (Requirement 4)
+        setIs404(true);
+      }
     };
 
     handleLocationChange();
@@ -64,7 +99,7 @@ export default function App() {
 
   // Synchronize document.title, meta description, canonical, and og:url on route change
   useEffect(() => {
-    if (!selectedArticle) {
+    if (!selectedArticle && !is404) {
       let title = "Digital Business & Design Notes | Penil's Digital Space";
       let desc = "Explore digital business and design notes on modern website architecture, executive data analytics frameworks, and vertical micro-SaaS strategy by Penil Vasani.";
       let path = '/';
@@ -102,12 +137,23 @@ export default function App() {
       if (ogTitle) ogTitle.setAttribute('content', title);
       let ogDesc = document.querySelector('meta[property="og:description"]');
       if (ogDesc) ogDesc.setAttribute('content', desc);
-      let ogUrl = document.querySelector('meta[property="og:url"]');
-      if (ogUrl) ogUrl.setAttribute('content', `${window.location.origin}${path}`);
+      
+      const host = window.location.host;
+      const protocol = window.location.protocol;
+      const baseOrigin = host ? `${protocol}//${host}` : 'https://digitalspace.io';
+      const selfReferencingUrl = `${baseOrigin}${path}`;
 
-      // Canonical link
+      let ogUrl = document.querySelector('meta[property="og:url"]');
+      if (ogUrl) ogUrl.setAttribute('content', selfReferencingUrl);
+
+      // Requirement 3: Self-referencing canonical tag on every page
       let canonical = document.querySelector('link[rel="canonical"]');
-      if (canonical) canonical.setAttribute('href', `${window.location.origin}${path}`);
+      if (!canonical) {
+        canonical = document.createElement('link');
+        canonical.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonical);
+      }
+      canonical.setAttribute('href', selfReferencingUrl);
 
       // Twitter
       let twTitle = document.querySelector('meta[name="twitter:title"]');
@@ -115,10 +161,11 @@ export default function App() {
       let twDesc = document.querySelector('meta[name="twitter:description"]');
       if (twDesc) twDesc.setAttribute('content', desc);
     }
-  }, [currentTab, selectedArticle]);
+  }, [currentTab, selectedArticle, is404]);
 
   // Navigation handler
   const navigateTo = (tab: 'articles' | 'about' | 'projects' | 'contact' | 'saved' | 'seo', article?: Article | null) => {
+    setIs404(false);
     if (article) {
       setSelectedArticle(article);
       window.history.pushState({}, '', `/articles/${article.slug}`);
@@ -249,6 +296,15 @@ export default function App() {
             onClap={handleClap}
             hasClapped={clappedArticleIds.has(selectedArticle.id)}
           />
+        ) : is404 ? (
+          <NotFoundView
+            onNavigateHome={() => navigateTo('articles', null)}
+            onNavigateTab={(tab) => navigateTo(tab, null)}
+            onNavigateArticle={(slug) => {
+              const match = articles.find((a) => a.slug === slug);
+              if (match) navigateTo('articles', match);
+            }}
+          />
         ) : currentTab === 'seo' ? (
           <SeoResearchView
             onNavigateToArticle={(slug) => {
@@ -274,25 +330,25 @@ export default function App() {
         ) : currentTab === 'contact' ? (
           <ContactSection />
         ) : (
-          <main className="max-w-[1140px] mx-auto px-6 md:px-8">
+          <main className="max-w-[1140px] mx-auto px-3.5 sm:px-6 md:px-8">
             {/* User-Centric Hero Section */}
             {currentTab === 'saved' ? (
-              <section className="my-12 max-w-[700px]">
-                <span className="font-sans text-[0.8rem] uppercase tracking-[1px] text-[#D96C4A] font-semibold block mb-2">
+              <section className="my-6 sm:my-10 md:my-12 max-w-[700px]">
+                <span className="font-sans text-[0.75rem] sm:text-[0.8rem] uppercase tracking-[1px] text-[#D96C4A] font-semibold block mb-1.5">
                   Personal Reading Archive
                 </span>
-                <h1 className="font-sans font-semibold text-3xl md:text-4xl text-[#2D2A26] leading-tight mb-4">
+                <h1 className="font-sans font-semibold text-2xl sm:text-3xl md:text-4xl text-[#2D2A26] leading-tight mb-2.5 sm:mb-4">
                   Saved Notes &amp; Essays ({savedArticleIds.size})
                 </h1>
-                <p className="font-serif text-lg text-[#595550]">
+                <p className="font-serif text-sm sm:text-base md:text-lg text-[#595550]">
                   Articles and masterclass frameworks you've pinned for thoughtful reading.
                 </p>
               </section>
             ) : (
-              <section className="py-6 md:py-8 mb-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start pb-6 border-b border-[#E5E0D8]/60">
-                <div className="lg:col-span-8 space-y-3">
+              <section className="py-4 sm:py-6 md:py-8 mb-4 sm:mb-6 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start pb-4 sm:pb-6 border-b border-[#E5E0D8]/60">
+                <div className="lg:col-span-8 space-y-2.5 sm:space-y-3">
                   {/* Target Keywords Badge for Homepage */}
-                  <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono text-[#595550]">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-mono text-[#595550]">
                     <span className="flex items-center gap-1 font-semibold text-[#D96C4A]">
                       <Tag className="w-3 h-3" />
                       <span>TARGET KEYWORDS:</span>
@@ -300,51 +356,51 @@ export default function App() {
                     <span className="bg-white px-2 py-0.5 rounded border border-[#E5E0D8] text-[#2D2A26] font-semibold">
                       digital business and design notes
                     </span>
-                    <span className="text-[#E5E0D8]">·</span>
+                    <span className="text-[#E5E0D8] hidden xs:inline">·</span>
                     <span className="bg-white px-1.5 py-0.5 rounded border border-[#E5E0D8]">
                       modern website architecture
                     </span>
-                    <span className="text-[#E5E0D8]">·</span>
+                    <span className="text-[#E5E0D8] hidden xs:inline">·</span>
                     <span className="bg-white px-1.5 py-0.5 rounded border border-[#E5E0D8]">
                       business data analytics frameworks
                     </span>
                   </div>
 
-                  <h1 className="font-sans font-semibold text-3xl sm:text-4xl lg:text-[2.75rem] text-[#2D2A26] leading-[1.12] tracking-[-0.8px]">
+                  <h1 className="font-sans font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] text-[#2D2A26] leading-[1.2] sm:leading-[1.14] tracking-tight">
                     Bridging the gap between digital business and thoughtful design.
                   </h1>
-                  <p className="font-serif text-base sm:text-lg text-[#595550] leading-relaxed max-w-2xl">
+                  <p className="font-serif text-sm sm:text-base md:text-lg text-[#595550] leading-relaxed max-w-2xl">
                     Welcome to my personal notebook exploring modern website architecture, executive data analytics frameworks, and vertical micro-SaaS unit economics. Every article is engineered with in-depth analysis, bespoke small-size imagery, and Answer Engine Optimization (AEO).
                   </p>
                   
                   {/* Action buttons with descriptive anchor text */}
-                  <div className="flex flex-wrap items-center gap-2.5 pt-1">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2.5 pt-1">
                     <a
                       href="/seo-research"
                       onClick={(e) => {
                         e.preventDefault();
                         navigateTo('seo', null);
                       }}
-                      className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#D96C4A] hover:bg-[#B85536] text-white rounded-md text-xs font-sans font-semibold transition-all cursor-pointer shadow-xs"
+                      className="inline-flex items-center justify-center sm:justify-start gap-2 px-3.5 py-2 bg-[#D96C4A] hover:bg-[#B85536] text-white rounded-md text-xs font-sans font-semibold transition-all cursor-pointer shadow-xs text-center"
                       title="Inspect Keyword Research Table for Homepage and 3 Articles"
                     >
-                      <Table2 className="w-3.5 h-3.5 text-white" />
-                      <span>Inspect Keyword Research Table &amp; On-Page SEO (Steps 1–3)</span>
+                      <Table2 className="w-3.5 h-3.5 text-white shrink-0" />
+                      <span>Inspect Keyword Research Table (Steps 1–3)</span>
                     </a>
                     <button
                       onClick={() => setIsStudioOpen(true)}
-                      className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#2D2A26] hover:bg-[#3E3A36] text-white rounded-md text-xs font-sans font-semibold transition-all cursor-pointer shadow-xs"
+                      className="inline-flex items-center justify-center sm:justify-start gap-2 px-3.5 py-2 bg-[#2D2A26] hover:bg-[#3E3A36] text-white rounded-md text-xs font-sans font-semibold transition-all cursor-pointer shadow-xs text-center"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-[#D96C4A]" />
+                      <Sparkles className="w-3.5 h-3.5 text-[#D96C4A] shrink-0" />
                       <span>Launch AI Studio (Chatbot · Search · Voice)</span>
                     </button>
                   </div>
                 </div>
 
                 {/* Right Hero Overview Card */}
-                <div className="lg:col-span-4 bg-white border border-[#E5E0D8] rounded-lg p-4 shadow-xs font-sans space-y-2.5">
+                <div className="lg:col-span-4 bg-white border border-[#E5E0D8] rounded-lg p-3.5 sm:p-4 shadow-xs font-sans space-y-2">
                   <div className="flex items-center justify-between pb-1 border-b border-[#E5E0D8]/80">
-                    <span className="text-[11px] font-mono uppercase tracking-wider text-[#D96C4A] font-semibold block">
+                    <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-[#D96C4A] font-semibold block">
                       ON-PAGE SEO AUDIT
                     </span>
                     <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded font-semibold">
@@ -352,16 +408,16 @@ export default function App() {
                     </span>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+                    <div className="p-1.5 sm:p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
                       <span className="text-[9px] text-[#595550] block font-mono">IMAGE ASSETS</span>
-                      <span className="text-xs font-bold text-[#2D2A26] font-mono">&lt; 3KB Vector</span>
+                      <span className="text-[11px] sm:text-xs font-bold text-[#2D2A26] font-mono">&lt; 3KB Vector</span>
                     </div>
-                    <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+                    <div className="p-1.5 sm:p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
                       <span className="text-[9px] text-[#595550] block font-mono">AEO FORMAT</span>
-                      <span className="text-xs font-bold text-[#2D2A26] font-mono">H2 Q&amp;A Pairs</span>
+                      <span className="text-[11px] sm:text-xs font-bold text-[#2D2A26] font-mono">H2 Q&amp;A Pairs</span>
                     </div>
                   </div>
-                  <div className="text-[11px] text-[#595550] font-serif leading-snug pt-0.5">
+                  <div className="text-[10px] sm:text-[11px] text-[#595550] font-serif leading-snug pt-0.5">
                     Unique URLs, title rules (50–60), meta description (140–160), anchor text, and Schema.org FAQPage active.
                   </div>
                 </div>
@@ -369,15 +425,15 @@ export default function App() {
             )}
 
             {/* Category Filters, Search & View Controls */}
-            <div id="notebook-feed" className="mb-6 pb-3 border-b border-[#E5E0D8] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 font-sans scroll-mt-20">
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+            <div id="notebook-feed" className="mb-4 sm:mb-6 pb-2.5 sm:pb-3 border-b border-[#E5E0D8] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 sm:gap-3 font-sans scroll-mt-20">
+              <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto pb-1.5 md:pb-0 scrollbar-none -mx-1 px-1">
                 {categories.map((cat) => {
                   const count = categoryCounts[cat] || 0;
                   return (
                     <button
                       key={cat}
                       onClick={() => setSelectedCategory(cat)}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                      className={`px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs font-semibold rounded transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1 sm:gap-1.5 ${
                         selectedCategory === cat
                           ? 'bg-[#2D2A26] text-white shadow-xs'
                           : 'text-[#595550] hover:text-[#2D2A26] hover:bg-[#E5E0D8]/40 border border-transparent'
@@ -393,8 +449,8 @@ export default function App() {
               </div>
 
               {/* View Switcher & Search */}
-              <div className="flex items-center gap-3">
-                <div className="flex items-center bg-white border border-[#E5E0D8] rounded p-0.5">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="flex items-center bg-white border border-[#E5E0D8] rounded p-0.5 shrink-0">
                   <button
                     onClick={() => setViewMode('magazine')}
                     className={`p-1.5 rounded transition-colors cursor-pointer ${
@@ -429,10 +485,10 @@ export default function App() {
             </div>
 
             {/* Articles Stream and Companion Rail */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-start" id="articles">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-start" id="articles">
               <div className="lg:col-span-8">
                 {filteredArticles.length === 0 ? (
-                  <div className="py-16 text-center bg-white rounded-lg border border-[#E5E0D8] p-8">
+                  <div className="py-12 sm:py-16 text-center bg-white rounded-lg border border-[#E5E0D8] p-6 sm:p-8">
                     <p className="text-[#595550] text-sm font-serif">No notes found matching "{searchQuery}".</p>
                     <button
                       onClick={() => {
@@ -445,15 +501,15 @@ export default function App() {
                     </button>
                   </div>
                 ) : (
-                  <div className="space-y-6 sm:space-y-7">
+                  <div className="space-y-4 sm:space-y-6 md:space-y-7">
                     {filteredArticles.map((article) => (
                       <article
                         key={article.id}
                         onClick={() => handleSelectArticle(article)}
-                        className="bg-white border border-[#E5E0D8] rounded-lg p-5 sm:p-6 hover:border-[#D96C4A]/60 transition-all cursor-pointer group shadow-xs"
+                        className="bg-white border border-[#E5E0D8] rounded-lg p-3.5 sm:p-5 md:p-6 hover:border-[#D96C4A]/60 transition-all cursor-pointer group shadow-xs"
                       >
                         {/* Dedicated Small Vector Image with Alt Text (< 3KB) */}
-                        <div className="w-full h-48 sm:h-56 rounded-md overflow-hidden mb-4 border border-[#E5E0D8] bg-[#FAF8F5] relative group-hover:border-[#D96C4A]/50 transition-all">
+                        <div className="w-full h-40 sm:h-52 md:h-56 rounded-md overflow-hidden mb-3 sm:mb-4 border border-[#E5E0D8] bg-[#FAF8F5] relative group-hover:border-[#D96C4A]/50 transition-all">
                           <img
                             src={article.coverImage}
                             alt={article.imageAlt}
@@ -469,24 +525,24 @@ export default function App() {
                         </div>
 
                         {/* Category & Keywords */}
-                        <div className="flex flex-wrap items-center justify-between text-xs font-sans mb-2 gap-2">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[0.8rem] uppercase tracking-[1px] text-[#D96C4A] font-semibold">
+                        <div className="flex flex-wrap items-center justify-between text-xs font-sans mb-1.5 sm:mb-2 gap-1.5 sm:gap-2">
+                          <div className="flex items-center gap-1.5 sm:gap-2">
+                            <span className="text-[0.75rem] sm:text-[0.8rem] uppercase tracking-[1px] text-[#D96C4A] font-semibold">
                               {article.category}
                             </span>
                             <span className="text-[#E5E0D8]">·</span>
-                            <span className="font-mono text-[#595550] text-[11px] bg-[#FAF8F5] px-1.5 py-0.5 rounded border border-[#E5E0D8]">
+                            <span className="font-mono text-[#595550] text-[10px] sm:text-[11px] bg-[#FAF8F5] px-1.5 py-0.5 rounded border border-[#E5E0D8]">
                               KW: {article.mainKeyword}
                             </span>
                           </div>
-                          <span className="font-mono text-[#595550] text-[11px] flex items-center gap-1">
+                          <span className="font-mono text-[#595550] text-[10px] sm:text-[11px] flex items-center gap-1">
                             <Clock className="w-3 h-3 text-[#D96C4A]" />
                             {article.readTime}
                           </span>
                         </div>
 
                         {/* Title with Semantic Anchor */}
-                        <h2 className="font-sans font-semibold text-2xl sm:text-[1.75rem] text-[#2D2A26] group-hover:text-[#D96C4A] transition-colors leading-[1.25] my-2">
+                        <h2 className="font-sans font-semibold text-lg sm:text-xl md:text-2xl text-[#2D2A26] group-hover:text-[#D96C4A] transition-colors leading-[1.25] my-1.5 sm:my-2">
                           <a
                             href={`/articles/${article.slug}`}
                             onClick={(e) => {
@@ -501,26 +557,26 @@ export default function App() {
                         </h2>
 
                         {/* Subtitle / Excerpt */}
-                        <p className="font-serif text-[#2D2A26] text-base leading-[1.65] my-3">
+                        <p className="font-serif text-[#595550] text-xs sm:text-sm md:text-base leading-relaxed my-2 sm:my-3">
                           {article.excerpt}
                         </p>
 
                         {/* Actions & Explicit Anchor Text */}
-                        <div className="flex flex-wrap items-center justify-between text-xs text-[#595550] font-sans pt-3 border-t border-[#E5E0D8]/60 mt-4 gap-3">
+                        <div className="flex flex-wrap items-center justify-between text-xs text-[#595550] font-sans pt-2.5 sm:pt-3 border-t border-[#E5E0D8]/60 mt-3 sm:mt-4 gap-2 sm:gap-3">
                           <a
                             href={`/articles/${article.slug}`}
                             onClick={(e) => {
                               e.preventDefault();
                               handleSelectArticle(article);
                             }}
-                            className="text-[#D96C4A] font-semibold group-hover:underline inline-flex items-center gap-1"
+                            className="text-[#D96C4A] font-semibold group-hover:underline inline-flex items-center gap-1 text-xs sm:text-sm"
                             title={`Read the full masterclass guide: ${article.title}`}
                           >
-                            <span>Read complete guide on {article.mainKeyword}</span>
+                            <span>Read guide on {article.mainKeyword}</span>
                             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                           </a>
 
-                          <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-3 sm:gap-4">
                             <button
                               onClick={(e) => handleClap(article.id, e)}
                               className={`flex items-center gap-1 p-1 hover:text-[#D96C4A] transition-colors cursor-pointer ${
@@ -529,7 +585,7 @@ export default function App() {
                               title="Applaud essay"
                             >
                               <Heart className={`w-3.5 h-3.5 ${clappedArticleIds.has(article.id) ? 'fill-[#D96C4A]' : ''}`} />
-                              <span className="font-mono tabular-nums">{article.claps}</span>
+                              <span className="font-mono tabular-nums text-xs">{article.claps}</span>
                             </button>
 
                             <button
@@ -550,8 +606,8 @@ export default function App() {
               </div>
 
               {/* Right Companion Rail */}
-              <aside className="lg:col-span-4 space-y-6">
-                <div className="sticky top-24 space-y-6">
+              <aside className="lg:col-span-4 space-y-4 sm:space-y-6">
+                <div className="sticky top-20 sm:top-24 space-y-4 sm:space-y-6">
                   {/* SEO Hub Card */}
                   <div className="bg-white p-5 rounded-lg border border-[#E5E0D8] shadow-xs space-y-3 font-sans">
                     <div className="flex items-center gap-2">

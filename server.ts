@@ -355,6 +355,18 @@ app.get('/robots.txt', (req, res) => {
   res.sendFile(path.join(publicDir, 'robots.txt'));
 });
 
+// Explicit endpoint for XML sitemap with XML mime type and CORS
+app.get('/sitemap.xml', (req, res) => {
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.sendFile(path.join(publicDir, 'sitemap.xml'));
+});
+
+// Requirement 5: 301 Permanent Redirect from /old-home to /
+app.get('/old-home', (req, res) => {
+  res.redirect(301, '/');
+});
+
 app.use(express.static(publicDir));
 
 // Mount Vite or serve static assets

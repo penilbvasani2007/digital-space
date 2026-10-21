@@ -1,5 +1,5 @@
-import React from 'react';
-import { Bookmark, Sparkles, Table2, Search } from 'lucide-react';
+import React, { useState } from 'react';
+import { Bookmark, Sparkles, Table2, Search, Menu, X, ArrowRight, FileText } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 
 interface HeaderProps {
@@ -15,30 +15,37 @@ export const Header: React.FC<HeaderProps> = ({
   savedCount,
   onOpenStudio,
 }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleNavClick = (tab: 'articles' | 'about' | 'projects' | 'contact' | 'saved' | 'seo') => {
+    onSelectTab(tab);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <header className="sticky top-0 z-30 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#E5E0D8]/80 transition-all">
-      <div className="max-w-[1200px] mx-auto py-3 px-4 sm:px-6 md:px-8 flex items-center justify-between">
-        {/* Brand Zone with Geometric Architectural Logo Mark */}
+      <div className="max-w-[1200px] mx-auto py-2.5 sm:py-3 px-3.5 sm:px-6 md:px-8 flex items-center justify-between">
+        {/* Brand Zone */}
         <a
           href="/"
           onClick={(e) => {
             e.preventDefault();
-            onSelectTab('articles');
+            handleNavClick('articles');
           }}
-          className="cursor-pointer text-left focus:outline-none"
+          className="cursor-pointer text-left focus:outline-none shrink-0"
           title="Return to Penil's Digital Space homepage and notebook articles"
           aria-label="Penil's Digital Space - Return to Homepage"
         >
           <BrandLogo size="md" />
         </a>
 
-        {/* Nav Links with Descriptive Anchor Text */}
-        <nav aria-label="Main Navigation" className="flex items-center gap-3 sm:gap-6 md:gap-7 font-sans text-[0.92rem]">
+        {/* Desktop Nav Links (Hidden on small screens to prevent crowded wrapping) */}
+        <nav aria-label="Main Navigation" className="hidden md:flex items-center gap-4 lg:gap-6 font-sans text-[0.9rem]">
           <a
             href="/about"
             onClick={(e) => {
               e.preventDefault();
-              onSelectTab('about');
+              handleNavClick('about');
             }}
             className={`transition-colors py-1 ${
               currentTab === 'about' ? 'text-[#D96C4A] font-semibold border-b border-[#D96C4A]' : 'text-[#595550] hover:text-[#D96C4A]'
@@ -51,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({
             href="/"
             onClick={(e) => {
               e.preventDefault();
-              onSelectTab('articles');
+              handleNavClick('articles');
             }}
             className={`transition-colors py-1 ${
               currentTab === 'articles' ? 'text-[#D96C4A] font-semibold border-b border-[#D96C4A]' : 'text-[#595550] hover:text-[#D96C4A]'
@@ -64,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({
             href="/projects"
             onClick={(e) => {
               e.preventDefault();
-              onSelectTab('projects');
+              handleNavClick('projects');
             }}
             className={`transition-colors py-1 ${
               currentTab === 'projects' ? 'text-[#D96C4A] font-semibold border-b border-[#D96C4A]' : 'text-[#595550] hover:text-[#D96C4A]'
@@ -77,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({
             href="/contact"
             onClick={(e) => {
               e.preventDefault();
-              onSelectTab('contact');
+              handleNavClick('contact');
             }}
             className={`transition-colors py-1 ${
               currentTab === 'contact' ? 'text-[#D96C4A] font-semibold border-b border-[#D96C4A]' : 'text-[#595550] hover:text-[#D96C4A]'
@@ -87,12 +94,12 @@ export const Header: React.FC<HeaderProps> = ({
             Contact
           </a>
 
-          {/* STEP 2 & 3: SEO Keyword Research Table Link with Clear Anchor Text on All Devices */}
+          {/* STEP 2 & 3: SEO Keyword Research Table Link with Clear Anchor Text */}
           <a
             href="/seo-research"
             onClick={(e) => {
               e.preventDefault();
-              onSelectTab('seo');
+              handleNavClick('seo');
             }}
             className={`transition-colors flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded border ${
               currentTab === 'seo'
@@ -114,16 +121,16 @@ export const Header: React.FC<HeaderProps> = ({
             aria-label="Open AI Chatbot, Search and Audio Studio"
           >
             <Sparkles className="w-3 h-3 text-[#D96C4A]" />
-            <span className="hidden xs:inline">AI Studio</span>
+            <span>AI Studio</span>
           </button>
 
-          {/* Saved Articles Link with Explicit Accessible Anchor Text */}
+          {/* Saved Articles Link */}
           {savedCount > 0 && (
             <a
               href="/saved"
               onClick={(e) => {
                 e.preventDefault();
-                onSelectTab('saved');
+                handleNavClick('saved');
               }}
               className={`transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-mono px-2 py-1 rounded border ${
                 currentTab === 'saved'
@@ -138,7 +145,162 @@ export const Header: React.FC<HeaderProps> = ({
             </a>
           )}
         </nav>
+
+        {/* Mobile Action Controls & Hamburger Toggle */}
+        <div className="flex md:hidden items-center gap-2">
+          {/* Quick AI Studio Button on Mobile */}
+          <button
+            onClick={onOpenStudio}
+            className="p-1.5 bg-[#2D2A26] text-white rounded text-xs flex items-center gap-1 shadow-xs cursor-pointer"
+            title="Open AI Studio"
+            aria-label="Open AI Studio"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[#D96C4A]" />
+            <span className="text-[11px] font-sans font-semibold pr-0.5">AI</span>
+          </button>
+
+          {/* Quick Saved Indicator on Mobile */}
+          {savedCount > 0 && (
+            <button
+              onClick={() => handleNavClick('saved')}
+              className={`p-1.5 rounded border text-xs cursor-pointer flex items-center gap-1 ${
+                currentTab === 'saved'
+                  ? 'bg-[#D96C4A] text-white border-[#D96C4A]'
+                  : 'bg-white text-[#595550] border-[#E5E0D8]'
+              }`}
+              title="Saved Articles"
+              aria-label="Saved Articles"
+            >
+              <Bookmark className="w-3.5 h-3.5" />
+              <span className="text-[10px] font-mono font-semibold">{savedCount}</span>
+            </button>
+          )}
+
+          {/* Mobile Hamburger Toggle Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-1.5 rounded-md border border-[#E5E0D8] bg-white text-[#2D2A26] hover:bg-[#FAF8F5] transition-colors cursor-pointer focus:outline-none"
+            aria-label={isMobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5 text-[#D96C4A]" /> : <Menu className="w-5 h-5 text-[#2D2A26]" />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Drawer Menu with Balanced Whitespace & Generous Touch Targets */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden border-t border-[#E5E0D8] bg-[#FAF8F5] px-4 py-3 shadow-lg font-sans animate-in slide-in-from-top-2 duration-150">
+          <div className="flex flex-col divide-y divide-[#E5E0D8]/60 text-sm">
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('articles');
+              }}
+              className={`py-3 flex items-center justify-between transition-colors ${
+                currentTab === 'articles' ? 'text-[#D96C4A] font-semibold' : 'text-[#2D2A26]'
+              }`}
+            >
+              <span>Notebook Articles</span>
+              <ArrowRight className="w-4 h-4 opacity-40" />
+            </a>
+
+            <a
+              href="/about"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('about');
+              }}
+              className={`py-3 flex items-center justify-between transition-colors ${
+                currentTab === 'about' ? 'text-[#D96C4A] font-semibold' : 'text-[#2D2A26]'
+              }`}
+            >
+              <span>About Penil</span>
+              <ArrowRight className="w-4 h-4 opacity-40" />
+            </a>
+
+            <a
+              href="/projects"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('projects');
+              }}
+              className={`py-3 flex items-center justify-between transition-colors ${
+                currentTab === 'projects' ? 'text-[#D96C4A] font-semibold' : 'text-[#2D2A26]'
+              }`}
+            >
+              <span>Projects &amp; Prototypes</span>
+              <ArrowRight className="w-4 h-4 opacity-40" />
+            </a>
+
+            <a
+              href="/contact"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('contact');
+              }}
+              className={`py-3 flex items-center justify-between transition-colors ${
+                currentTab === 'contact' ? 'text-[#D96C4A] font-semibold' : 'text-[#2D2A26]'
+              }`}
+            >
+              <span>Contact &amp; Inquiries</span>
+              <ArrowRight className="w-4 h-4 opacity-40" />
+            </a>
+
+            <a
+              href="/seo-research"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('seo');
+              }}
+              className={`py-3 flex items-center justify-between transition-colors ${
+                currentTab === 'seo' ? 'text-[#D96C4A] font-semibold' : 'text-[#2D2A26]'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Table2 className="w-4 h-4 text-[#D96C4A]" />
+                <span className="font-semibold text-[#D96C4A]">SEO Keyword Research Table</span>
+              </div>
+              <span className="text-[10px] font-mono bg-[#D96C4A]/10 text-[#D96C4A] px-1.5 py-0.5 rounded font-semibold">
+                Steps 1–3
+              </span>
+            </a>
+
+            {savedCount > 0 && (
+              <a
+                href="/saved"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick('saved');
+                }}
+                className={`py-3 flex items-center justify-between transition-colors ${
+                  currentTab === 'saved' ? 'text-[#D96C4A] font-semibold' : 'text-[#2D2A26]'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Bookmark className="w-4 h-4 text-[#D96C4A]" />
+                  <span>Saved Reading Archive</span>
+                </div>
+                <span className="text-xs font-mono font-semibold text-[#595550]">({savedCount})</span>
+              </a>
+            )}
+
+            <div className="pt-3 pb-1">
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onOpenStudio();
+                }}
+                className="w-full py-2.5 px-3 bg-[#2D2A26] hover:bg-[#D96C4A] text-white rounded-md text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#D96C4A]" />
+                <span>Launch AI Studio (Chatbot · Search · Voice)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

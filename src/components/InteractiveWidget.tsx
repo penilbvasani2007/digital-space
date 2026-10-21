@@ -34,19 +34,19 @@ export const InteractiveWidget: React.FC<{ config: InteractiveComponentConfig }>
   };
 
   return (
-    <div className="my-8 border border-[#E5E0D8] bg-[#FAF8F5] rounded-lg p-6 overflow-hidden">
-      <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-3 mb-4">
+    <div className="my-5 sm:my-8 border border-[#E5E0D8] bg-[#FAF8F5] rounded-lg p-3.5 sm:p-5 md:p-6 overflow-hidden">
+      <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-2.5 sm:pb-3 mb-3 sm:mb-4">
         <div>
-          <span className="text-xs uppercase tracking-widest font-sans font-semibold text-[#D96C4A]">
+          <span className="text-[10px] sm:text-xs uppercase tracking-widest font-sans font-semibold text-[#D96C4A]">
             Interactive Masterclass Tool
           </span>
-          <h4 className="text-base font-semibold text-[#2D2A26] font-sans mt-0.5">{config.title}</h4>
+          <h4 className="text-sm sm:text-base font-semibold text-[#2D2A26] font-sans mt-0.5">{config.title}</h4>
         </div>
-        <div className="text-xs font-mono text-[#595550] bg-white border border-[#E5E0D8] px-2.5 py-0.5 rounded">
+        <div className="text-[10px] sm:text-xs font-mono text-[#595550] bg-white border border-[#E5E0D8] px-2 sm:px-2.5 py-0.5 rounded">
           {config.type.toUpperCase()}
         </div>
       </div>
-      <p className="text-xs text-[#595550] mb-5 font-serif">{config.caption}</p>
+      <p className="text-xs text-[#595550] mb-4 sm:mb-5 font-serif leading-relaxed">{config.caption}</p>
 
       {/* Spreadsheet to Dashboard Visualizer */}
       {config.type === 'dashboard' && (

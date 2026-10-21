@@ -96,16 +96,21 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
       ogUrl.setAttribute('property', 'og:url');
       document.head.appendChild(ogUrl);
     }
-    ogUrl.setAttribute('content', `${window.location.origin}/articles/${article.slug}`);
+    const host = window.location.host;
+    const protocol = window.location.protocol;
+    const baseOrigin = host ? `${protocol}//${host}` : 'https://digitalspace.io';
+    const selfArticleUrl = `${baseOrigin}/articles/${article.slug}`;
 
-    // 4. Canonical Link Tag
+    ogUrl.setAttribute('content', selfArticleUrl);
+
+    // 4. Canonical Link Tag (Requirement 3: Self-referencing canonical tag on every page)
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement('link');
       canonical.setAttribute('rel', 'canonical');
       document.head.appendChild(canonical);
     }
-    canonical.setAttribute('href', `${window.location.origin}/articles/${article.slug}`);
+    canonical.setAttribute('href', selfArticleUrl);
 
     // 5. Schema.org JSON-LD (Article + FAQPage for AEO)
     const jsonLdId = 'schema-article-faq';
@@ -269,12 +274,12 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
   };
 
   const proseSizeClass = 
-    fontSize === 'sm' ? 'text-base leading-relaxed' :
-    fontSize === 'lg' ? 'text-xl leading-loose' :
-    'text-lg leading-relaxed';
+    fontSize === 'sm' ? 'text-sm sm:text-base leading-relaxed' :
+    fontSize === 'lg' ? 'text-base sm:text-lg md:text-xl leading-relaxed md:leading-loose' :
+    'text-[0.98rem] sm:text-[1.05rem] md:text-lg leading-[1.7] sm:leading-relaxed';
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] pb-24 text-[#2D2A26]">
+    <div className="min-h-screen bg-[#FAF8F5] pb-16 sm:pb-24 text-[#2D2A26]">
       {/* Reading Progress Bar */}
       <div className="fixed top-0 left-0 right-0 h-1 bg-[#E5E0D8] z-50">
         <div
@@ -284,22 +289,23 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
       </div>
 
       {/* Top Floating Action Bar with Semantic Back Anchor */}
-      <div className="sticky top-[57px] z-20 bg-[#FAF8F5]/90 backdrop-blur-sm border-b border-[#E5E0D8]/60 py-2.5 px-6 md:px-8 max-w-[1140px] mx-auto flex items-center justify-between">
+      <div className="sticky top-[52px] sm:top-[57px] z-20 bg-[#FAF8F5]/95 backdrop-blur-sm border-b border-[#E5E0D8]/60 py-2 sm:py-2.5 px-3.5 sm:px-6 md:px-8 max-w-[1140px] mx-auto flex items-center justify-between">
         <a
           href="/"
           onClick={(e) => {
             e.preventDefault();
             onBack();
           }}
-          className="inline-flex items-center gap-1.5 text-xs font-sans text-[#595550] hover:text-[#2D2A26] transition-colors cursor-pointer group"
+          className="inline-flex items-center gap-1.5 text-xs font-sans text-[#595550] hover:text-[#2D2A26] transition-colors cursor-pointer group shrink-0"
           title="Return to Digital Business and Design Notes articles index"
         >
-          <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-          <span className="font-medium">Return to Notebook Articles Index</span>
+          <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform shrink-0" />
+          <span className="font-medium hidden sm:inline">Return to Articles Index</span>
+          <span className="font-medium sm:hidden">Articles</span>
         </a>
 
         {/* Reading Controls */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
           {/* Typography scale */}
           <div className="hidden sm:flex items-center gap-1 bg-white border border-[#E5E0D8] rounded px-1.5 py-0.5 text-xs font-mono text-[#595550]">
             <button
@@ -329,7 +335,7 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
           <button
             onClick={handleToggleAudio}
             disabled={audioLoading}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded border text-xs font-sans font-semibold transition-colors cursor-pointer ${
+            className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 rounded border text-xs font-sans font-semibold transition-colors cursor-pointer ${
               isPlayingAudio
                 ? 'bg-[#D96C4A] text-white border-[#D96C4A]'
                 : 'bg-white border-[#E5E0D8] text-[#2D2A26] hover:border-[#D96C4A]'
@@ -343,26 +349,27 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
             ) : (
               <Volume2 className="w-3.5 h-3.5 text-[#D96C4A]" />
             )}
-            <span>{isPlayingAudio ? 'Pause Narration' : 'Listen Narration'}</span>
+            <span className="hidden sm:inline">{isPlayingAudio ? 'Pause Narration' : 'Listen Narration'}</span>
+            <span className="sm:hidden">{isPlayingAudio ? 'Pause' : 'Listen'}</span>
           </button>
 
           {/* Claps */}
           <button
             onClick={() => onClap(article.id)}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded border text-xs font-mono transition-colors cursor-pointer ${
+            className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded border text-xs font-mono transition-colors cursor-pointer ${
               hasClapped
                 ? 'bg-[#D96C4A]/10 border-[#D96C4A] text-[#D96C4A] font-semibold'
                 : 'bg-white border-[#E5E0D8] text-[#595550] hover:border-[#D96C4A]'
             }`}
           >
             <Heart className={`w-3.5 h-3.5 ${hasClapped ? 'fill-[#D96C4A]' : ''}`} />
-            <span>{article.claps}</span>
+            <span className="text-[11px] sm:text-xs">{article.claps}</span>
           </button>
 
           {/* Bookmark */}
           <button
             onClick={() => onToggleSave(article.id)}
-            className={`p-1.5 rounded border transition-colors cursor-pointer ${
+            className={`p-1 sm:p-1.5 rounded border transition-colors cursor-pointer ${
               isSaved
                 ? 'bg-[#2D2A26] border-[#2D2A26] text-white'
                 : 'bg-white border-[#E5E0D8] text-[#595550] hover:border-[#D96C4A]'
@@ -375,7 +382,7 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
           {/* Share */}
           <button
             onClick={handleShare}
-            className="p-1.5 rounded border border-[#E5E0D8] bg-white text-[#595550] hover:border-[#D96C4A] transition-colors cursor-pointer"
+            className="p-1 sm:p-1.5 rounded border border-[#E5E0D8] bg-white text-[#595550] hover:border-[#D96C4A] transition-colors cursor-pointer"
             title="Share article URL"
           >
             {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
@@ -384,9 +391,9 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
       </div>
 
       {/* On-Page SEO Verified Metadata Ribbon */}
-      <div className="max-w-[1140px] mx-auto px-6 md:px-8 pt-4">
-        <div className="p-3 bg-white border border-[#E5E0D8] rounded-md flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono">
-          <div className="flex flex-wrap items-center gap-2">
+      <div className="max-w-[1140px] mx-auto px-3.5 sm:px-6 md:px-8 pt-3 sm:pt-4">
+        <div className="p-2.5 sm:p-3 bg-white border border-[#E5E0D8] rounded-md flex flex-wrap items-center justify-between gap-2 sm:gap-3 text-[10px] sm:text-[11px] font-mono">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             <span className="flex items-center gap-1 font-semibold text-[#D96C4A]">
               <Tag className="w-3 h-3" />
               <span>MAIN KEYWORD:</span>
@@ -394,7 +401,7 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
             <span className="bg-[#FAF8F5] px-2 py-0.5 rounded border border-[#E5E0D8] text-[#2D2A26] font-semibold">
               {article.mainKeyword}
             </span>
-            <span className="text-[#E5E0D8]">|</span>
+            <span className="text-[#E5E0D8] hidden xs:inline">|</span>
             <span className="text-[#595550]">RELATED:</span>
             <span className="bg-[#FAF8F5] px-1.5 py-0.5 rounded border border-[#E5E0D8] text-[#595550]">
               {article.relatedKeywords[0]}
@@ -403,7 +410,7 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
               {article.relatedKeywords[1]}
             </span>
           </div>
-          <div className="flex items-center gap-2 text-[#595550]">
+          <div className="flex items-center gap-1.5 text-[#595550]">
             <Globe className="w-3 h-3 text-emerald-700" />
             <span>URL: /articles/{article.slug}</span>
           </div>
@@ -411,31 +418,31 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
       </div>
 
       {/* Article Header (H1) */}
-      <header className="max-w-[1140px] mx-auto px-6 md:px-8 pt-6 pb-6 border-b border-[#E5E0D8]">
+      <header className="max-w-[1140px] mx-auto px-3.5 sm:px-6 md:px-8 pt-4 sm:pt-6 pb-4 sm:pb-6 border-b border-[#E5E0D8]">
         <div className="max-w-[850px]">
-          <span className="font-sans text-[0.85rem] uppercase tracking-[1px] text-[#D96C4A] font-semibold block mb-2">
+          <span className="font-sans text-[0.75rem] sm:text-[0.85rem] uppercase tracking-[1px] text-[#D96C4A] font-semibold block mb-1.5 sm:mb-2">
             {article.category}
           </span>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-sans font-semibold text-[#2D2A26] leading-[1.15] mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-sans font-semibold text-[#2D2A26] leading-[1.2] sm:leading-[1.15] mb-2.5 sm:mb-4">
             {article.title}
           </h1>
 
-          <p className="text-xl font-serif text-[#595550] leading-relaxed mb-6">
+          <p className="text-sm sm:text-base md:text-xl font-serif text-[#595550] leading-relaxed mb-3 sm:mb-6">
             {article.subtitle}
           </p>
 
           {/* Direct Answer Summary Box for AEO (Answer Engine Optimization) */}
           {article.directAnswerSummary && (
-            <div className="my-5 p-4 bg-amber-50/80 border-l-3 border-[#D96C4A] rounded-r-md">
-              <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-[#D96C4A] mb-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
+            <div className="my-3.5 sm:my-5 p-3.5 sm:p-4 bg-amber-50/80 border-l-3 border-[#D96C4A] rounded-r-md">
+              <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-mono font-semibold text-[#D96C4A] mb-1">
+                <Sparkles className="w-3.5 h-3.5 shrink-0" />
                 <span>EXECUTIVE DIRECT ANSWER SUMMARY (AEO &amp; AI OVERVIEWS)</span>
               </div>
-              <h2 className="text-base font-sans font-semibold text-[#2D2A26] mb-1">
+              <h2 className="text-sm sm:text-base font-sans font-semibold text-[#2D2A26] mb-1">
                 What is the direct executive answer for {article.title}?
               </h2>
-              <p className="text-sm font-serif text-[#2D2A26] leading-relaxed">
+              <p className="text-xs sm:text-sm font-serif text-[#2D2A26] leading-relaxed">
                 <strong className="font-mono text-xs text-[#D96C4A] mr-1.5">Answer:</strong>
                 {article.directAnswerSummary}
               </p>
@@ -443,17 +450,17 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
           )}
 
           {/* Metadata & Author Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[#E5E0D8]/60 text-xs font-sans">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#2D2A26] text-white flex items-center justify-center font-mono text-xs font-semibold">
+          <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-[#E5E0D8]/60 text-xs font-sans">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#2D2A26] text-white flex items-center justify-center font-mono text-xs font-semibold shrink-0">
                 {article.author.avatar}
               </div>
               <div>
                 <div className="font-semibold text-[#2D2A26]">{article.author.name}</div>
-                <div className="text-[#595550] text-[11px]">{article.author.role}</div>
+                <div className="text-[#595550] text-[10px] sm:text-[11px]">{article.author.role}</div>
               </div>
             </div>
-            <div className="flex items-center gap-3 font-mono text-[#595550] text-[11px]">
+            <div className="flex items-center gap-2 sm:gap-3 font-mono text-[#595550] text-[10px] sm:text-[11px]">
               <span className="flex items-center gap-1">
                 <Clock className="w-3 h-3 text-[#D96C4A]" />
                 {article.readTime}
@@ -468,8 +475,8 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
       </header>
 
       {/* Dedicated Small-Size Vector Artwork & Specimen Image with Descriptive Alt Text */}
-      <figure className="max-w-[1140px] mx-auto px-6 md:px-8 my-8">
-        <div className="w-full h-72 sm:h-88 md:h-[420px] rounded-lg overflow-hidden border border-[#E5E0D8] shadow-sm bg-white relative">
+      <figure className="max-w-[1140px] mx-auto px-3.5 sm:px-6 md:px-8 my-4 sm:my-6 md:my-8">
+        <div className="w-full h-44 sm:h-64 md:h-[420px] rounded-lg overflow-hidden border border-[#E5E0D8] shadow-sm bg-white relative">
           <img
             src={article.coverImage}
             alt={article.imageAlt}
@@ -479,24 +486,24 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
             decoding="async"
             className="w-full h-full object-cover"
           />
-          <div className="absolute bottom-3 right-3 bg-[#2D2A26]/85 backdrop-blur-xs text-white text-[10px] font-mono px-2.5 py-1 rounded border border-white/20">
+          <div className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 bg-[#2D2A26]/85 backdrop-blur-xs text-white text-[9px] sm:text-[10px] font-mono px-2 sm:px-2.5 py-0.5 sm:py-1 rounded border border-white/20">
             Vector SVG Asset · &lt; 3KB · Zero CLS
           </div>
         </div>
-        <figcaption className="text-xs font-serif italic text-[#595550] text-center mt-2.5">
+        <figcaption className="text-xs font-serif italic text-[#595550] text-center mt-2">
           {article.imageAlt}
         </figcaption>
       </figure>
 
       {/* Main Two-Column Reading Layout */}
-      <div className="max-w-[1140px] mx-auto px-6 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 mt-6">
+      <div className="max-w-[1140px] mx-auto px-3.5 sm:px-6 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 mt-4 sm:mt-6">
         {/* Left / Center Prose Column (8 cols ~ 68ch measure) */}
         <main className="lg:col-span-8 font-serif">
           {article.sections.map((section, idx) => (
-            <section key={idx} id={`section-${idx}`} className="my-8 scroll-mt-24" itemScope itemType="https://schema.org/Question">
+            <section key={idx} id={`section-${idx}`} className="my-5 sm:my-8 scroll-mt-24" itemScope itemType="https://schema.org/Question">
               {/* Question Subheading (H2) for AEO */}
-              <h2 className="text-2xl font-sans font-semibold text-[#2D2A26] mb-3 flex items-start gap-2" itemProp="name">
-                <span className="text-[#D96C4A] font-mono text-lg shrink-0 mt-0.5">Q:</span>
+              <h2 className="text-lg sm:text-xl md:text-2xl font-sans font-semibold text-[#2D2A26] mb-2 sm:mb-3 flex items-start gap-1.5 sm:gap-2" itemProp="name">
+                <span className="text-[#D96C4A] font-mono text-base sm:text-lg shrink-0 mt-0.5">Q:</span>
                 <span>{section.title}</span>
               </h2>
 
@@ -504,13 +511,13 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
               <div itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                 <p
                   itemProp="text"
-                  className={`text-[#2D2A26] ${proseSizeClass} mb-6 font-serif ${
+                  className={`text-[#2D2A26] ${proseSizeClass} mb-4 sm:mb-6 font-serif ${
                     idx === 0
-                      ? 'first-letter:text-5xl first-letter:font-serif first-letter:font-normal first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-[#D96C4A]'
+                      ? 'first-letter:text-3xl sm:first-letter:text-4xl md:first-letter:text-5xl first-letter:font-serif first-letter:font-normal first-letter:float-left first-letter:mr-2 sm:first-letter:mr-3 first-letter:mt-0.5 first-letter:text-[#D96C4A]'
                       : ''
                   }`}
                 >
-                  <span className="inline-flex items-center font-mono text-[11px] font-bold text-[#D96C4A] bg-[#FAF8F5] border border-[#E5E0D8] px-2 py-0.5 rounded mr-2 align-middle">
+                  <span className="inline-flex items-center font-mono text-[10px] sm:text-[11px] font-bold text-[#D96C4A] bg-[#FAF8F5] border border-[#E5E0D8] px-1.5 sm:px-2 py-0.5 rounded mr-1.5 sm:mr-2 align-middle">
                     Answer:
                   </span>
                   {section.content}
@@ -519,8 +526,8 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
 
               {/* Pull Quote */}
               {section.pullQuote && (
-                <figure className="my-8 py-5 px-6 border-l-2 border-[#D96C4A] bg-white rounded-r shadow-xs">
-                  <blockquote className="text-xl md:text-2xl font-serif italic text-[#2D2A26] leading-snug">
+                <figure className="my-4 sm:my-8 py-3.5 sm:py-5 px-4 sm:px-6 border-l-2 border-[#D96C4A] bg-white rounded-r shadow-xs">
+                  <blockquote className="text-base sm:text-lg md:text-xl font-serif italic text-[#2D2A26] leading-snug">
                     "{section.pullQuote}"
                   </blockquote>
                 </figure>
@@ -572,21 +579,21 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
 
           {/* Schema.org FAQPage Accordion for AEO Direct Answers */}
           {article.faqList && article.faqList.length > 0 && (
-            <section className="my-12 p-6 bg-white border border-[#E5E0D8] rounded-lg">
-              <div className="flex items-center gap-2 mb-4 pb-2 border-b border-[#E5E0D8]">
-                <HelpCircle className="w-4 h-4 text-[#D96C4A]" />
-                <h2 className="font-sans font-semibold text-lg text-[#2D2A26]">
+            <section className="my-6 sm:my-10 p-3.5 sm:p-6 bg-white border border-[#E5E0D8] rounded-lg">
+              <div className="flex items-center gap-2 mb-3 sm:mb-4 pb-2 border-b border-[#E5E0D8]">
+                <HelpCircle className="w-4 h-4 text-[#D96C4A] shrink-0" />
+                <h2 className="font-sans font-semibold text-sm sm:text-base text-[#2D2A26]">
                   Frequently Asked Questions: What key answers resolve common doubts?
                 </h2>
               </div>
-              <div className="space-y-4 font-sans text-xs">
+              <div className="space-y-3 sm:space-y-4 font-sans text-xs">
                 {article.faqList.map((faq, i) => (
-                  <div key={i} className="p-3.5 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
-                    <div className="font-semibold text-sm text-[#2D2A26] mb-1.5 flex items-start gap-2">
+                  <div key={i} className="p-3 sm:p-3.5 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+                    <div className="font-semibold text-xs sm:text-sm text-[#2D2A26] mb-1 sm:mb-1.5 flex items-start gap-1.5 sm:gap-2">
                       <span className="text-[#D96C4A] font-mono text-xs shrink-0 mt-0.5 font-bold">Q:</span>
                       <span>{faq.question}</span>
                     </div>
-                    <div className="font-serif text-sm text-[#595550] leading-relaxed flex items-start gap-2">
+                    <div className="font-serif text-xs sm:text-sm text-[#595550] leading-relaxed flex items-start gap-1.5 sm:gap-2">
                       <span className="text-[#2D2A26] font-mono text-xs shrink-0 mt-0.5 font-bold">A:</span>
                       <span>{faq.answer}</span>
                     </div>
@@ -597,14 +604,14 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
           )}
 
           {/* Key Takeaways */}
-          <div className="my-10 p-6 bg-white border border-[#E5E0D8] rounded-lg shadow-xs">
-            <h3 className="font-sans font-semibold text-base text-[#2D2A26] mb-3 uppercase tracking-wider text-xs">
+          <div className="my-6 sm:my-10 p-4 sm:p-6 bg-white border border-[#E5E0D8] rounded-lg shadow-xs">
+            <h3 className="font-sans font-semibold text-xs uppercase tracking-wider text-[#2D2A26] mb-2.5 sm:mb-3">
               Key Strategic Takeaways
             </h3>
-            <ul className="space-y-2.5 font-serif text-base text-[#2D2A26]">
+            <ul className="space-y-2 font-serif text-xs sm:text-sm md:text-base text-[#2D2A26]">
               {article.keyTakeaways.map((takeaway, i) => (
-                <li key={i} className="flex items-start gap-2.5">
-                  <span className="text-[#D96C4A] font-bold mt-1 text-sm">•</span>
+                <li key={i} className="flex items-start gap-2">
+                  <span className="text-[#D96C4A] font-bold mt-0.5 text-sm">•</span>
                   <span>{takeaway}</span>
                 </li>
               ))}
@@ -613,49 +620,49 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
 
           {/* Suggested Prompt Block */}
           {article.suggestedPrompt && (
-            <div className="my-10 p-5 bg-[#FAF8F5] border border-[#E5E0D8] rounded-lg">
+            <div className="my-6 sm:my-10 p-3.5 sm:p-5 bg-[#FAF8F5] border border-[#E5E0D8] rounded-lg">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono uppercase tracking-wider text-[#D96C4A] font-semibold flex items-center gap-1.5">
+                <span className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-[#D96C4A] font-semibold flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5" />
                   Suggested AI Workflow Prompt
                 </span>
                 <button
                   onClick={handleCopyPrompt}
-                  className="flex items-center gap-1 text-xs font-mono text-[#595550] hover:text-[#2D2A26] transition-colors cursor-pointer"
+                  className="flex items-center gap-1 text-[11px] sm:text-xs font-mono text-[#595550] hover:text-[#2D2A26] transition-colors cursor-pointer"
                 >
                   {copiedPrompt ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{copiedPrompt ? 'Copied' : 'Copy'}</span>
                 </button>
               </div>
-              <p className="font-mono text-xs text-[#2D2A26] bg-white p-3 rounded border border-[#E5E0D8] leading-relaxed">
+              <p className="font-mono text-[11px] sm:text-xs text-[#2D2A26] bg-white p-2.5 sm:p-3 rounded border border-[#E5E0D8] leading-relaxed">
                 {article.suggestedPrompt}
               </p>
             </div>
           )}
 
           {/* Reader Discussion / Comments */}
-          <div className="mt-12 pt-8 border-t border-[#E5E0D8]">
-            <h3 className="font-sans font-semibold text-xl text-[#2D2A26] mb-6 flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-[#D96C4A]" />
+          <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-[#E5E0D8]">
+            <h3 className="font-sans font-semibold text-lg sm:text-xl text-[#2D2A26] mb-4 sm:mb-6 flex items-center gap-2">
+              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-[#D96C4A]" />
               <span>Reader Notes &amp; Observations ({comments.length})</span>
             </h3>
 
             {/* Comment Form */}
-            <form onSubmit={handleAddComment} className="bg-white border border-[#E5E0D8] rounded-lg p-5 mb-8 shadow-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+            <form onSubmit={handleAddComment} className="bg-white border border-[#E5E0D8] rounded-lg p-3.5 sm:p-5 mb-6 sm:mb-8 shadow-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 mb-2.5 sm:mb-3">
                 <input
                   type="text"
                   placeholder="Your Name (e.g. Maya Chen)"
                   value={newCommentName}
                   onChange={(e) => setNewCommentName(e.target.value)}
-                  className="px-3 py-2 border border-[#E5E0D8] rounded text-xs font-sans focus:outline-none focus:border-[#D96C4A] bg-[#FAF8F5]"
+                  className="px-3 py-2 border border-[#E5E0D8] rounded text-sm sm:text-xs font-sans focus:outline-none focus:border-[#D96C4A] bg-[#FAF8F5]"
                 />
                 <input
                   type="text"
                   placeholder="Your Role (e.g. Design Technologist)"
                   value={newCommentRole}
                   onChange={(e) => setNewCommentRole(e.target.value)}
-                  className="px-3 py-2 border border-[#E5E0D8] rounded text-xs font-sans focus:outline-none focus:border-[#D96C4A] bg-[#FAF8F5]"
+                  className="px-3 py-2 border border-[#E5E0D8] rounded text-sm sm:text-xs font-sans focus:outline-none focus:border-[#D96C4A] bg-[#FAF8F5]"
                 />
               </div>
               <textarea
@@ -663,11 +670,11 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
                 placeholder="Share a perspective on typography, unit economics, or executive metrics..."
                 value={newCommentText}
                 onChange={(e) => setNewCommentText(e.target.value)}
-                className="w-full px-3 py-2 border border-[#E5E0D8] rounded text-xs font-serif focus:outline-none focus:border-[#D96C4A] bg-[#FAF8F5] mb-3 leading-relaxed"
+                className="w-full px-3 py-2 border border-[#E5E0D8] rounded text-sm sm:text-xs font-serif focus:outline-none focus:border-[#D96C4A] bg-[#FAF8F5] mb-2.5 sm:mb-3 leading-relaxed"
               />
               <button
                 type="submit"
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#2D2A26] hover:bg-[#D96C4A] text-white rounded text-xs font-sans font-semibold transition-colors cursor-pointer shadow-xs"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#2D2A26] hover:bg-[#D96C4A] text-white rounded text-xs font-sans font-semibold transition-colors cursor-pointer shadow-xs"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>Post Reader Note</span>
@@ -675,24 +682,24 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
             </form>
 
             {/* Existing Comments */}
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {comments.map((comment) => (
-                <div key={comment.id} className="p-4 bg-white border border-[#E5E0D8] rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-[#FAF8F5] border border-[#E5E0D8] text-[#2D2A26] flex items-center justify-center font-mono text-[10px] font-semibold">
+                <div key={comment.id} className="p-3 sm:p-4 bg-white border border-[#E5E0D8] rounded-lg">
+                  <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#FAF8F5] border border-[#E5E0D8] text-[#2D2A26] flex items-center justify-center font-mono text-[9px] sm:text-[10px] font-semibold shrink-0">
                         {comment.avatar}
                       </div>
                       <span className="font-sans font-semibold text-xs text-[#2D2A26]">{comment.author}</span>
                       <span className="text-[#E5E0D8]">·</span>
-                      <span className="text-[11px] text-[#595550]">{comment.role}</span>
+                      <span className="text-[10px] sm:text-[11px] text-[#595550]">{comment.role}</span>
                     </div>
-                    <span className="text-[11px] font-mono text-[#595550]">{comment.createdAt}</span>
+                    <span className="text-[10px] sm:text-[11px] font-mono text-[#595550]">{comment.createdAt}</span>
                   </div>
-                  <p className="font-serif text-sm text-[#2D2A26] leading-relaxed">
+                  <p className="font-serif text-xs sm:text-sm text-[#2D2A26] leading-relaxed">
                     {comment.content}
                   </p>
-                  <div className="flex items-center gap-3 mt-3 pt-2 border-t border-[#E5E0D8]/60 text-xs text-[#595550]">
+                  <div className="flex items-center gap-3 mt-2 sm:mt-3 pt-2 border-t border-[#E5E0D8]/60 text-xs text-[#595550]">
                     <button
                       onClick={() => handleToggleLikeComment(comment.id)}
                       className="flex items-center gap-1 hover:text-rose-600 transition-colors cursor-pointer"
@@ -707,13 +714,13 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
           </div>
 
           {/* Related Masterclass Guides Internal Linking Section with Rich Anchor Text */}
-          <section className="mt-14 pt-8 border-t border-[#E5E0D8]">
-            <div className="flex items-center justify-between mb-4">
+          <section className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-[#E5E0D8]">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-wider text-[#D96C4A] font-semibold block">
                   CONTINUE READING
                 </span>
-                <h3 className="font-sans font-semibold text-xl text-[#2D2A26]">
+                <h3 className="font-sans font-semibold text-lg sm:text-xl text-[#2D2A26]">
                   Related Architecture &amp; Strategy Guides
                 </h3>
               </div>
@@ -730,15 +737,15 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
               </a>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {INITIAL_ARTICLES.filter((item) => item.id !== article.id).slice(0, 2).map((rel) => (
                 <div
                   key={rel.id}
-                  className="p-5 bg-white border border-[#E5E0D8] rounded-lg hover:border-[#D96C4A] transition-all group flex flex-col justify-between shadow-xs"
+                  className="p-3.5 sm:p-5 bg-white border border-[#E5E0D8] rounded-lg hover:border-[#D96C4A] transition-all group flex flex-col justify-between shadow-xs"
                 >
                   <div>
                     {/* Small vector image with alt text */}
-                    <div className="w-full h-32 rounded overflow-hidden mb-3 border border-[#E5E0D8] bg-[#FAF8F5]">
+                    <div className="w-full h-28 sm:h-32 rounded overflow-hidden mb-2.5 sm:mb-3 border border-[#E5E0D8] bg-[#FAF8F5]">
                       <img
                         src={rel.coverImage}
                         alt={rel.imageAlt}

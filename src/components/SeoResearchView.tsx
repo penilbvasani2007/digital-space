@@ -32,96 +32,102 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
   };
 
   return (
-    <div className="max-w-[1140px] mx-auto px-6 md:px-8 py-8 font-sans">
+    <div className="max-w-[1140px] mx-auto px-3.5 sm:px-6 md:px-8 py-5 sm:py-8 font-sans">
       {/* Page Header */}
-      <div className="border-b border-[#E5E0D8] pb-6 mb-8">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#D96C4A] font-semibold bg-[#D96C4A]/10 px-2 py-0.5 rounded">
+      <div className="border-b border-[#E5E0D8] pb-4 sm:pb-6 mb-5 sm:mb-8">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+          <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-[#D96C4A] font-semibold bg-[#D96C4A]/10 px-2 py-0.5 rounded">
             STEP 2 &amp; STEP 3 VERIFICATION
           </span>
-          <span className="text-xs font-mono text-[#595550]">On-Page SEO &amp; AEO Architecture</span>
+          <span className="text-[11px] sm:text-xs font-mono text-[#595550]">On-Page SEO &amp; AEO Architecture</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-sans font-semibold text-[#2D2A26] leading-tight mb-3">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-sans font-semibold text-[#2D2A26] leading-tight mb-2 sm:mb-3">
           Step 2 Keyword Research &amp; AEO Questions Table
         </h1>
-        <p className="font-serif text-lg text-[#595550] max-w-3xl leading-relaxed">
+        <p className="font-serif text-sm sm:text-base md:text-lg text-[#595550] max-w-3xl leading-relaxed">
           Comprehensive SEO specification table mapping every page to its main keyword, 2 related keywords, search intent, monthly search volume, and the exact user question it answers for Answer Engine Optimization.
         </p>
 
         {/* Tab Switcher */}
-        <div className="flex flex-wrap items-center gap-2 mt-6">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-4 sm:mt-6">
           <button
             onClick={() => setActiveTab('table')}
-            className={`px-4 py-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${
               activeTab === 'table'
                 ? 'bg-[#2D2A26] text-white shadow-xs'
                 : 'bg-white border border-[#E5E0D8] text-[#595550] hover:text-[#2D2A26]'
             }`}
           >
-            Tab 1: Step 2 SEO Table (10 Pages)
+            Tab 1: Step 2 Table (10 Pages)
           </button>
           <button
             onClick={() => setActiveTab('checklist')}
-            className={`px-4 py-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${
               activeTab === 'checklist'
                 ? 'bg-[#2D2A26] text-white shadow-xs'
                 : 'bg-white border border-[#E5E0D8] text-[#595550] hover:text-[#2D2A26]'
             }`}
           >
-            Tab 2: On-Page SEO Checklist (8 Rules)
+            Tab 2: On-Page Checklist (8 Rules)
           </button>
           <button
             onClick={() => setActiveTab('aeo')}
-            className={`px-4 py-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs font-semibold transition-all cursor-pointer ${
               activeTab === 'aeo'
                 ? 'bg-[#2D2A26] text-white shadow-xs'
                 : 'bg-white border border-[#E5E0D8] text-[#595550] hover:text-[#2D2A26]'
             }`}
           >
-            3. AEO Answer Engine Snippet Matrix
+            Tab 3: AEO Snippet Matrix
           </button>
           <a
             href="/SEO_Keyword_Research_Table.doc"
             download="SEO_Keyword_Research_Table.doc"
-            className="px-4 py-2 rounded-md text-xs font-semibold transition-all cursor-pointer bg-emerald-700 hover:bg-emerald-800 text-white flex items-center gap-1.5 shadow-xs ml-auto"
+            className="w-full sm:w-auto mt-1 sm:mt-0 sm:ml-auto justify-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs font-semibold transition-all cursor-pointer bg-emerald-700 hover:bg-emerald-800 text-white flex items-center gap-1.5 shadow-xs"
             title="Download Word Document (.doc) for Step 2 and Step 3 SEO Report"
           >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Download Word Document (.doc)</span>
+            <FileText className="w-3.5 h-3.5 shrink-0" />
+            <span>Download Report (.doc)</span>
           </a>
         </div>
       </div>
 
       {/* TAB 1: KEYWORD RESEARCH TABLE */}
       {activeTab === 'table' && (
-        <section className="space-y-8">
+        <section className="space-y-6 sm:space-y-8">
           <div className="bg-white border border-[#E5E0D8] rounded-lg shadow-xs overflow-hidden">
-            <div className="p-4 bg-[#FAF8F5] border-b border-[#E5E0D8] flex items-center justify-between">
+            <div className="p-3.5 sm:p-4 bg-[#FAF8F5] border-b border-[#E5E0D8] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h2 className="text-sm font-semibold text-[#2D2A26]">
+                <h2 className="text-xs sm:text-sm font-semibold text-[#2D2A26]">
                   What keywords and SEO specifications target each page on Penil's Space?
                 </h2>
                 <p className="text-xs text-[#595550] mt-0.5">
-                  <strong className="font-mono text-[11px] text-[#D96C4A] mr-1">Answer:</strong>
+                  <strong className="font-mono text-[10px] sm:text-[11px] text-[#D96C4A] mr-1">Answer:</strong>
                   Every page maps to 1 Main Keyword and 2 Related Keywords with documented search volume, informational intent, clean URLs, and strict title/meta length rules.
                 </p>
               </div>
-              <span className="text-[11px] font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded">
+              <span className="text-[10px] sm:text-[11px] font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded self-start sm:self-auto shrink-0">
                 100% SEO COMPLIANT
               </span>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
+            {/* Mobile swipe cue */}
+            <div className="px-3 py-1 bg-amber-50/80 border-b border-[#E5E0D8] text-[10px] font-mono text-[#D96C4A] md:hidden flex items-center justify-between">
+              <span>← Swipe table horizontally to inspect all columns →</span>
+              <span className="font-semibold text-stone-700">10 Pages</span>
+            </div>
+
+            <div className="overflow-x-auto scrollbar-thin">
+              <table className="w-full text-left text-xs border-collapse min-w-[720px]">
                 <thead>
                   <tr className="bg-[#FAF8F5] border-b border-[#E5E0D8] text-[#595550] font-mono uppercase tracking-wider text-[10px]">
-                    <th className="py-3 px-3.5 font-semibold">Page</th>
-                    <th className="py-3 px-3.5 font-semibold text-[#D96C4A]">Main Keyword</th>
-                    <th className="py-3 px-3.5 font-semibold">2 Related Keywords</th>
-                    <th className="py-3 px-3 font-semibold">Intent</th>
-                    <th className="py-3 px-3 font-semibold">Volume</th>
-                    <th className="py-3 px-4 font-semibold min-w-[280px]">Questions It Answers (AEO)</th>
-                    <th className="py-3 px-3 font-semibold text-right">Action</th>
+                    <th className="py-2.5 sm:py-3 px-3 sm:px-3.5 font-semibold">Page</th>
+                    <th className="py-2.5 sm:py-3 px-3 sm:px-3.5 font-semibold text-[#D96C4A]">Main Keyword</th>
+                    <th className="py-2.5 sm:py-3 px-3 sm:px-3.5 font-semibold">2 Related Keywords</th>
+                    <th className="py-2.5 sm:py-3 px-2.5 sm:px-3 font-semibold">Intent</th>
+                    <th className="py-2.5 sm:py-3 px-2.5 sm:px-3 font-semibold">Volume</th>
+                    <th className="py-2.5 sm:py-3 px-3.5 sm:px-4 font-semibold min-w-[260px]">Questions It Answers (AEO)</th>
+                    <th className="py-2.5 sm:py-3 px-2.5 sm:px-3 font-semibold text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E5E0D8]/60 text-[#2D2A26]">
@@ -198,18 +204,18 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
           </div>
 
           {/* Deep Inspection Panel for Selected Entry */}
-          <div className="bg-white border border-[#E5E0D8] rounded-lg p-6 shadow-xs">
-            <div className="flex items-center justify-between pb-4 border-b border-[#E5E0D8] mb-4">
+          <div className="bg-white border border-[#E5E0D8] rounded-lg p-3.5 sm:p-5 md:p-6 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 sm:pb-4 border-b border-[#E5E0D8] mb-3 sm:mb-4 gap-2">
               <div>
                 <span className="text-[10px] font-mono text-[#D96C4A] uppercase tracking-wider font-semibold">
                   Page SEO Detail Specimen
                 </span>
-                <h3 className="text-xl font-sans font-semibold text-[#2D2A26] mt-0.5">
+                <h3 className="text-lg sm:text-xl font-sans font-semibold text-[#2D2A26] mt-0.5">
                   {selectedEntry.pageName}
                 </h3>
               </div>
-              <div className="text-right">
-                <span className="text-xs font-mono text-[#595550]">Target Clean URL</span>
+              <div className="text-left sm:text-right">
+                <span className="text-[11px] sm:text-xs font-mono text-[#595550]">Target Clean URL</span>
                 <div className="text-xs font-mono font-semibold text-[#2D2A26]">{selectedEntry.url}</div>
               </div>
             </div>
@@ -325,45 +331,45 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
           </div>
 
           {/* Dedicated Good URL Rules & Site-Wide Clean URL Directory */}
-          <div className="bg-white border border-[#E5E0D8] rounded-lg p-6 shadow-xs space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E5E0D8]">
+          <div className="bg-white border border-[#E5E0D8] rounded-lg p-3.5 sm:p-5 md:p-6 shadow-xs space-y-3 sm:space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[#E5E0D8] gap-2">
               <div>
-                <h3 className="font-sans font-semibold text-base text-[#2D2A26] flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-[#D96C4A]" />
+                <h3 className="font-sans font-semibold text-sm sm:text-base text-[#2D2A26] flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-[#D96C4A] shrink-0" />
                   <span>Good URL Rules — Complete Site-Wide URL Directory</span>
                 </h3>
                 <p className="text-xs text-[#595550] mt-0.5">
                   Every page has its own unique, permanent URL engineered to follow strict search engine URL standards.
                 </p>
               </div>
-              <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded font-medium">
+              <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded font-medium self-start sm:self-auto shrink-0">
                 100% CLEAN URLS
               </span>
             </div>
 
             {/* 6 Good URL Rules Summary */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
-              <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3 text-xs">
+              <div className="p-2.5 sm:p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
                 <strong className="text-[#2D2A26] block font-mono text-[11px] mb-1">1. Lowercase Only</strong>
                 <span className="text-[#595550]">Zero uppercase characters to prevent duplicate content canonical fragmentation.</span>
               </div>
-              <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+              <div className="p-2.5 sm:p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
                 <strong className="text-[#2D2A26] block font-mono text-[11px] mb-1">2. Kebab-Case Hyphens</strong>
                 <span className="text-[#595550]">Words separated strictly by hyphens, never underscores or encoded spaces (%20).</span>
               </div>
-              <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+              <div className="p-2.5 sm:p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
                 <strong className="text-[#2D2A26] block font-mono text-[11px] mb-1">3. Zero File Extensions</strong>
                 <span className="text-[#595550]">No legacy .html, .php, or .aspx extensions for clean RESTful web standards.</span>
               </div>
-              <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+              <div className="p-2.5 sm:p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
                 <strong className="text-[#2D2A26] block font-mono text-[11px] mb-1">4. No Query Parameters</strong>
                 <span className="text-[#595550]">Core content paths avoid ?page= or ?id= strings to maximize crawl efficiency.</span>
               </div>
-              <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+              <div className="p-2.5 sm:p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
                 <strong className="text-[#2D2A26] block font-mono text-[11px] mb-1">5. Keyword-Rich Slugs</strong>
                 <span className="text-[#595550]">Target keywords are naturally embedded directly within the URL pathname.</span>
               </div>
-              <div className="p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
+              <div className="p-2.5 sm:p-3 bg-[#FAF8F5] rounded border border-[#E5E0D8]">
                 <strong className="text-[#2D2A26] block font-mono text-[11px] mb-1">6. Canonicalized History</strong>
                 <span className="text-[#595550]">Backed by HTML5 pushState &amp; &lt;link rel="canonical"&gt; matching each URL.</span>
               </div>
@@ -374,14 +380,14 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
               <span className="text-xs font-mono font-semibold text-[#2D2A26] block mb-2">
                 Active Clean URL Route Manifest:
               </span>
-              <div className="space-y-1.5 font-mono text-xs">
-                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+              <div className="space-y-1.5 font-mono text-[11px] sm:text-xs">
+                <div className="p-2 sm:p-2.5 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex flex-col sm:flex-row sm:items-center justify-between gap-1 break-all sm:break-normal">
                   <span><strong>Homepage:</strong> <code>/</code></span>
-                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">REST / Clean Root</span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded self-start sm:self-auto shrink-0">REST / Clean Root</span>
                 </div>
-                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                <div className="p-2 sm:p-2.5 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex flex-col sm:flex-row sm:items-center justify-between gap-1 break-all sm:break-normal">
                   <span><strong>Article 1:</strong> <code>/articles/why-first-impressions-matter-in-website-architecture</code></span>
-                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Kebab-case / Clean Slug</span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded self-start sm:self-auto shrink-0">Kebab-case / Clean Slug</span>
                 </div>
                 <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
                   <span><strong>Article 2:</strong> <code>/articles/organizing-business-data-spreadsheets-to-dashboards</code></span>
@@ -418,6 +424,22 @@ export const SeoResearchView: React.FC<SeoResearchViewProps> = ({
                 <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
                   <span><strong>SEO Hub:</strong> <code>/seo-research</code></span>
                   <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Semantic / Clean</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>XML Sitemap:</strong> <code>/sitemap.xml</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">XML / Full HTTPS URLs</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>Robots Directives:</strong> <code>/robots.txt</code></span>
+                  <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded">Crawler Allow + Sitemap</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>301 Redirect:</strong> <code>/old-home → /</code></span>
+                  <span className="text-[10px] text-amber-700 font-semibold bg-amber-50 px-2 py-0.5 rounded">301 Moved Permanently</span>
+                </div>
+                <div className="p-2 bg-[#FAF8F5] rounded border border-[#E5E0D8] flex items-center justify-between">
+                  <span><strong>Custom 404:</strong> <code>/404</code></span>
+                  <span className="text-[10px] text-indigo-700 font-semibold bg-indigo-50 px-2 py-0.5 rounded">Friendly Hub / Main Links</span>
                 </div>
               </div>
             </div>

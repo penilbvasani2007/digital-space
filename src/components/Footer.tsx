@@ -7,9 +7,9 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
   return (
-    <footer className="max-w-[1140px] mx-auto mt-16 mb-8 px-6 md:px-8 pt-8 border-t border-[#E5E0D8] font-sans text-[0.88rem] text-[#595550]">
+    <footer className="max-w-[1140px] mx-auto mt-10 sm:mt-14 md:mt-16 mb-6 sm:mb-8 px-3.5 sm:px-6 md:px-8 pt-6 sm:pt-8 border-t border-[#E5E0D8] font-sans text-xs sm:text-[0.88rem] text-[#595550]">
       {/* Primary Navigation Links with Descriptive Anchor Text */}
-      <nav aria-label="Footer Primary Navigation" className="flex flex-wrap items-center justify-center gap-6 mb-6 text-xs font-semibold text-[#2D2A26]">
+      <nav aria-label="Footer Primary Navigation" className="flex flex-wrap items-center justify-center gap-x-3.5 sm:gap-x-6 gap-y-2 mb-4 sm:mb-6 text-xs font-semibold text-[#2D2A26]">
         <a
           href="/about"
           onClick={(e) => {
@@ -72,11 +72,11 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
       </nav>
 
       {/* Featured Masterclass Articles Index with Rich Anchor Text */}
-      <div className="py-5 my-4 border-t border-b border-[#E5E0D8]/60">
-        <span className="text-[10px] font-mono uppercase tracking-wider text-[#D96C4A] font-semibold block text-center mb-3">
+      <div className="py-4 sm:py-5 my-3 sm:my-4 border-t border-b border-[#E5E0D8]/60">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-[#D96C4A] font-semibold block text-center mb-2 sm:mb-3">
           Featured Architecture &amp; Strategy Masterclass Guides
         </span>
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-[#2D2A26]">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-6 gap-y-1.5 sm:gap-y-2 text-[11px] sm:text-xs text-[#2D2A26] text-center">
           <a
             href="/articles/why-first-impressions-matter-in-website-architecture"
             className="hover:text-[#D96C4A] transition-colors underline decoration-[#E5E0D8] hover:decoration-[#D96C4A]"
@@ -103,7 +103,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
         </div>
       </div>
 
-      <p className="font-serif text-[#595550] text-xs text-center">
+      <p className="font-serif text-[#595550] text-[11px] sm:text-xs text-center leading-relaxed">
         &copy; 2026 Penil's Digital Space · Written and crafted by hand with clean typography, high data-ink ratios, and 100% on-page SEO compliance.
       </p>
     </footer>

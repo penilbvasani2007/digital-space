@@ -215,5 +215,41 @@ export const ON_PAGE_SEO_CHECKLIST = [
     requirement: 'FAQPage and Article structured data embedded dynamically for rich snippet extraction',
     status: 'Verified (Valid Schema.org WebSite, Article, and FAQPage schemas active)',
     example: 'type="application/ld+json" with questions, accepted answers, and author metadata'
+  },
+  {
+    rule: 'Robots.txt & Crawler Directives',
+    requirement: 'public/robots.txt allows all crawlers and explicitly declares sitemap location',
+    status: 'Verified (User-agent: * Allow: / Sitemap: https://digitalspace.io/sitemap.xml)',
+    example: 'public/robots.txt accessible directly at /robots.txt with CORS'
+  },
+  {
+    rule: 'XML Sitemap with Full HTTPS URLs',
+    requirement: 'public/sitemap.xml lists every canonical page with full https URLs, lastmod, and priority',
+    status: 'Verified (12 full URLs including all core masterclass essays and sections)',
+    example: 'https://digitalspace.io/sitemap.xml valid XML schema'
+  },
+  {
+    rule: 'Self-Referencing Canonical Tag on Every Page',
+    requirement: 'Every single page includes a self-referencing <link rel="canonical"> matching the requested URL',
+    status: 'Verified (Dynamic self-referencing canonical on homepage, articles, subpages, and 404)',
+    example: '<link rel="canonical" href="https://digitalspace.io/articles/why-first-impressions-matter-in-website-architecture" />'
+  },
+  {
+    rule: 'Friendly Custom 404 Page',
+    requirement: 'A friendly custom 404 page with direct links to main pages and featured essays',
+    status: 'Verified (Custom NotFoundView with 5 core page cards and 3 featured essays)',
+    example: 'Visitable at /404 or any unrecognized route with self-referencing canonical'
+  },
+  {
+    rule: '301 Permanent Redirect for Deprecated URLs',
+    requirement: 'In vercel.json and Express server, a permanent 301 redirect from /old-home to /',
+    status: 'Verified (HTTP 301 redirect configured in vercel.json and server.ts)',
+    example: 'GET /old-home -> 301 Moved Permanently -> /'
+  },
+  {
+    rule: 'Image Compression & Explicit Dimensions',
+    requirement: 'Compress images (< 3KB lightweight SVGs) and set explicit width and height to eliminate CLS',
+    status: 'Verified (All images have width="800" height="450", loading="lazy", decoding="async")',
+    example: '<img width={800} height={450} loading="lazy" decoding="async" />'
   }
 ];

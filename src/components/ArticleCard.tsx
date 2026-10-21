@@ -22,11 +22,11 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   return (
     <article
       onClick={() => onSelect(article)}
-      className="group flex flex-col justify-between bg-white border border-[#E5E0D8] rounded-lg p-6 hover:border-[#2D2A26] transition-all cursor-pointer shadow-xs"
+      className="group flex flex-col justify-between bg-white border border-[#E5E0D8] rounded-lg p-3.5 sm:p-5 md:p-6 hover:border-[#2D2A26] transition-all cursor-pointer shadow-xs"
     >
       <div>
         {/* Dedicated Article Vector Image with Small File Size & Explicit Alt Text */}
-        <div className="w-full h-48 rounded-md overflow-hidden mb-5 border border-[#E5E0D8]/80 bg-[#FAF8F5] relative group-hover:opacity-95 transition-opacity">
+        <div className="w-full h-40 sm:h-48 md:h-52 rounded-md overflow-hidden mb-3 sm:mb-5 border border-[#E5E0D8]/80 bg-[#FAF8F5] relative group-hover:opacity-95 transition-opacity">
           <img
             src={article.coverImage}
             alt={article.imageAlt}
@@ -42,7 +42,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         </div>
 
         {/* Clean Unboxed Metadata with Typographic Separator (Zero-Pill Discipline) */}
-        <div className="flex items-center gap-2 text-xs text-[#595550] mb-2.5 font-sans">
+        <div className="flex items-center gap-2 text-[11px] sm:text-xs text-[#595550] mb-2 sm:mb-2.5 font-sans">
           <span className="font-semibold text-[#D96C4A]">{article.category}</span>
           <span aria-hidden="true">·</span>
           <span>{article.readTime}</span>
@@ -51,7 +51,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         </div>
 
         {/* Headline with Semantic Anchor Text for Crawlers */}
-        <h3 className="text-xl font-serif font-medium text-[#2D2A26] group-hover:text-[#D96C4A] transition-colors leading-snug mb-2 line-clamp-2">
+        <h3 className="text-lg sm:text-xl font-serif font-medium text-[#2D2A26] group-hover:text-[#D96C4A] transition-colors leading-snug mb-1.5 sm:mb-2 line-clamp-2">
           <a
             href={`/articles/${article.slug}`}
             onClick={(e) => {
@@ -66,7 +66,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         </h3>
 
         {/* Excerpt */}
-        <p className="text-xs text-[#595550] line-clamp-3 leading-relaxed mb-4 font-serif">
+        <p className="text-xs sm:text-sm text-[#595550] line-clamp-3 leading-relaxed mb-3 sm:mb-4 font-serif">
           {article.excerpt}
         </p>
 

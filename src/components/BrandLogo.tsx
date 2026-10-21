@@ -103,15 +103,15 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
           <span
             className={`font-sans font-bold tracking-[-0.03em] text-[#2D2A26] group-hover:text-[#D96C4A] transition-colors ${
               size === 'sm'
-                ? 'text-base sm:text-[1.1rem]'
+                ? 'text-sm sm:text-[1.1rem]'
                 : size === 'lg'
-                ? 'text-xl sm:text-2xl'
-                : 'text-[1.2rem] sm:text-[1.3rem]'
+                ? 'text-lg sm:text-2xl'
+                : 'text-[0.98rem] sm:text-[1.2rem]'
             }`}
           >
             Penil's Digital Space
           </span>
-          <span className="hidden sm:inline-block px-1.5 py-0.5 text-[9px] font-mono uppercase tracking-wider bg-[#E5E0D8]/60 text-[#595550] rounded font-semibold group-hover:bg-[#D96C4A]/10 group-hover:text-[#D96C4A] transition-colors">
+          <span className="hidden md:inline-block px-1.5 py-0.5 text-[9px] font-mono uppercase tracking-wider bg-[#E5E0D8]/60 text-[#595550] rounded font-semibold group-hover:bg-[#D96C4A]/10 group-hover:text-[#D96C4A] transition-colors">
             NOTEBOOK
           </span>
         </div>
