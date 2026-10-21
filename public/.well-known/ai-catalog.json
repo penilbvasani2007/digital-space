@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/ards-project/ard-spec/main/spec/schemas/ai-catalog.schema.json",
   "specVersion": "1.0",
   "host": {
     "displayName": "Penil's Digital Space",
@@ -9,7 +8,7 @@
     {
       "identifier": "urn:air:digitalspace.io:agent:website-architecture-advisor",
       "displayName": "Website Architecture & Typography Advisor",
-      "type": "application/json",
+      "type": "application/agent-card+json",
       "description": "Interactive AI advisor providing actionable guidance on readable typography, optimal line measure (65-75ch), and 50ms cognitive trust in website architecture.",
       "tags": ["web-design", "typography", "website-architecture", "ergonomics"],
       "capabilities": ["ArchitectureAudit", "TypographyAnalysis", "MeasureCheck"],
@@ -39,7 +38,7 @@
     {
       "identifier": "urn:air:digitalspace.io:agent:data-analytics-dashboard-coach",
       "displayName": "Business Analytics & Executive Dashboard Coach",
-      "type": "application/json",
+      "type": "application/agent-card+json",
       "description": "AI advisory service converting raw spreadsheet metrics into high data-ink executive dashboards with North Star, leading, and trailing KPIs.",
       "tags": ["data-analytics", "dashboards", "business-intelligence", "kpis"],
       "capabilities": ["DashboardReview", "KpiClassification", "DataInkOptimization"],
@@ -69,7 +68,7 @@
     {
       "identifier": "urn:air:digitalspace.io:agent:digital-business-strategist",
       "displayName": "Digital Business & Micro-SaaS Strategist",
-      "type": "application/json",
+      "type": "application/agent-card+json",
       "description": "Strategic advisory agent providing unit economics evaluation, CAC payback modeling, LTV multiples analysis, and sustainable digital business architecture.",
       "tags": ["digital-business", "micro-saas", "cac-payback", "unit-economics"],
       "capabilities": ["UnitEconomicsAudit", "CacPaybackModeling", "LtvMultipleEvaluation"],
@@ -99,7 +98,7 @@
     {
       "identifier": "urn:air:digitalspace.io:agent:presentation-narrative-specialist",
       "displayName": "Executive Presentation Narrative Specialist",
-      "type": "application/json",
+      "type": "application/agent-card+json",
       "description": "AI coaching agent specializing in the 1-2-1 narrative structure (1 context, 2 proof, 1 action) for high-stakes executive stakeholder decks.",
       "tags": ["presentation-design", "executive-communication", "narrative-structure"],
       "capabilities": ["DeckStructureAudit", "NarrativeRefinement", "BillboardClarityCheck"],

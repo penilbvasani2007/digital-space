@@ -324,7 +324,6 @@ app.post('/api/generate-music', async (req, res) => {
 
 // Static directory for public files (SEO & AI Agent specifications)
 const publicDir = path.resolve(__dirname, 'public');
-app.use(express.static(publicDir));
 
 // Explicit route endpoints for LLM and Agent audits
 app.get('/llms.txt', (req, res) => {
@@ -340,7 +339,12 @@ app.get('/llms-full.txt', (req, res) => {
 });
 
 app.get(['/ai-catalog.json', '/.well-known/ai-catalog.json'], (req, res) => {
-  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  const accept = req.headers.accept || '';
+  if (accept.includes('application/json') && !accept.includes('application/ai-catalog+json')) {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  } else {
+    res.setHeader('Content-Type', 'application/ai-catalog+json; charset=utf-8');
+  }
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.sendFile(path.join(publicDir, 'ai-catalog.json'));
 });
@@ -350,6 +354,8 @@ app.get('/robots.txt', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.sendFile(path.join(publicDir, 'robots.txt'));
 });
+
+app.use(express.static(publicDir));
 
 // Mount Vite or serve static assets
 async function startServer() {
