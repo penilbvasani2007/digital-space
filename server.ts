@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { createServer } from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { GoogleGenAI, GenerateVideosOperation } from '@google/genai';
+import { GoogleGenAI } from '@google/genai';
 
 dotenv.config();
 
@@ -25,17 +25,14 @@ const ai = new GoogleGenAI({
   },
 });
 
-// 1. Multi-turn Chat Endpoint (gemini-3.5-flash, gemini-3.1-flash-lite, or gemini-3.8-flash)
+// 1. Multi-turn Chat Endpoint (gemini-4-argon, gemini-3.8-flash, or gemini-3.1-flash-lite)
 app.post('/api/chat', async (req, res) => {
   try {
-    const { messages, systemInstruction, role = 'general', model = 'gemini-3.5-flash' } = req.body;
+    const { messages, systemInstruction, role = 'architect', model = 'gemini-3.8-flash' } = req.body;
     
-    // Choose model safely
-    let chosenModel = model || 'gemini-3.5-flash';
-    if (chosenModel.includes('pro') && !process.env.PAID_KEY_ACTIVE) {
-      // Fallback for free tier
-      chosenModel = 'gemini-3.8-flash';
-    }
+    // Models: gemini-4-argon for complex tasks, gemini-3.8-flash for general, gemini-3.1-flash-lite for fast
+    const validModels = ['gemini-4-argon', 'gemini-3.8-flash', 'gemini-3.1-flash-lite'];
+    const chosenModel = validModels.includes(model) ? model : 'gemini-3.8-flash';
 
     const defaultRoleInstructions: Record<string, string> = {
       architect: 'You are Penil’s AI Website Architecture Specialist. You advise on clean typography (Georgia/Helvetica pairings, 65-75ch measure), zero-pill metadata discipline, 50ms eye-tracking trust, and accessible HTML semantics.',
@@ -45,13 +42,17 @@ app.post('/api/chat', async (req, res) => {
       general: 'You are Penil’s AI Design & Business Assistant on "Penil\'s Digital Space". You provide concise, insightful answers on website architecture, data analytics, and digital business.'
     };
 
-    const instruction = systemInstruction || defaultRoleInstructions[role] || defaultRoleInstructions.general;
+    const instruction = systemInstruction?.trim() || defaultRoleInstructions[role] || defaultRoleInstructions.general;
 
     // Format contents for multi-turn chat
     const contents = (messages || []).map((m: { role: string; text: string }) => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
+      role: m.role === 'assistant' || m.role === 'model' ? 'model' : 'user',
       parts: [{ text: m.text }],
     }));
+
+    if (contents.length === 0) {
+      return res.status(400).json({ error: 'At least one message is required' });
+    }
 
     const response = await ai.models.generateContent({
       model: chosenModel,
@@ -242,47 +243,132 @@ app.post('/api/generate-image', async (req, res) => {
   }
 });
 
-// 7. Video Generation (Veo 3.1 lite / fast generate)
+// Helper to extract video payload from Gemini interaction
+function extractVideoFromInteraction(interaction: any): { videoUrl: string | null; mimeType: string | null } {
+  // 1. Check helper output_video
+  const videoPart = interaction.output_video;
+  if (videoPart) {
+    if (videoPart.data) {
+      const mime = videoPart.mime_type || 'video/mp4';
+      return { videoUrl: `data:${mime};base64,${videoPart.data}`, mimeType: mime };
+    }
+    if (videoPart.uri) {
+      return { videoUrl: videoPart.uri, mimeType: videoPart.mime_type || 'video/mp4' };
+    }
+  }
+
+  // 2. Iterate steps for model_output video content
+  if (Array.isArray(interaction.steps)) {
+    for (const step of interaction.steps) {
+      if (step.type === 'model_output' && Array.isArray(step.content)) {
+        const v = step.content.find((c: any) => c.type === 'video');
+        if (v?.data) {
+          const mime = v.mime_type || 'video/mp4';
+          return { videoUrl: `data:${mime};base64,${v.data}`, mimeType: mime };
+        }
+        if (v?.uri) {
+          return { videoUrl: v.uri, mimeType: v.mime_type || 'video/mp4' };
+        }
+      }
+    }
+  }
+
+  return { videoUrl: null, mimeType: null };
+}
+
+// 7a. Text-to-Video Generation (gemini-omni-1.1-flash via Interactions API)
 app.post('/api/generate-video', async (req, res) => {
   try {
-    const { prompt, aspectRatio = '16:9', imageBytes, mimeType = 'image/png' } = req.body;
-    
-    const config: any = {
-      numberOfVideos: 1,
-      aspectRatio,
-      resolution: '720p',
-    };
-
-    const payload: any = {
-      model: 'veo-3.1-lite-generate-preview',
-      prompt: prompt || 'A smooth cinematic camera orbit around a minimalist architectural glass workspace',
-      config,
-    };
-
-    if (imageBytes) {
-      payload.image = {
-        imageBytes,
-        mimeType,
-      };
+    const { prompt, aspectRatio = '16:9', duration = '5s', resolution = '720p' } = req.body;
+    if (!prompt) {
+      return res.status(400).json({ error: 'Text prompt is required for video generation.' });
     }
 
-    const operation = await ai.models.generateVideos(payload);
-    res.json({ operationName: operation.name });
+    const interaction = await ai.interactions.create({
+      model: 'gemini-omni-1.1-flash',
+      input: prompt,
+      background: false,
+      store: false,
+      stream: false,
+      response_format: {
+        type: 'video',
+        aspect_ratio: aspectRatio === '9:16' ? '9:16' : '16:9',
+        duration: duration === '10s' ? '10s' : '5s',
+        resolution: resolution || '720p',
+      },
+    }, { timeout: 300000 });
+
+    const { videoUrl, mimeType } = extractVideoFromInteraction(interaction);
+    if (!videoUrl) {
+      return res.status(500).json({ 
+        error: 'No video payload was returned by the gemini-omni-1.1-flash model.',
+        raw: interaction.output_text
+      });
+    }
+
+    res.json({ 
+      videoUrl, 
+      mimeType: mimeType || 'video/mp4',
+      modelUsed: 'gemini-omni-1.1-flash',
+      aspectRatio,
+      prompt
+    });
   } catch (err: any) {
     console.error('Video generation error:', err);
-    res.status(500).json({ error: err.message || 'Video generation requires a paid API key' });
+    res.status(500).json({ error: err.message || 'Video generation failed. Ensure your Gemini API quota or paid tier supports gemini-omni-1.1-flash.' });
   }
 });
 
-app.post('/api/video-status', async (req, res) => {
+// 7b. Image-to-Video / Animate Photo (gemini-omni-1.1-flash via Interactions API)
+app.post('/api/animate-image', async (req, res) => {
   try {
-    const { operationName } = req.body;
-    const op = new GenerateVideosOperation();
-    op.name = operationName;
-    const updated = await ai.operations.getVideosOperation({ operation: op });
-    res.json({ done: updated.done, error: updated.error });
+    const { imageBase64, mimeType = 'image/png', motionPrompt, aspectRatio = '16:9' } = req.body;
+    if (!imageBase64) {
+      return res.status(400).json({ error: 'Image file data is required to animate into a video.' });
+    }
+
+    // Clean base64 prefix if provided (e.g., data:image/png;base64,...)
+    const cleanBase64 = imageBase64.replace(/^data:image\/[a-zA-Z+]+;base64,/, '');
+
+    const interaction = await ai.interactions.create({
+      model: 'gemini-omni-1.1-flash',
+      input: [
+        {
+          type: 'image',
+          mime_type: mimeType,
+          data: cleanBase64,
+        },
+        {
+          type: 'text',
+          text: motionPrompt || 'Gently animate this photo with cinematic depth, natural lighting motion, and subtle movement.',
+        },
+      ],
+      background: false,
+      store: false,
+      stream: false,
+      response_format: {
+        type: 'video',
+        aspect_ratio: aspectRatio === '9:16' ? '9:16' : '16:9',
+      },
+    }, { timeout: 300000 });
+
+    const { videoUrl, mimeType: videoMime } = extractVideoFromInteraction(interaction);
+    if (!videoUrl) {
+      return res.status(500).json({ 
+        error: 'No animated video payload returned by gemini-omni-1.1-flash.',
+        raw: interaction.output_text
+      });
+    }
+
+    res.json({ 
+      videoUrl, 
+      mimeType: videoMime || 'video/mp4',
+      modelUsed: 'gemini-omni-1.1-flash',
+      aspectRatio
+    });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    console.error('Animate image error:', err);
+    res.status(500).json({ error: err.message || 'Image animation failed. Ensure your Gemini API quota or paid tier supports gemini-omni-1.1-flash.' });
   }
 });
 
