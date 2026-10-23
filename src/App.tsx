@@ -8,12 +8,13 @@ import { ContactSection } from './components/ContactSection';
 import { SeoResearchView } from './components/SeoResearchView';
 import { GeminiStudio } from './components/GeminiStudio';
 import { NotFoundView } from './components/NotFoundView';
+import { GameShell } from './game/GameShell';
 import { INITIAL_ARTICLES } from './data/articles';
 import { Article } from './types';
 import { 
   Search, Heart, Bookmark, ArrowRight, Mail, Sparkles, 
   LayoutGrid, List, Volume2, Clock, CheckCircle2, 
-  BookOpen, ChevronRight, Filter, Table2, Tag, ShieldCheck, Globe
+  BookOpen, ChevronRight, Filter, Table2, Tag, ShieldCheck, Globe, Gamepad2
 } from 'lucide-react';
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [currentTab, setCurrentTab] = useState<'articles' | 'about' | 'projects' | 'contact' | 'saved' | 'seo'>('articles');
   const [is404, setIs404] = useState<boolean>(false);
+  const [isGameOpen, setIsGameOpen] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [savedArticleIds, setSavedArticleIds] = useState<Set<string>>(new Set(['art-01', 'art-02']));
@@ -49,8 +51,17 @@ export default function App() {
         setCurrentTab('articles');
         setSelectedArticle(null);
         setIs404(false);
+        setIsGameOpen(false);
         return;
       }
+
+      if (path === '/game') {
+        setIsGameOpen(true);
+        setSelectedArticle(null);
+        setIs404(false);
+        return;
+      }
+      setIsGameOpen(false);
 
       if (path.startsWith('/articles/')) {
         const slug = path.replace('/articles/', '');
@@ -166,6 +177,7 @@ export default function App() {
   // Navigation handler
   const navigateTo = (tab: 'articles' | 'about' | 'projects' | 'contact' | 'saved' | 'seo', article?: Article | null) => {
     setIs404(false);
+    setIsGameOpen(false);
     if (article) {
       setSelectedArticle(article);
       window.history.pushState({}, '', `/articles/${article.slug}`);
@@ -274,6 +286,20 @@ export default function App() {
     navigateTo('articles', null);
   };
 
+  // Full-Viewport Game Shell (never renders website navbars or footers when playing)
+  if (isGameOpen) {
+    return (
+      <GameShell
+        onExitGame={() => {
+          setIsGameOpen(false);
+          if (window.location.pathname === '/game') {
+            window.history.pushState({}, '', '/');
+          }
+        }}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#2D2A26] font-serif">
       {/* Header with Navigation & SEO Research Tab */}
@@ -282,6 +308,10 @@ export default function App() {
         onSelectTab={(tab) => navigateTo(tab, null)}
         savedCount={savedArticleIds.size}
         onOpenStudio={() => setIsStudioOpen(true)}
+        onOpenGame={() => {
+          setIsGameOpen(true);
+          window.history.pushState({}, '', '/game');
+        }}
       />
 
       {/* Main Container */}
@@ -393,6 +423,17 @@ export default function App() {
                     >
                       <Sparkles className="w-3.5 h-3.5 text-[#D96C4A] shrink-0" />
                       <span>Launch AI Studio (Chatbot · Search · Voice)</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setIsGameOpen(true);
+                        window.history.pushState({}, '', '/game');
+                      }}
+                      className="inline-flex items-center justify-center sm:justify-start gap-2 px-3.5 py-2 bg-[#D96C4A]/10 hover:bg-[#D96C4A] text-[#D96C4A] hover:text-white border border-[#D96C4A]/30 hover:border-[#D96C4A] rounded-md text-xs font-sans font-semibold transition-all cursor-pointer shadow-xs text-center"
+                    >
+                      <Gamepad2 className="w-3.5 h-3.5 shrink-0" />
+                      <span>Play Data Runner 3D</span>
                     </button>
                   </div>
                 </div>

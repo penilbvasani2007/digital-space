@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bookmark, Sparkles, Table2, Search, Menu, X, ArrowRight, FileText } from 'lucide-react';
+import { Bookmark, Sparkles, Table2, Search, Menu, X, ArrowRight, FileText, Gamepad2 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 
 interface HeaderProps {
@@ -7,6 +7,7 @@ interface HeaderProps {
   onSelectTab: (tab: 'articles' | 'about' | 'projects' | 'contact' | 'saved' | 'seo') => void;
   savedCount: number;
   onOpenStudio: () => void;
+  onOpenGame: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -14,6 +15,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectTab,
   savedCount,
   onOpenStudio,
+  onOpenGame,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -113,6 +115,17 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="font-semibold">SEO Research</span>
           </a>
 
+          {/* 3D Game Trigger */}
+          <button
+            onClick={onOpenGame}
+            className="px-2.5 sm:px-3 py-1.5 bg-[#D96C4A]/10 hover:bg-[#D96C4A] text-[#D96C4A] hover:text-white border border-[#D96C4A]/30 hover:border-[#D96C4A] text-xs font-sans font-semibold rounded-md transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
+            title="Launch 3D Data Runner Game"
+            aria-label="Launch 3D Data Runner Game"
+          >
+            <Gamepad2 className="w-3.5 h-3.5" />
+            <span>3D Game</span>
+          </button>
+
           {/* AI Studio Trigger */}
           <button
             onClick={onOpenStudio}
@@ -148,6 +161,17 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Mobile Action Controls & Hamburger Toggle */}
         <div className="flex md:hidden items-center gap-2">
+          {/* Quick 3D Game Button on Mobile */}
+          <button
+            onClick={onOpenGame}
+            className="p-1.5 bg-[#D96C4A] text-white rounded text-xs flex items-center gap-1 shadow-xs cursor-pointer"
+            title="Play 3D Game"
+            aria-label="Play 3D Game"
+          >
+            <Gamepad2 className="w-3.5 h-3.5" />
+            <span className="text-[11px] font-sans font-semibold pr-0.5">Game</span>
+          </button>
+
           {/* Quick AI Studio Button on Mobile */}
           <button
             onClick={onOpenStudio}
@@ -286,7 +310,18 @@ export const Header: React.FC<HeaderProps> = ({
               </a>
             )}
 
-            <div className="pt-3 pb-1">
+            <div className="pt-3 pb-1 space-y-2">
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onOpenGame();
+                }}
+                className="w-full py-2.5 px-3 bg-[#D96C4A] hover:bg-[#B85536] text-white rounded-md text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs"
+              >
+                <Gamepad2 className="w-4 h-4" />
+                <span>Play Data Runner 3D Game</span>
+              </button>
+
               <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
